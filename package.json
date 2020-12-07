@@ -1,0 +1,58 @@
+{
+  "version": "0.1.0",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test --passWithNoTests",
+    "lint": "tsdx lint",
+    "prepare": "tsdx build",
+    "size": "size-limit",
+    "analyze": "size-limit --why"
+  },
+  "peerDependencies": {
+    "react": ">=16",
+    "react-dom": ">=16"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "name": "hot-toast",
+  "author": "Timo Lins",
+  "module": "dist/hot-toast.esm.js",
+  "size-limit": [
+    {
+      "path": "dist/hot-toast.cjs.production.min.js",
+      "limit": "5 KB"
+    },
+    {
+      "path": "dist/hot-toast.esm.js",
+      "limit": "5 KB"
+    }
+  ],
+  "devDependencies": {
+    "@types/react": "^17.0.0",
+    "css-spring": "^4.1.0",
+    "tsdx": "^0.14.1"
+  },
+  "dependencies": {
+    "goober": "^2.0.15"
+  }
+}
