@@ -51,9 +51,7 @@ const createHandler = (type: StatusType): MessageHandler => (
     ...options,
   });
 
-export const notify: {
-  [key: string]: MessageHandler;
-} = {
+export const notify = {
   success: createHandler(StatusType.Success),
   error: createHandler(StatusType.Error),
   loading: createHandler(StatusType.Loading),
