@@ -54,6 +54,7 @@
     "tsdx": "^0.14.1"
   },
   "dependencies": {
+    "@types/react-dom": "^17.0.0",
     "goober": "^2.0.15"
   }
 }

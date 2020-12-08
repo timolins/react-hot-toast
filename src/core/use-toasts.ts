@@ -126,21 +126,19 @@ export const useToasts = () => {
     }
 
     const now = Date.now();
-    const timeouts = queue
-      .map((s) => {
-        const duration = s.timeout - (now - s.createdAt);
+    const timeouts = queue.map((s) => {
+      const duration = s.timeout - (now - s.createdAt);
 
-        if (duration < 0) {
-          return;
-        }
-        return setTimeout(() => {
-          setQueue(hideReducer(queue, s));
-        }, duration);
-      })
-      .filter((t): t is NodeJS.Timeout => t !== undefined);
+      if (duration < 0) {
+        return;
+      }
+      return setTimeout(() => {
+        setQueue(hideReducer(queue, s));
+      }, duration);
+    });
 
     return () => {
-      timeouts.forEach(clearTimeout);
+      timeouts.forEach((timeout) => timeout ?? clearTimeout(timeout));
     };
   }, [queue, pauseAt]);
 
