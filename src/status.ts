@@ -2,6 +2,7 @@ export enum StatusType {
   Error = 'error',
   Loading = 'loading',
   Success = 'success',
+  Custom = 'custom',
 }
 
 export interface Status {
@@ -15,7 +16,7 @@ export interface InternalStatus extends Status {
   id: number;
   createdAt: number;
   timeout: number;
-  visible: true;
+  visible: boolean;
 }
 
 export const defaultTimeouts: Map<StatusType, number> = new Map([

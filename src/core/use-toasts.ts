@@ -2,19 +2,26 @@ import { useEffect, useMemo, useState } from 'react';
 import { defaultTimeouts, InternalStatus, Status, StatusType } from '../status';
 import { genId } from './utils';
 
-let memoryQueue: InternalStatus[] = [];
+const TOAST_LIMIT = 20;
 
 const addReducer = (queue: InternalStatus[], status: InternalStatus) => {
   if (queue.find((s) => s.id === status.id)) {
     return queue.map((s) => (s.id === status.id ? status : s));
   } else {
-    return [...queue, status];
+    return [...queue, status].slice(
+      Math.max(queue.length - (TOAST_LIMIT - 1), 0)
+    );
   }
 };
 
-const removeReducer = (queue: InternalStatus[], status: InternalStatus) => {
-  return queue.filter(
-    (s) => !(s.id === status.id && s.createdAt === status.createdAt)
+const hideReducer = (queue: InternalStatus[], status: InternalStatus) => {
+  return queue.map((s) =>
+    s.id === status.id && s.createdAt === status.createdAt
+      ? {
+          ...status,
+          visible: false,
+        }
+      : s
   );
 };
 
@@ -26,8 +33,34 @@ const addPauseReducer = (queue: InternalStatus[], pause: number) => {
 };
 
 const listeners: Array<(status: InternalStatus) => void> = [];
+let memoryQueue: InternalStatus[] = [];
 
-export const notify = (status: Status) => {
+interface NotifyOptions {
+  id?: number;
+}
+
+type MessageHandler = (message: string, options?: NotifyOptions) => number;
+
+const createHandler = (type: StatusType): MessageHandler => (
+  message,
+  options
+) =>
+  addNotification({
+    message,
+    type,
+    ...options,
+  });
+
+export const notify: {
+  [key: string]: MessageHandler;
+} = {
+  success: createHandler(StatusType.Success),
+  error: createHandler(StatusType.Error),
+  loading: createHandler(StatusType.Loading),
+  custom: createHandler(StatusType.Custom),
+};
+
+const addNotification = (status: Status) => {
   const newStatus: InternalStatus = {
     id: genId(),
     createdAt: Date.now(),
@@ -35,7 +68,6 @@ export const notify = (status: Status) => {
     timeout: defaultTimeouts.get(status.type) || 3000,
     ...status,
   };
-
   memoryQueue = addReducer(memoryQueue, newStatus);
   listeners.forEach((listener) => {
     listener(newStatus);
@@ -45,31 +77,28 @@ export const notify = (status: Status) => {
 
 export const notifyPromise = <T extends any>(
   promise: Promise<T>,
-  messages: {
+  {
+    loading,
+    success,
+    error,
+  }: {
     loading: string;
-    success: string;
-    error: string;
+    success: string | ((result: T) => string);
+    error: string | ((reason: any) => string);
   }
 ) => {
-  const id = notify({
-    type: StatusType.Loading,
-    message: messages.loading,
-  });
+  const id = notify.loading(loading);
 
   promise
     .then((p) => {
-      notify({
-        id: id,
-        type: StatusType.Success,
-        message: messages.success,
+      notify.success(typeof success === 'function' ? success(p) : success, {
+        id,
       });
       return p;
     })
-    .catch(() => {
-      notify({
-        id: id,
-        type: StatusType.Error,
-        message: messages.error,
+    .catch((e) => {
+      notify.error(typeof error === 'function' ? error(e) : error, {
+        id,
       });
     });
 
@@ -99,20 +128,28 @@ export const useToasts = () => {
     }
 
     const now = Date.now();
-    const timeouts = queue.map((s) => {
-      return setTimeout(() => {
-        setQueue(removeReducer(queue, s));
-      }, s.timeout - (now - s.createdAt));
-    });
+    const timeouts = queue
+      .map((s) => {
+        const duration = s.timeout - (now - s.createdAt);
+
+        if (duration < 0) {
+          return;
+        }
+        return setTimeout(() => {
+          setQueue(hideReducer(queue, s));
+        }, duration);
+      })
+      .filter((t): t is NodeJS.Timeout => t !== undefined);
 
     return () => {
       timeouts.forEach(clearTimeout);
     };
-  }, [queue]);
+  }, [queue, pauseAt]);
 
   const handlers = useMemo(
     () => ({
       onMouseEnter: () => {
+        console.log('Start pause');
         setPausedAt(Date.now());
       },
       onMouseLeave: () => {

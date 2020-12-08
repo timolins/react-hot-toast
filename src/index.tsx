@@ -11,29 +11,24 @@ setup(React.createElement);
 
 export { StatusType };
 
-export const Thing = () => {
+export const ToastsContainer = () => {
   const [toasts, handlers] = useToasts();
-  const activeStatus = toasts[toasts.length - 1];
+  const visibleToasts = toasts.filter((t) => t.visible);
 
-  console.log({ toasts });
   return (
     <div {...handlers}>
-      <button
-        onClick={() => {
-          // setReRender(!reRender);
-        }}
-      >
-        Rerender
-      </button>
-      Hans the snozzberries ertaste like snozzberries {toasts.length}
-      <StatusBar
-        visible={!!activeStatus}
-        // delay={100}
-        status={activeStatus}
-
-        // done={loading}
-        // statusType={loading ? StatusType.Loading : StatusType.Success}
-      />
+      {toasts.map((s) => (
+        <StatusBar
+          key={s.id}
+          visible={s.visible}
+          status={s}
+          index={
+            visibleToasts.length -
+            1 -
+            visibleToasts.findIndex((toast) => toast.id === s.id)
+          }
+        />
+      ))}
     </div>
   );
 };

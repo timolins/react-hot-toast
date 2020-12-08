@@ -1,7 +1,7 @@
 import 'react-app-polyfill/ie11';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Thing, notify, notifyPromise, StatusType } from '../.';
+import { ToastsContainer, notify, notifyPromise, StatusType } from '../.';
 
 const App = () => {
   React.useEffect(() => {
@@ -12,17 +12,24 @@ const App = () => {
       123
       <button
         onClick={() => {
-          notify({ message: 'Servas', type: StatusType.Error });
+          notify.error('This went wrong.');
         }}
       >
-        Hello
+        Error
       </button>
       <button
         onClick={() => {
-          notify({ message: 'Servas', type: StatusType.Success });
+          notify.success('Project created');
         }}
       >
-        Hello
+        Success
+      </button>
+      <button
+        onClick={() => {
+          notify.custom('Noel hat Jobs');
+        }}
+      >
+        Custom
       </button>
       <button
         onClick={() => {
@@ -38,7 +45,7 @@ const App = () => {
       >
         Promise
       </button>
-      <Thing />{' '}
+      <ToastsContainer />
     </div>
   );
 };

@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { useRef } from 'react';
-// import { animated, useTransition } from 'react-spring/web';
-
 import { styled, keyframes, CSSAttribute } from 'goober';
+
+import { usePreserve } from '../core/use-preserve';
+import { Status, StatusType } from '../status';
 import { Indicator } from './indicator';
-import { Status } from '../status';
 
 const StatusBarWrapper = styled('div')`
   position: fixed;
@@ -54,6 +53,7 @@ const enterSpring = `
 `;
 
 const enterAnimation: CSSAttribute = {
+  zIndex: 1,
   animation: `${keyframes`${enterSpring}`} forwards`,
   animationDuration: '0.3s',
   animationTimingFunction: 'cubic-bezier(.21,1.02,.73,1)',
@@ -85,7 +85,7 @@ const IndicatorWrapper = styled('div')`
   display: absolute;
 `;
 
-const Message = styled('div')`
+const Message = styled('p')`
   margin: 4px;
   margin-left: 10px;
   color: #363636;
@@ -95,30 +95,58 @@ const Message = styled('div')`
 
 interface StatusBarProps {
   status?: Status;
+  index: number;
   visible: boolean;
 }
 
-export const StatusBar: React.FC<StatusBarProps> = React.memo((props) => {
-  const prevStatus = useRef<Status>();
-
-  const status = props.status || prevStatus.current;
-
-  if (props.status) {
-    prevStatus.current = props.status;
+const firstLineAnimation = keyframes`
+  from {
+    transform: scale(0.6);
+	 opacity: 0.4;
   }
 
-  const visible = !!props.status;
+  to {
+    transform: scale(1);
+	 opacity: 1;
+  }
+`;
+
+const CustomIndicator = styled('div')`
+  position: relative;
+  transform: scale(0.6);
+  opacity: 0.4;
+  animation: ${firstLineAnimation} 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)
+    forwards;
+  animation-delay: 0.12s;
+`;
+
+export const StatusBar: React.FC<StatusBarProps> = React.memo((props) => {
+  const status = usePreserve(props.status);
+  const visible = !!props.visible;
 
   return (
-    <StatusBarWrapper key="status-bar">
+    <StatusBarWrapper
+      key="status-bar"
+      style={{
+        transition: 'all 200ms cubic-bezier(0.59,0,0.5,1.15)',
+        // transitionDelay: `${props.index * 5}ms`,
+        transform: `translateY(${props.index * 50}px)`,
+      }}
+    >
       <StatusBarBase style={visible ? enterAnimation : exitAnimation}>
         <IndicatorWrapper>
-          <Indicator
-            statusType={status ? status.type : undefined}
-            delay={100}
-          />
+          {status?.type === StatusType.Custom ? (
+            <CustomIndicator>🔥</CustomIndicator>
+          ) : (
+            <Indicator
+              statusType={status ? status.type : undefined}
+              delay={100}
+            />
+          )}
         </IndicatorWrapper>
-        <Message>{status && status.message}</Message>
+        <Message role="alert" aria-live="polite">
+          {status && status.message}
+        </Message>
       </StatusBarBase>
     </StatusBarWrapper>
   );
