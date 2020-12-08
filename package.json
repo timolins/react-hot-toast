@@ -1,5 +1,7 @@
 {
+  "name": "react-hot-toast",
   "version": "0.1.0",
+  "author": "Timo Lins",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -35,8 +37,6 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "hot-toast",
-  "author": "Timo Lins",
   "module": "dist/hot-toast.esm.js",
   "size-limit": [
     {
