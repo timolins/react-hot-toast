@@ -4,7 +4,7 @@ import { useRef } from 'react';
 
 import { styled, keyframes, CSSAttribute } from 'goober';
 import { Indicator } from './indicator';
-import { StatusType } from '../status';
+import { Status } from '../status';
 
 const StatusBarWrapper = styled('div')`
   position: fixed;
@@ -92,11 +92,6 @@ const Message = styled('div')`
   flex: 1;
   text-align: center;
 `;
-
-interface Status {
-  type: StatusType;
-  message: string;
-}
 
 interface StatusBarProps {
   status?: Status;
