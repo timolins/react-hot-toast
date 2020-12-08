@@ -128,17 +128,17 @@ export const useToasts = () => {
     const now = Date.now();
     const timeouts = queue.map((s) => {
       const duration = s.timeout - (now - s.createdAt);
-
-      if (duration < 0) {
+      if (duration < 0 && s.visible) {
+        setQueue(hideReducer(queue, s));
         return;
       }
       return setTimeout(() => {
         setQueue(hideReducer(queue, s));
-      }, duration);
+      }, s.timeout);
     });
 
     return () => {
-      timeouts.forEach((timeout) => timeout ?? clearTimeout(timeout));
+      timeouts.forEach((timeout) => timeout && clearTimeout(timeout));
     };
   }, [queue, pauseAt]);
 
