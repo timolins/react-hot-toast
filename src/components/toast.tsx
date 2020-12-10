@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useCallback } from 'react';
 import { styled, keyframes, CSSAttribute } from 'goober';
 
 import { usePreserve } from '../core/use-preserve';
@@ -86,8 +87,6 @@ interface StatusBarProps {
   offset: number;
   onHeight: (height: number) => void;
 }
-
-import { useCallback } from 'react';
 
 export const StatusBar: React.FC<StatusBarProps> = React.memo(
   ({ status, onHeight, offset }) => {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { keyframes, styled } from 'goober';
+import { styled } from 'goober';
 
 import { StatusType } from '../status';
 import { ErrorIndicator } from './error';

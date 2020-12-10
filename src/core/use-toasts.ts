@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { defaultTimeouts, InternalStatus, Status, StatusType } from '../status';
+import { defaultTimeouts, InternalStatus, StatusType } from '../status';
 import { genId } from './utils';
 
 const TOAST_LIMIT = 20;
