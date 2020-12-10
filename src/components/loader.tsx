@@ -13,8 +13,9 @@ const rotate = keyframes`
 export const Loader = styled('div')<{
   big?: boolean;
 }>`
-  width: 8px;
-  height: 8px;
+  width: 12px;
+  height: 12px;
+  box-sizing: border-box;
   border: 2px solid;
   border-radius: 100%;
   border-color: #e0e0e0;

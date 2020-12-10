@@ -14,25 +14,25 @@ const circleAnimation = keyframes`
 
 const checkmarkAnimation = keyframes`
   0% {
-		height: 0px;
-		width: 0px;
+		height: 0;
+		width: 0;
 		opacity: 0;
 		visibility: visible;
   }
 
   40% {
-		height: 0px;
-		width: 4px;
+		height: 0;
+		width: 6px;
 		opacity: 1;
   }
 
   100% {
 	visibility: visible;
-		height: 8px;
+		height: 10px;
   }
 `;
 
-export const Checkmark: any = styled('div')<{ delay?: number }>`
+export const Checkmark = styled('div')<{ delay?: number }>`
   width: 20px;
   opacity: 0;
   height: 20px;
@@ -46,6 +46,7 @@ export const Checkmark: any = styled('div')<{ delay?: number }>`
   animation-delay: ${(p) => p.delay || 0}ms;
   &:after {
     content: '';
+    box-sizing: border-box;
     visibility: hidden;
     animation: ${checkmarkAnimation} 0.2s ease-out forwards;
     animation-delay: ${(p) => (p.delay || 0) + 100}ms;
@@ -55,7 +56,7 @@ export const Checkmark: any = styled('div')<{ delay?: number }>`
     border-color: white;
     bottom: 6px;
     left: 6px;
-    height: 8px;
-    width: 4px;
+    height: 10px;
+    width: 6px;
   }
 `;
