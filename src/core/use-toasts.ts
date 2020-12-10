@@ -103,8 +103,11 @@ export const useToasts = () => {
   const [pauseAt, setPausedAt] = useState<number | false>(false);
 
   useEffect(() => {
+    // In case multiple notifications are submitted in sync
+    let tempQueue: InternalStatus[] = [];
     const handler = (status: InternalStatus) => {
-      setQueue(addReducer(queue, status));
+      tempQueue.push(status);
+      setQueue(tempQueue.reduce(addReducer, queue));
     };
     listeners.push(handler);
     return () => {
