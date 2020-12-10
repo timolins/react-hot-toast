@@ -6,11 +6,9 @@ const TOAST_LIMIT = 20;
 
 const addReducer = (queue: InternalStatus[], status: InternalStatus) => {
   if (queue.find((s) => s.id === status.id)) {
-    return queue.map((s) => (s.id === status.id ? status : s));
+    return queue.map((s) => (s.id === status.id ? { ...s, ...status } : s));
   } else {
-    return [...queue, status].slice(
-      Math.max(queue.length - (TOAST_LIMIT - 1), 0)
-    );
+    return [status, ...queue].slice(0, TOAST_LIMIT);
   }
 };
 
@@ -45,7 +43,11 @@ const createHandler = (type: StatusType): MessageHandler => (
   message,
   options
 ) =>
-  addNotification({
+  setNotification({
+    id: genId(),
+    createdAt: Date.now(),
+    visible: true,
+    timeout: defaultTimeouts.get(type) || 3000,
     message,
     type,
     ...options,
@@ -58,19 +60,12 @@ export const notify = {
   custom: createHandler(StatusType.Custom),
 };
 
-const addNotification = (status: Status) => {
-  const newStatus: InternalStatus = {
-    id: genId(),
-    createdAt: Date.now(),
-    visible: true,
-    timeout: defaultTimeouts.get(status.type) || 3000,
-    ...status,
-  };
-  memoryQueue = addReducer(memoryQueue, newStatus);
+export const setNotification = (status: InternalStatus) => {
+  memoryQueue = addReducer(memoryQueue, status);
   listeners.forEach((listener) => {
-    listener(newStatus);
+    listener(status);
   });
-  return newStatus.id;
+  return status.id;
 };
 
 export const notifyPromise = <T extends any>(
@@ -128,13 +123,15 @@ export const useToasts = () => {
     const now = Date.now();
     const timeouts = queue.map((s) => {
       const duration = s.timeout - (now - s.createdAt);
-      if (duration < 0 && s.visible) {
-        setQueue(hideReducer(queue, s));
+      if (duration < 0) {
+        if (s.visible) {
+          setQueue(hideReducer(queue, s));
+        }
         return;
       }
       return setTimeout(() => {
         setQueue(hideReducer(queue, s));
-      }, s.timeout);
+      }, duration);
     });
 
     return () => {
@@ -145,7 +142,6 @@ export const useToasts = () => {
   const handlers = useMemo(
     () => ({
       onMouseEnter: () => {
-        console.log('Start pause');
         setPausedAt(Date.now());
       },
       onMouseLeave: () => {

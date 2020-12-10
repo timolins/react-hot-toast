@@ -33,6 +33,15 @@ const App = () => {
       </button>
       <button
         onClick={() => {
+          notify.success(
+            'This is a ultra long Jobs thing this is so long wowo I cant believe it maybe we should stop at some point'
+          );
+        }}
+      >
+        Long
+      </button>
+      <button
+        onClick={() => {
           const promise = new Promise((res, rej) => {
             setTimeout(Math.random() > 0.5 ? res : rej, 1000);
           });

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { styled, keyframes, CSSAttribute } from 'goober';
 
 import { usePreserve } from '../core/use-preserve';
-import { Status, StatusType } from '../status';
+import { InternalStatus, StatusType } from '../status';
 import { Indicator } from './indicator';
 
 const StatusBarWrapper = styled('div')`
@@ -13,39 +13,6 @@ const StatusBarWrapper = styled('div')`
   right: 0;
   top: 0;
 `;
-// Animations generated with: https://rawgit.com/sktt/springish-css/master/index.html
-// Enter
-// A: -80, k: 200, damping: 12
-// (val) => `transform: translate3d(0, ${val}px, 0) scale(${Number(val)/250 + 1}); opacity: ${Number(val)/160 + 1}`
-
-// const enterSpring = `
-// 0.00% {transform: translate3d(0, -80.00px, 0) scale(0.67999); opacity: 0.5;}
-// 40.27% {transform: translate3d(0, 1.42px, 0) scale(1.00568); opacity: 1.008875;}
-// 100.00% {transform: translate3d(0, -0.01px, 0) scale(1); opacity: 1;}
-// `;
-
-// const enterAnimation: CSSAttribute = {
-//   animation: `${keyframes`${enterSpring}`} forwards`,
-//   animationDuration: '0.7s',
-//   animationTimingFunction: 'cubic-bezier(0.445, 0.05, 0.55, 0.95)',
-// };
-
-// Animations generated with: https://rawgit.com/sktt/springish-css/master/index.html
-// Enter
-// A: -80, k: 200, damping: 12
-// (val) => `transform: translate3d(0, ${val}px, 0) scale(${Number(val)/250 + 1}); opacity: ${Number(val)/160 + 1}`
-
-// const enterSpring = `
-// 0.00% {transform: translate3d(0, -80.00px, 0) scale(0.67999); opacity: 0.5;}
-// 40.27% {transform: translate3d(0, 1.42px, 0) scale(1.00568); opacity: 1.008875;}
-// 100.00% {transform: translate3d(0, -0.01px, 0) scale(1); opacity: 1;}
-// `;
-
-// const enterAnimation: CSSAttribute = {
-//   animation: `${keyframes`${enterSpring}`} forwards`,
-//   animationDuration: '0.7s',
-//   animationTimingFunction: 'cubic-bezier(0.445, 0.05, 0.55, 0.95)',
-// };
 
 const enterSpring = `
 0% {transform: translate3d(0,-80px,0) scale(0.6); opacity:.5;}
@@ -53,7 +20,7 @@ const enterSpring = `
 `;
 
 const enterAnimation: CSSAttribute = {
-  zIndex: 1,
+  zIndex: 2,
   animation: `${keyframes`${enterSpring}`} forwards`,
   animationDuration: '0.3s',
   animationTimingFunction: 'cubic-bezier(.21,1.02,.73,1)',
@@ -69,12 +36,12 @@ const exitAnimation: CSSAttribute = {
 };
 
 // Animated
-const StatusBarBase = styled('div')`
+const StatusBarBase = styled('div', React.forwardRef)`
   display: flex;
   position: absolute;
   align-items: center;
-  width: 2;
   background: white;
+  max-width: 300px;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1), 0 3px 3px rgba(0, 0, 0, 0.05);
   padding: 6px 12px;
   margin-top: 20px;
@@ -82,7 +49,7 @@ const StatusBarBase = styled('div')`
 `;
 
 const IndicatorWrapper = styled('div')`
-  display: absolute;
+  /* display: absolute; */
 `;
 
 const Message = styled('p')`
@@ -92,12 +59,6 @@ const Message = styled('p')`
   flex: 1;
   text-align: center;
 `;
-
-interface StatusBarProps {
-  status?: Status;
-  index: number;
-  visible: boolean;
-}
 
 const firstLineAnimation = keyframes`
   from {
@@ -120,34 +81,57 @@ const CustomIndicator = styled('div')`
   animation-delay: 0.12s;
 `;
 
-export const StatusBar: React.FC<StatusBarProps> = React.memo((props) => {
-  const status = usePreserve(props.status);
-  const visible = !!props.visible;
+interface StatusBarProps {
+  status: InternalStatus;
+  offset: number;
+  onHeight: (height: number) => void;
+}
 
-  return (
-    <StatusBarWrapper
-      key="status-bar"
-      style={{
-        transition: 'all 200ms cubic-bezier(0.59,0,0.5,1.15)',
-        // transitionDelay: `${props.index * 5}ms`,
-        transform: `translateY(${props.index * 50}px)`,
-      }}
-    >
-      <StatusBarBase style={visible ? enterAnimation : exitAnimation}>
-        <IndicatorWrapper>
-          {status?.type === StatusType.Custom ? (
-            <CustomIndicator>🔥</CustomIndicator>
-          ) : (
-            <Indicator
-              statusType={status ? status.type : undefined}
-              delay={100}
-            />
-          )}
-        </IndicatorWrapper>
-        <Message role="alert" aria-live="polite">
-          {status && status.message}
-        </Message>
-      </StatusBarBase>
-    </StatusBarWrapper>
-  );
-});
+import { useCallback } from 'react';
+
+export const StatusBar: React.FC<StatusBarProps> = React.memo(
+  ({ status, onHeight, offset }) => {
+    const persStatus = usePreserve(status);
+
+    const ref = useCallback((el: HTMLElement | null) => {
+      if (el) {
+        const boundingRect = el.getBoundingClientRect();
+        onHeight(boundingRect.height);
+      }
+    }, []);
+
+    return (
+      <div>
+        <StatusBarWrapper
+          key="status-bar"
+          style={{
+            transition: 'all 200ms cubic-bezier(0.59,0,0.5,1.15)',
+            transform: `translateY(${offset}px)`,
+          }}
+        >
+          <StatusBarBase
+            ref={ref}
+            style={
+              persStatus?.height
+                ? persStatus.visible
+                  ? enterAnimation
+                  : exitAnimation
+                : { opacity: 0 }
+            }
+          >
+            <IndicatorWrapper>
+              {persStatus?.type === StatusType.Custom ? (
+                <CustomIndicator>🔥</CustomIndicator>
+              ) : (
+                <Indicator statusType={persStatus?.type} delay={100} />
+              )}
+            </IndicatorWrapper>
+            <Message role="alert" aria-live="polite">
+              {persStatus?.message} {persStatus?.id}
+            </Message>
+          </StatusBarBase>
+        </StatusBarWrapper>
+      </div>
+    );
+  }
+);

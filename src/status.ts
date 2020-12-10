@@ -17,6 +17,7 @@ export interface InternalStatus extends Status {
   createdAt: number;
   timeout: number;
   visible: boolean;
+  height?: number;
 }
 
 export const defaultTimeouts: Map<StatusType, number> = new Map([
