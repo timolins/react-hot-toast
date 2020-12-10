@@ -50,11 +50,10 @@
   ],
   "devDependencies": {
     "@types/react": "^17.0.0",
-    "css-spring": "^4.1.0",
+    "@types/react-dom": "^17.0.0",
     "tsdx": "^0.14.1"
   },
   "dependencies": {
-    "@types/react-dom": "^17.0.0",
     "goober": "^2.0.15"
   }
 }
