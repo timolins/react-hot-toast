@@ -36,7 +36,7 @@ const secondLineAnimation = keyframes`
   }
 `;
 
-export const ErrorIndicator = styled('div')<{ delay?: number }>`
+export const ErrorIndicator = styled('div')`
   width: 20px;
   opacity: 0;
   height: 20px;
@@ -47,13 +47,13 @@ export const ErrorIndicator = styled('div')<{ delay?: number }>`
 
   animation: ${circleAnimation} 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)
     forwards;
-  animation-delay: ${(p) => p.delay || 0}ms;
+  animation-delay: 100ms;
 
   &:after,
   &:before {
     content: '';
     animation: ${firstLineAnimation} 0.15s ease-out forwards;
-    animation-delay: ${(p) => (p.delay || 0) + 50}ms;
+    animation-delay: 150ms;
     position: absolute;
     border-radius: 3px;
     opacity: 0;
@@ -66,7 +66,7 @@ export const ErrorIndicator = styled('div')<{ delay?: number }>`
 
   &:before {
     animation: ${secondLineAnimation} 0.15s ease-out forwards;
-    animation-delay: ${(p) => (p.delay || 0) + 80}ms;
+    animation-delay: 180ms;
     transform: rotate(90deg);
   }
 `;

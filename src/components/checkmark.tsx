@@ -32,7 +32,7 @@ const checkmarkAnimation = keyframes`
   }
 `;
 
-export const Checkmark = styled('div')<{ delay?: number }>`
+export const Checkmark = styled('div')`
   width: 20px;
   opacity: 0;
   height: 20px;
@@ -43,13 +43,13 @@ export const Checkmark = styled('div')<{ delay?: number }>`
 
   animation: ${circleAnimation} 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)
     forwards;
-  animation-delay: ${(p) => p.delay || 0}ms;
+  animation-delay: 100ms;
   &:after {
     content: '';
     box-sizing: border-box;
     visibility: hidden;
     animation: ${checkmarkAnimation} 0.2s ease-out forwards;
-    animation-delay: ${(p) => (p.delay || 0) + 100}ms;
+    animation-delay: 200ms;
     position: absolute;
     border-right: 2px solid;
     border-bottom: 2px solid;

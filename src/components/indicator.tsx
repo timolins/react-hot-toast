@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { styled } from 'goober';
 
-import { StatusType } from '../status';
+import { Renderable, ToastType } from '../core/types';
 import { ErrorIndicator } from './error';
 import { Loader } from './loader';
 import { Checkmark } from './checkmark';
+import { IconWrapper } from './icon-wrapper';
 
 const StatusWrapper = styled('div')`
   position: absolute;
@@ -14,32 +15,29 @@ const StatusWrapper = styled('div')`
 
 const IndicatorWrapper = styled('div')`
   position: relative;
+  margin-right: 6px;
 `;
 
 interface ConnectionProps {
-  statusType?: StatusType;
-  done?: boolean;
-  delay?: number;
+  type?: ToastType;
+  icon?: Renderable;
 }
 
-export const Indicator: React.FC<ConnectionProps> = ({
-  statusType,
-  done,
-  delay,
-}) => {
-  const notLoading =
-    (statusType !== undefined && statusType !== StatusType.Loading) || done;
+export const Indicator: React.FC<ConnectionProps> = ({ type, icon }) => {
+  if (icon !== undefined) {
+    return <IconWrapper>{icon}</IconWrapper>;
+  }
+
+  if (type === 'blank') {
+    return null;
+  }
 
   return (
     <IndicatorWrapper>
       <Loader />
-      {notLoading && (
+      {type !== 'loading' && (
         <StatusWrapper>
-          {statusType === StatusType.Error ? (
-            <ErrorIndicator delay={delay} />
-          ) : (
-            <Checkmark delay={delay} />
-          )}
+          {type === 'error' ? <ErrorIndicator /> : <Checkmark />}
         </StatusWrapper>
       )}
     </IndicatorWrapper>

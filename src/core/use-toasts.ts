@@ -1,122 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
-import { defaultTimeouts, InternalStatus, StatusType } from '../status';
-import { genId } from './utils';
-
-const TOAST_LIMIT = 20;
-
-const addReducer = (queue: InternalStatus[], status: InternalStatus) => {
-  if (queue.find((s) => s.id === status.id)) {
-    return queue.map((s) => (s.id === status.id ? { ...s, ...status } : s));
-  } else {
-    return [status, ...queue].slice(0, TOAST_LIMIT);
-  }
-};
-
-const hideReducer = (queue: InternalStatus[], status: InternalStatus) => {
-  return queue.map((s) =>
-    s.id === status.id && s.createdAt === status.createdAt
-      ? {
-          ...status,
-          visible: false,
-        }
-      : s
-  );
-};
-
-const addPauseReducer = (queue: InternalStatus[], pause: number) => {
-  return queue.map((s) => ({
-    ...s,
-    timeout: s.timeout + pause,
-  }));
-};
-
-const listeners: Array<(status: InternalStatus) => void> = [];
-let memoryQueue: InternalStatus[] = [];
-
-interface NotifyOptions {
-  id?: number;
-}
-
-type MessageHandler = (message: string, options?: NotifyOptions) => number;
-
-const createHandler = (type: StatusType): MessageHandler => (
-  message,
-  options
-) =>
-  setNotification({
-    id: genId(),
-    createdAt: Date.now(),
-    visible: true,
-    timeout: defaultTimeouts.get(type) || 3000,
-    message,
-    type,
-    ...options,
-  });
-
-export const notify = {
-  success: createHandler(StatusType.Success),
-  error: createHandler(StatusType.Error),
-  loading: createHandler(StatusType.Loading),
-  custom: createHandler(StatusType.Custom),
-};
-
-export const setNotification = (status: InternalStatus) => {
-  memoryQueue = addReducer(memoryQueue, status);
-  listeners.forEach((listener) => {
-    listener(status);
-  });
-  return status.id;
-};
-
-export const notifyPromise = <T extends any>(
-  promise: Promise<T>,
-  {
-    loading,
-    success,
-    error,
-  }: {
-    loading: string;
-    success: string | ((result: T) => string);
-    error: string | ((reason: any) => string);
-  }
-) => {
-  const id = notify.loading(loading);
-
-  promise
-    .then((p) => {
-      notify.success(typeof success === 'function' ? success(p) : success, {
-        id,
-      });
-      return p;
-    })
-    .catch((e) => {
-      notify.error(typeof error === 'function' ? error(e) : error, {
-        id,
-      });
-    });
-
-  return promise;
-};
+import { dispatch, ActionType, useStore } from './store';
 
 export const useToasts = () => {
-  const [queue, setQueue] = useState<InternalStatus[]>(memoryQueue);
+  const queue = useStore();
   const [pauseAt, setPausedAt] = useState<number | false>(false);
-
-  useEffect(() => {
-    // In case multiple notifications are submitted in sync
-    let tempQueue: InternalStatus[] = [];
-    const handler = (status: InternalStatus) => {
-      tempQueue.push(status);
-      setQueue(tempQueue.reduce(addReducer, queue));
-    };
-    listeners.push(handler);
-    return () => {
-      const index = listeners.indexOf(handler);
-      if (index > -1) {
-        listeners.splice(index, 1);
-      }
-    };
-  }, [queue]);
 
   useEffect(() => {
     if (pauseAt) {
@@ -124,17 +11,21 @@ export const useToasts = () => {
     }
 
     const now = Date.now();
-    const timeouts = queue.map((s) => {
-      const duration = s.timeout - (now - s.createdAt);
+    const timeouts = queue.map((t) => {
+      const duration = t.duration - (now - t.createdAt);
+      const dismiss = () =>
+        dispatch({
+          type: ActionType.DISMISS_TOAST,
+          toastId: t.id,
+        });
+
       if (duration < 0) {
-        if (s.visible) {
-          setQueue(hideReducer(queue, s));
+        if (t.visible) {
+          dismiss();
         }
         return;
       }
-      return setTimeout(() => {
-        setQueue(hideReducer(queue, s));
-      }, duration);
+      return setTimeout(dismiss, duration);
     });
 
     return () => {
@@ -150,7 +41,7 @@ export const useToasts = () => {
       onMouseLeave: () => {
         if (pauseAt) {
           const diff = Date.now() - pauseAt;
-          setQueue(addPauseReducer(queue, diff));
+          dispatch({ type: ActionType.ADD_PAUSE, duration: diff });
           setPausedAt(false);
         }
       },

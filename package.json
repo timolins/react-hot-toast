@@ -38,15 +38,15 @@
     "arrowParens": "always",
     "trailingComma": "es5"
   },
-  "module": "dist/hot-toast.esm.js",
+  "module": "dist/react-hot-toast.esm.js",
   "size-limit": [
     {
-      "path": "dist/hot-toast.cjs.production.min.js",
-      "limit": "5 KB"
+      "path": "dist/react-hot-toast.cjs.production.min.js",
+      "limit": "4 KB"
     },
     {
-      "path": "dist/hot-toast.esm.js",
-      "limit": "5 KB"
+      "path": "dist/react-hot-toast.esm.js",
+      "limit": "4 KB"
     }
   ],
   "devDependencies": {
