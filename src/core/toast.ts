@@ -28,14 +28,17 @@ const createToast = (message: Renderable, opts?: ToastOptions): Toast => ({
   ...opts,
 });
 
-const createHandler = (type: ToastType): ToastHandler => (message, options) => {
-  const toast = createToast(message, { ...options, type });
+const createHandler = (type?: ToastType): ToastHandler => (
+  message,
+  options
+) => {
+  const toast = createToast(message, type ? { ...options, type } : options);
   dispatch({ type: ActionType.UPSERT_TOAST, toast });
   return toast.id;
 };
 
 const toast = (message: Renderable, opts?: ToastOptions) =>
-  createHandler('blank')(message, opts);
+  createHandler()(message, opts);
 
 toast.error = createHandler('error');
 toast.success = createHandler('success');
