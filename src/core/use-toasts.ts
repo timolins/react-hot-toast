@@ -13,11 +13,18 @@ export const useToasts = () => {
     const now = Date.now();
     const timeouts = queue.map((t) => {
       const duration = t.duration - (now - t.createdAt);
-      const dismiss = () =>
+      const dismiss = () => {
         dispatch({
           type: ActionType.DISMISS_TOAST,
           toastId: t.id,
         });
+        setTimeout(() => {
+          dispatch({
+            type: ActionType.REMOVE_TOAST,
+            toastId: t.id,
+          });
+        }, 1000);
+      };
 
       if (duration < 0) {
         if (t.visible) {

@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Toast } from './types';
 
-const TOAST_LIMIT = 15;
+const TOAST_LIMIT = 20;
 
 export enum ActionType {
   ADD_TOAST,
   UPDATE_TOAST,
   UPSERT_TOAST,
   DISMISS_TOAST,
+  REMOVE_TOAST,
+  TOAST,
   ADD_PAUSE,
 }
 
@@ -26,6 +28,10 @@ type Action =
     }
   | {
       type: ActionType.DISMISS_TOAST;
+      toastId: string;
+    }
+  | {
+      type: ActionType.REMOVE_TOAST;
       toastId: string;
     }
   | {
@@ -58,6 +64,8 @@ export const reducer = (queue: Toast[], action: Action): Toast[] => {
             }
           : t
       );
+    case ActionType.REMOVE_TOAST:
+      return queue.filter((t) => t.id !== action.toastId);
     case ActionType.ADD_PAUSE:
       return queue.map((t) => ({
         ...t,
