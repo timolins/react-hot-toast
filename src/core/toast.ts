@@ -9,12 +9,9 @@ const defaultTimeouts: Map<ToastType, number> = new Map<ToastType, number>([
   ['loading', 30000],
 ]);
 
-interface ToastOptions {
-  id?: string;
-  type?: ToastType;
-  duration?: number;
-  icon?: Renderable;
-}
+type ToastOptions = Partial<
+  Pick<Toast, 'id' | 'icon' | 'type' | 'duration' | 'role' | 'ariaLive'>
+>;
 
 type ToastHandler = (message: Renderable, options?: ToastOptions) => string;
 
@@ -23,6 +20,8 @@ const createToast = (message: Renderable, opts?: ToastOptions): Toast => ({
   createdAt: Date.now(),
   visible: true,
   type: 'blank',
+  role: 'status',
+  ariaLive: 'polite',
   duration: (opts?.type && defaultTimeouts.get(opts.type)) || 4000,
   message,
   ...opts,

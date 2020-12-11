@@ -64,6 +64,10 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
       }
     }, []);
 
+    if (!prevToast) {
+      return null;
+    }
+
     const top = position.includes('top');
     const verticalStyle = top ? { top: 0 } : { bottom: 0 };
     const horizontalStyle: CSSAttribute = position.includes('left')
@@ -117,9 +121,9 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
             ...style,
           }}
         >
-          <Indicator icon={prevToast?.icon} type={prevToast?.type} />
-          <Message role="alert" aria-live="polite">
-            {prevToast?.message}
+          <Indicator icon={prevToast.icon} type={prevToast.type} />
+          <Message role={prevToast.role} aria-live={prevToast.ariaLive}>
+            {prevToast.message}
           </Message>
         </ToastBarBase>
       </div>

@@ -16,6 +16,9 @@ export interface Toast {
   icon?: Renderable;
   duration: number;
 
+  role: 'status' | 'alert';
+  ariaLive: 'assertive' | 'off' | 'polite';
+
   createdAt: number;
   visible: boolean;
   height?: number;
