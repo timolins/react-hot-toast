@@ -1,71 +1,61 @@
 import * as React from 'react';
 import { useCallback } from 'react';
+import { Properties } from 'csstype';
 import { styled, keyframes, CSSAttribute } from 'goober';
 
 import { usePreserve } from '../core/use-preserve';
-import { Toast } from '../core/types';
+import { Toast, ToastPosition } from '../core/types';
 import { Indicator } from './indicator';
-import { IconWrapper } from './icon-wrapper';
 
-const StatusBarWrapper = styled('div')`
-  position: fixed;
-  display: flex;
-  justify-content: center;
-  left: 0;
-  right: 0;
-  top: 0;
-`;
-
-const enterSpring = `
-0% {transform: translate3d(0,-80px,0) scale(0.6); opacity:.5;}
+const enterAnimation = (reverse: boolean) => `
+0% {transform: translate3d(0,${
+  (reverse ? -1 : 1) * -80
+}px,0) scale(.6); opacity:.5;}
 100% {transform: translate3d(0,0,0) scale(1); opacity:1;}
 `;
 
-const enterAnimation: CSSAttribute = {
-  zIndex: 9999,
-  animation: `${keyframes`${enterSpring}`} forwards`,
-  animationDuration: '0.35s',
-  animationTimingFunction: 'cubic-bezier(.21,1.02,.73,1)',
-};
-
-const exitSpring = `
-0% {transform: translate3d(0, 0, 0) scale(1); opacity: 1;}
-100% {transform: translate3d(0,-130px, 0) scale(0.5); opacity: 0;}
+const exitAnimation = (reverse: boolean) => `
+0% {transform: translate3d(0,0,0) scale(1); opacity:1;}
+100% {transform: translate3d(0,${
+  (reverse ? -1 : 1) * -130
+}px, 0) scale(.5); opacity:0;}
 `;
 
-const exitAnimation: CSSAttribute = {
-  animation: `${keyframes`${exitSpring}`} 0.8s forwards cubic-bezier(.06,.71,.55,1)`,
-};
-
-// Animated
-const StatusBarBase = styled('div', React.forwardRef)`
+const ToastBarBase = styled('div', React.forwardRef)`
   display: flex;
-  position: absolute;
   align-items: center;
-  background: white;
-  max-width: 300px;
+  background: ${(p) => p.theme.colors.background};
+  color: ${(p) => p.theme.colors.text};
+  text-align: center;
+  line-height: 1.3;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1), 0 3px 3px rgba(0, 0, 0, 0.05);
-  padding: 6px 12px;
-  margin-top: 20px;
+  max-width: 300px;
+  margin: 8px;
+  pointer-events: auto;
+  padding: 6px 8px;
   border-radius: 8px;
 `;
 
 const Message = styled('p')`
-  margin: 4px;
-  color: #363636;
+  margin: 4px 10px;
+  color: inherit;
   flex: 1;
-  text-align: center;
 `;
 
-interface StatusBarProps {
-  status: Toast;
+interface ToastBarProps {
+  toast: Toast;
   offset: number;
+  position: ToastPosition;
+  zIndex: number | false;
   onHeight: (height: number) => void;
+
+  style?: Properties;
+  className?: string;
 }
 
-export const ToastBar: React.FC<StatusBarProps> = React.memo(
-  ({ status, onHeight, offset }) => {
-    const persStatus = usePreserve(status);
+export const ToastBar: React.FC<ToastBarProps> = React.memo(
+  ({ toast, onHeight, offset, position, style, zIndex, className }) => {
+    const prevToast = usePreserve(toast);
 
     const ref = useCallback((el: HTMLElement | null) => {
       if (el) {
@@ -74,31 +64,65 @@ export const ToastBar: React.FC<StatusBarProps> = React.memo(
       }
     }, []);
 
+    const top = position.includes('top');
+    const verticalStyle = top ? { top: 0 } : { bottom: 0 };
+    const horizontalStyle: CSSAttribute = position.includes('left')
+      ? {
+          left: 0,
+        }
+      : position.includes('right')
+      ? {
+          right: 0,
+        }
+      : {
+          left: 0,
+          pointerEvents: 'none',
+          right: 0,
+          justifyContent: 'center',
+        };
+
+    const animationStyle = prevToast?.height
+      ? prevToast.visible
+        ? {
+            animation: `${keyframes`${enterAnimation(
+              !top
+            )}`} 0.35s cubic-bezier(.21,1.02,.73,1) forwards`,
+          }
+        : {
+            animation: `${keyframes`${exitAnimation(
+              !top
+            )}`} 0.8s forwards cubic-bezier(.06,.71,.55,1)`,
+            pointerEvents: 'none',
+          }
+      : { opacity: 0 };
+
     return (
-      <StatusBarWrapper
-        key="status-bar"
+      <div
         style={{
-          zIndex: status.visible ? 9999 : 'initial',
+          position: 'fixed',
+          display: 'flex',
+          ...horizontalStyle,
+          ...verticalStyle,
           transition: 'all 230ms cubic-bezier(.21,1.02,.73,1)',
-          transform: `translateY(${offset}px)`,
+          transform: `translateY(${offset * (top ? 1 : -1)}px)`,
+          zIndex: zIndex === false ? undefined : zIndex,
         }}
       >
-        <StatusBarBase
+        <ToastBarBase
           ref={ref}
-          style={
-            persStatus?.height
-              ? persStatus.visible
-                ? enterAnimation
-                : exitAnimation
-              : { opacity: 0 }
-          }
+          className={className}
+          style={{
+            ...animationStyle,
+            pointerEvents: !toast.visible ? 'none' : undefined,
+            ...style,
+          }}
         >
-          <Indicator icon={persStatus?.icon} type={persStatus?.type} />
+          <Indicator icon={prevToast?.icon} type={prevToast?.type} />
           <Message role="alert" aria-live="polite">
-            {persStatus?.message}
+            {prevToast?.message}
           </Message>
-        </StatusBarBase>
-      </StatusBarWrapper>
+        </ToastBarBase>
+      </div>
     );
   }
 );

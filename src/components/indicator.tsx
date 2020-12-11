@@ -9,13 +9,15 @@ import { IconWrapper } from './icon-wrapper';
 
 const StatusWrapper = styled('div')`
   position: absolute;
-  left: -4px;
-  top: -4px;
 `;
 
 const IndicatorWrapper = styled('div')`
   position: relative;
-  margin-right: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
 `;
 
 interface ConnectionProps {
@@ -25,7 +27,11 @@ interface ConnectionProps {
 
 export const Indicator: React.FC<ConnectionProps> = ({ type, icon }) => {
   if (icon !== undefined) {
-    return <IconWrapper>{icon}</IconWrapper>;
+    if (typeof icon === 'string') {
+      return <IconWrapper>{icon}</IconWrapper>;
+    } else {
+      return <IndicatorWrapper>{icon}</IndicatorWrapper>;
+    }
   }
 
   if (type === 'blank') {

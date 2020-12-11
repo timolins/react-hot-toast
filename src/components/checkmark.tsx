@@ -17,7 +17,6 @@ const checkmarkAnimation = keyframes`
 		height: 0;
 		width: 0;
 		opacity: 0;
-		visibility: visible;
   }
 
   40% {
@@ -27,7 +26,7 @@ const checkmarkAnimation = keyframes`
   }
 
   100% {
-	visibility: visible;
+    opacity: 1;
 		height: 10px;
   }
 `;
@@ -47,8 +46,8 @@ export const Checkmark = styled('div')`
   &:after {
     content: '';
     box-sizing: border-box;
-    visibility: hidden;
     animation: ${checkmarkAnimation} 0.2s ease-out forwards;
+    opacity: 0;
     animation-delay: 200ms;
     position: absolute;
     border-right: 2px solid;

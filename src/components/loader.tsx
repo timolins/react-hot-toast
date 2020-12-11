@@ -4,15 +4,12 @@ const rotate = keyframes`
   from {
     transform: rotate(0deg);
   }
-
   to {
     transform: rotate(360deg);
   }
 `;
 
-export const Loader = styled('div')<{
-  big?: boolean;
-}>`
+export const Loader = styled('div')`
   width: 12px;
   height: 12px;
   box-sizing: border-box;
