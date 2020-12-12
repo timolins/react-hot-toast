@@ -8,7 +8,9 @@
     "build": "parcel build index.html"
   },
   "dependencies": {
-    "react-app-polyfill": "^1.0.0"
+    "clsx": "^1.1.1",
+    "react-app-polyfill": "^1.0.0",
+    "tailwindcss": "^2.0.2"
   },
   "alias": {
     "react": "../node_modules/react",

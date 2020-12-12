@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { DefaultTheme, setup, styled } from 'goober';
+import { DefaultTheme, setup } from 'goober';
 import { Properties } from 'csstype';
 
-import { useToasts } from '../core/use-toasts';
+import { useToaster } from '../core/use-toaster';
 import { dispatch, ActionType } from '../core/store';
 import { ToastBar } from './toast-bar';
 import { ToastPosition } from '../core/types';
@@ -33,7 +33,7 @@ setup(React.createElement, undefined, useTheme);
 
 const MARGIN = 8;
 
-interface ToastsContainerProps {
+interface ToasterProps {
   position?: ToastPosition;
   zIndex?: number | false;
   reverseOrder?: boolean;
@@ -44,13 +44,13 @@ interface ToastsContainerProps {
   toastClassName?: string;
 }
 
-export const ToastsContainer: React.FC<ToastsContainerProps> = ({
+export const Toaster: React.FC<ToasterProps> = ({
   reverseOrder,
   position = 'top-center',
   zIndex = 9999,
   ...props
 }) => {
-  const [toasts, handlers] = useToasts();
+  const [toasts, handlers] = useToaster();
   const visibleToasts = toasts.filter((t) => t.height && t.visible);
 
   return (

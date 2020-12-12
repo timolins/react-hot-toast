@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { dispatch, ActionType, useStore } from './store';
 
-export const useToasts = () => {
+export const useToaster = () => {
   const queue = useStore();
   const [pauseAt, setPausedAt] = useState<number | false>(false);
 

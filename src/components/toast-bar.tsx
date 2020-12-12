@@ -85,7 +85,7 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
           justifyContent: 'center',
         };
 
-    const animationStyle = prevToast?.height
+    const animationStyle: Properties = prevToast?.height
       ? prevToast.visible
         ? {
             animation: `${keyframes`${enterAnimation(
@@ -117,8 +117,8 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
           className={className}
           style={{
             ...animationStyle,
-            pointerEvents: !toast.visible ? 'none' : undefined,
             ...style,
+            ...toast.style,
           }}
         >
           <Indicator icon={prevToast.icon} type={prevToast.type} />

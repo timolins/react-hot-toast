@@ -17,12 +17,12 @@ npm install react-hot-toast
 ## Basic usage
 
 ```jsx
-import toast, { ToastsContainer } from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 
 const App = () => {
   return (
     <div>
-      <ToastContainer />
+      <Toaster />
     </div>
   );
 };
@@ -31,13 +31,15 @@ const App = () => {
 toast('Hello World');
 ```
 
-## `<ToastContainer />` API
+Toasts are removed automatically after their duration. Hovering on one toast will pause all them.
+
+## `<Toaster />` API
 
 ```jsx
-<ToastContainer
+<Toaster
   position="top-center" // Support top-left, top-center, top-right, bottom-left, bottom-center & bottom-right
   zIndex={false} // Defaults to 9999
-  reverseOrder={true} // Toasts spawn at top by default
+  reverseOrder={false} // Toasts spawn at top by default. Set to `true` if you want new Toasts at the end
   // Custom styling
   toastStyle={{
     margin: '40px',
@@ -60,8 +62,10 @@ toast.success('Successfully created!'); // Checkmark
 toast.error('This is an error!'); // Error
 toast.loading('Waiting...'); // Loading spinner
 
-// Alternatively you use toast options
-toast('Success', { type: 'success' });
+// Emoji (animated)
+toast('Awesome!', {
+  icon: '🎉',
+});
 ```
 
 ### Available `toast()` options

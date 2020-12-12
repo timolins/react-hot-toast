@@ -1,12 +1,12 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { ToastsContainer, toast } from '../src';
+import { Toaster, toast } from '../src';
 
 describe('it', () => {
   it('renders without crashing', () => {
     const div = document.createElement('div');
     toast('Hello World');
-    ReactDOM.render(<ToastsContainer />, div);
+    ReactDOM.render(<Toaster />, div);
     ReactDOM.unmountComponentAtNode(div);
   });
   it('call all functions without crashing', () => {
@@ -27,7 +27,7 @@ describe('it', () => {
       }
     );
 
-    ReactDOM.render(<ToastsContainer />, div);
+    ReactDOM.render(<Toaster />, div);
     ReactDOM.unmountComponentAtNode(div);
   });
   it('toast a promise', () => {

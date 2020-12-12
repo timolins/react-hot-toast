@@ -1,15 +1,81 @@
 import 'react-app-polyfill/ie11';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import toast, { ToastsContainer } from '../.';
+import toast, { Toaster } from '../.';
+import { useState } from 'react';
+
+const positions = [
+  'top-left',
+  'top-center',
+  'top-right',
+  'bottom-left',
+  'bottom-center',
+  'bottom-right',
+] as const;
 
 const App = () => {
+  const [position, setPosition] = useState<any>('top-center');
+  const [reverse, setReverse] = useState(false);
   React.useEffect(() => {
     console.log(123);
   });
   return (
-    <div>
+    <div className="flex items-center justify-center h-full bg-gray-300">
       123
+      <fieldset className="grid grid-cols-3 gap-4 ">
+        {positions.map((p) => (
+          <div className="bg-green-100 rounded" key={p}>
+            <input
+              key={p}
+              id={p}
+              type="radio"
+              checked={position === p}
+              onChange={() => {
+                toast.remove();
+                toast.success(
+                  <span>
+                    Position set to <b>{p}</b>
+                  </span>
+                );
+                toast('Yes', {
+                  icon: 'Servas',
+                  style: {
+                    background: '#FFFAEE',
+                    color: '#713200',
+                  },
+                });
+                setPosition(p);
+              }}
+            />
+            <label htmlFor={p}>{p}</label>
+          </div>
+        ))}
+      </fieldset>
+      <button
+        onClick={() => {
+          toast.remove();
+          toast('Notification 1', {
+            icon: '1️⃣',
+          });
+          setTimeout(
+            () =>
+              toast('Notification 2', {
+                icon: '2️⃣',
+              }),
+            400
+          );
+          setTimeout(
+            () =>
+              toast('Notification 3', {
+                icon: '3️⃣',
+              }),
+            800
+          );
+          setReverse(!reverse);
+        }}
+      >
+        Toggle
+      </button>
       <button
         onClick={() => {
           // notify.error('This went wrong.');
@@ -17,9 +83,7 @@ const App = () => {
           const t2 = toast.error('This went wrong.');
 
           // notify.error('This went wrong.');
-          const t = toast('This is an error', {
-            type: 'error',
-          });
+          const t = toast('This is an error');
 
           setTimeout(() => {
             toast.dismiss(t2);
@@ -27,7 +91,7 @@ const App = () => {
           }, 1000);
         }}
       >
-        Error
+        Complex Example
       </button>
       <button
         onClick={() => {
@@ -44,6 +108,10 @@ const App = () => {
             </span>,
             {
               icon: '👏',
+              style: {
+                background: '#333',
+                color: 'white',
+              },
             }
           );
         }}
@@ -81,7 +149,7 @@ const App = () => {
       >
         Promise
       </button>
-      <ToastsContainer />
+      <Toaster position={position} reverseOrder={reverse} />
     </div>
   );
 };

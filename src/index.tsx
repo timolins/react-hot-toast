@@ -1,8 +1,8 @@
 import { toast } from './core/toast';
-export { useToasts } from './core/use-toasts';
+export { useToaster } from './core/use-toaster';
 export { dispatch, ActionType } from './core/store';
 export { ToastBar } from './components/toast-bar';
-export { ToastsContainer } from './components/toast-container';
+export { Toaster } from './components/toaster';
 export { ToastType } from './core/types';
 
 export { toast };
