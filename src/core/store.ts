@@ -28,11 +28,11 @@ type Action =
     }
   | {
       type: ActionType.DISMISS_TOAST;
-      toastId: string;
+      toastId?: string;
     }
   | {
       type: ActionType.REMOVE_TOAST;
-      toastId: string;
+      toastId?: string;
     }
   | {
       type: ActionType.ADD_PAUSE;
@@ -57,7 +57,7 @@ export const reducer = (queue: Toast[], action: Action): Toast[] => {
 
     case ActionType.DISMISS_TOAST:
       return queue.map((t) =>
-        t.id === action.toastId
+        t.id === action.toastId || action.toastId === undefined
           ? {
               ...t,
               visible: false,
@@ -65,6 +65,9 @@ export const reducer = (queue: Toast[], action: Action): Toast[] => {
           : t
       );
     case ActionType.REMOVE_TOAST:
+      if (action.toastId === undefined) {
+        return [];
+      }
       return queue.filter((t) => t.id !== action.toastId);
     case ActionType.ADD_PAUSE:
       return queue.map((t) => ({

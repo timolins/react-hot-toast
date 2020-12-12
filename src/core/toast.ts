@@ -10,19 +10,26 @@ const defaultTimeouts: Map<ToastType, number> = new Map<ToastType, number>([
 ]);
 
 type ToastOptions = Partial<
-  Pick<Toast, 'id' | 'icon' | 'type' | 'duration' | 'role' | 'ariaLive'>
+  Pick<
+    Toast,
+    'id' | 'icon' | 'duration' | 'role' | 'ariaLive' | 'className' | 'style'
+  >
 >;
 
 type ToastHandler = (message: Renderable, options?: ToastOptions) => string;
 
-const createToast = (message: Renderable, opts?: ToastOptions): Toast => ({
+const createToast = (
+  message: Renderable,
+  type: ToastType = 'blank',
+  opts?: ToastOptions
+): Toast => ({
   id: opts?.id || genId(),
   createdAt: Date.now(),
   visible: true,
-  type: 'blank',
+  type,
   role: 'status',
   ariaLive: 'polite',
-  duration: (opts?.type && defaultTimeouts.get(opts.type)) || 4000,
+  duration: defaultTimeouts.get(type) || 4000,
   message,
   ...opts,
 });
@@ -31,20 +38,22 @@ const createHandler = (type?: ToastType): ToastHandler => (
   message,
   options
 ) => {
-  const toast = createToast(message, type ? { ...options, type } : options);
+  const toast = createToast(message, type, options);
   dispatch({ type: ActionType.UPSERT_TOAST, toast });
   return toast.id;
 };
 
 const toast = (message: Renderable, opts?: ToastOptions) =>
-  createHandler()(message, opts);
+  createHandler('blank')(message, opts);
 
 toast.error = createHandler('error');
 toast.success = createHandler('success');
 toast.loading = createHandler('loading');
 
-toast.dismiss = (toastId: string) =>
+toast.dismiss = (toastId?: string) =>
   dispatch({ type: ActionType.DISMISS_TOAST, toastId });
+toast.remove = (toastId?: string) =>
+  dispatch({ type: ActionType.REMOVE_TOAST, toastId });
 
 toast.promise = <T>(
   promise: Promise<T>,

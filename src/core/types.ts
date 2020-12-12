@@ -1,3 +1,5 @@
+import { Properties } from 'csstype';
+
 export type ToastType = 'success' | 'error' | 'loading' | 'blank';
 export type ToastPosition =
   | 'top-left'
@@ -18,6 +20,9 @@ export interface Toast {
 
   role: 'status' | 'alert';
   ariaLive: 'assertive' | 'off' | 'polite';
+
+  style?: Properties;
+  className?: string;
 
   createdAt: number;
   visible: boolean;
