@@ -2,7 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { dispatch, ActionType, useStore } from './store';
 
 export const useToaster = () => {
-  const queue = useStore();
+  const toasts = useStore();
+  const visibleToasts = toasts.filter((t) => t.visible);
   const [pauseAt, setPausedAt] = useState<number | false>(false);
 
   useEffect(() => {
@@ -11,7 +12,7 @@ export const useToaster = () => {
     }
 
     const now = Date.now();
-    const timeouts = queue.map((t) => {
+    const timeouts = toasts.map((t) => {
       const duration = t.duration - (now - t.createdAt);
       const dismiss = () => {
         dispatch({
@@ -38,23 +39,49 @@ export const useToaster = () => {
     return () => {
       timeouts.forEach((timeout) => timeout && clearTimeout(timeout));
     };
-  }, [queue, pauseAt]);
+  }, [toasts, pauseAt]);
 
   const handlers = useMemo(
     () => ({
-      onMouseEnter: () => {
+      startPause: () => {
         setPausedAt(Date.now());
       },
-      onMouseLeave: () => {
+      endPause: () => {
         if (pauseAt) {
           const diff = Date.now() - pauseAt;
           dispatch({ type: ActionType.ADD_PAUSE, duration: diff });
           setPausedAt(false);
         }
       },
+      updateHeight: (toastId: string, height: number) =>
+        dispatch({
+          type: ActionType.UPDATE_TOAST,
+          toast: { id: toastId, height },
+        }),
+      calculateOffset: (
+        toastId: string,
+        {
+          reverseOrder = false,
+          margin = 8,
+        }: { reverseOrder?: boolean; margin?: number }
+      ) => {
+        const index = visibleToasts.findIndex((toast) => toast.id === toastId);
+        const offset =
+          index !== -1
+            ? visibleToasts
+                .slice(...(reverseOrder ? [index + 1] : [0, index]))
+                .reduce((acc, t) => acc + (t.height || 0) + margin, 0)
+            : 0;
+
+        return offset;
+      },
     }),
-    [queue, pauseAt]
+    [toasts, visibleToasts, pauseAt]
   );
 
-  return [queue, handlers] as const;
+  return {
+    toasts,
+    visibleToasts,
+    handlers,
+  };
 };

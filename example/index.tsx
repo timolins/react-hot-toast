@@ -1,7 +1,7 @@
 import 'react-app-polyfill/ie11';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import toast, { Toaster } from '../.';
+import toast, { Toaster, useToaster } from '../.';
 import { useState } from 'react';
 
 const positions = [

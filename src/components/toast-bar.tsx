@@ -47,7 +47,6 @@ interface ToastBarProps {
   toast: Toast;
   offset: number;
   position: ToastPosition;
-  zIndex: number | false;
   onHeight: (height: number) => void;
 
   style?: Properties;
@@ -120,6 +119,12 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
       );
     };
 
+    const style = {
+      ...animationStyle,
+      ...props.style,
+      ...toast.style,
+    };
+
     return (
       <div
         style={{
@@ -129,18 +134,10 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
           ...verticalStyle,
           transition: 'all 230ms cubic-bezier(.21,1.02,.73,1)',
           transform: `translateY(${props.offset * (top ? 1 : -1)}px)`,
-          zIndex: props.zIndex === false ? undefined : props.zIndex,
+          zIndex: toast.visible ? style.zIndex || 9999 : undefined,
         }}
       >
-        <ToastBarBase
-          ref={ref}
-          className={props.className}
-          style={{
-            ...animationStyle,
-            ...props.style,
-            ...toast.style,
-          }}
-        >
+        <ToastBarBase ref={ref} className={props.className} style={style}>
           {renderIcon()}
           <Message role={prevToast.role} aria-live={prevToast.ariaLive}>
             {prevToast.message}

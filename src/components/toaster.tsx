@@ -3,7 +3,6 @@ import { setup } from 'goober';
 import { Properties } from 'csstype';
 
 import { useToaster } from '../core/use-toaster';
-import { dispatch, ActionType } from '../core/store';
 import { ToastBar } from './toast-bar';
 import { ToastPosition } from '../core/types';
 import { IndicatorTheme } from './indicator';
@@ -11,11 +10,8 @@ export { ToastType } from '../core/types';
 
 setup(React.createElement);
 
-const MARGIN = 8;
-
 interface ToasterProps {
   position?: ToastPosition;
-  zIndex?: number | false;
   reverseOrder?: boolean;
 
   toastStyle?: Properties;
@@ -26,12 +22,10 @@ interface ToasterProps {
 export const Toaster: React.FC<ToasterProps> = ({
   reverseOrder,
   position = 'top-center',
-  zIndex = 9999,
   iconTheme,
   ...props
 }) => {
-  const [toasts, handlers] = useToaster();
-  const visibleToasts = toasts.filter((t) => t.height && t.visible);
+  const { toasts, handlers } = useToaster();
 
   return (
     <div
@@ -39,30 +33,19 @@ export const Toaster: React.FC<ToasterProps> = ({
         position: 'fixed',
         [position.includes('top') ? 'top' : 'bottom']: 0,
       }}
-      {...handlers}
+      onMouseEnter={handlers.startPause}
+      onMouseLeave={handlers.endPause}
     >
       {toasts.map((t) => {
-        const index = visibleToasts.findIndex((toast) => toast.id === t.id);
-        const offset =
-          index !== -1
-            ? visibleToasts
-                .slice(...(reverseOrder ? [index + 1] : [0, index]))
-                .reduce((acc, s) => acc + (s.height || 0) + MARGIN, 0)
-            : 0;
-
         return (
           <ToastBar
             key={t.id}
-            onHeight={(height) =>
-              dispatch({
-                type: ActionType.UPDATE_TOAST,
-                toast: { ...t, height },
-              })
-            }
-            zIndex={t.visible && zIndex}
+            onHeight={(height) => handlers.updateHeight(t.id, height)}
             toast={t}
             position={position}
-            offset={offset}
+            offset={handlers.calculateOffset(t.id, {
+              reverseOrder,
+            })}
             iconTheme={iconTheme}
             className={props.toastClassName}
             style={props.toastStyle}

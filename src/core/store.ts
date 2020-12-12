@@ -24,7 +24,7 @@ type Action =
     }
   | {
       type: ActionType.UPDATE_TOAST;
-      toast: Toast;
+      toast: Partial<Toast>;
     }
   | {
       type: ActionType.DISMISS_TOAST;
