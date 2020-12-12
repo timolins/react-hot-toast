@@ -1,17 +1,16 @@
 import * as React from 'react';
 import { styled } from 'goober';
 
-import { Renderable, ToastType } from '../core/types';
-import { ErrorIndicator } from './error';
-import { Loader } from './loader';
-import { Checkmark } from './checkmark';
-import { IconWrapper } from './icon-wrapper';
+import { ToastType } from '../core/types';
+import { ErrorIcon, ErrorTheme } from './error';
+import { LoaderIcon, LoaderTheme } from './loader';
+import { CheckmarkIcon, CheckmarkTheme } from './checkmark';
 
 const StatusWrapper = styled('div')`
   position: absolute;
 `;
 
-const IndicatorWrapper = styled('div')`
+export const IndicatorWrapper = styled('div')`
   position: relative;
   display: flex;
   justify-content: center;
@@ -20,30 +19,32 @@ const IndicatorWrapper = styled('div')`
   height: 20px;
 `;
 
-interface ConnectionProps {
-  type?: ToastType;
-  icon?: Renderable;
+export type IndicatorTheme = Partial<{
+  success: CheckmarkTheme;
+  error: ErrorTheme;
+  loading: LoaderTheme;
+}>;
+
+interface IndicatorProps {
+  type: ToastType;
+  theme?: IndicatorTheme;
 }
 
-export const Indicator: React.FC<ConnectionProps> = ({ type, icon }) => {
-  if (icon !== undefined) {
-    if (typeof icon === 'string') {
-      return <IconWrapper>{icon}</IconWrapper>;
-    } else {
-      return <IndicatorWrapper>{icon}</IndicatorWrapper>;
-    }
-  }
-
+export const Indicator: React.FC<IndicatorProps> = ({ type, theme }) => {
   if (type === 'blank') {
     return null;
   }
 
   return (
     <IndicatorWrapper>
-      <Loader />
+      <LoaderIcon {...theme?.success} />
       {type !== 'loading' && (
         <StatusWrapper>
-          {type === 'error' ? <ErrorIndicator /> : <Checkmark />}
+          {type === 'error' ? (
+            <ErrorIcon {...theme?.error} />
+          ) : (
+            <CheckmarkIcon {...theme?.success} />
+          )}
         </StatusWrapper>
       )}
     </IndicatorWrapper>

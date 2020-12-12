@@ -47,8 +47,12 @@ Toasts are removed automatically after their duration. Hovering on one toast wil
     color: '#fff',
   }}
   toastClassName=""
-  containerStyle={{}}
-  containerClassName=""
+  iconTheme={{
+    success: {
+      primary: 'green',
+      secondary: 'black',
+    },
+  }}
 />
 ```
 
@@ -158,3 +162,8 @@ toast(
   }
 );
 ```
+
+#### Todo
+
+- How to theme icons
+- Headless mode

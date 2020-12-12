@@ -36,12 +36,17 @@ const secondLineAnimation = keyframes`
   }
 `;
 
-export const ErrorIndicator = styled('div')`
+export interface ErrorTheme {
+  primary?: string;
+  secondary?: string;
+}
+
+export const ErrorIcon = styled('div')<ErrorTheme>`
   width: 20px;
   opacity: 0;
   height: 20px;
   border-radius: 10px;
-  background-color: #ff4b4b;
+  background: ${(p) => p.primary || '#ff4b4b'};
   position: relative;
   transform: rotate(45deg);
 
@@ -57,7 +62,7 @@ export const ErrorIndicator = styled('div')`
     position: absolute;
     border-radius: 3px;
     opacity: 0;
-    background: white;
+    background: ${(p) => p.secondary || '#fff'};
     bottom: 9px;
     left: 4px;
     height: 2px;

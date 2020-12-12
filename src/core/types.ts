@@ -1,4 +1,5 @@
 import { Properties } from 'csstype';
+import { IndicatorTheme } from '../components/indicator';
 
 export type ToastType = 'success' | 'error' | 'loading' | 'blank';
 export type ToastPosition =
@@ -23,6 +24,7 @@ export interface Toast {
 
   style?: Properties;
   className?: string;
+  iconTheme?: IndicatorTheme;
 
   createdAt: number;
   visible: boolean;

@@ -31,12 +31,17 @@ const checkmarkAnimation = keyframes`
   }
 `;
 
-export const Checkmark = styled('div')`
+export interface CheckmarkTheme {
+  primary?: string;
+  secondary?: string;
+}
+
+export const CheckmarkIcon = styled('div')<CheckmarkTheme>`
   width: 20px;
   opacity: 0;
   height: 20px;
   border-radius: 10px;
-  background-color: #61d345;
+  background: ${(p) => p.primary || '#61d345'};
   position: relative;
   transform: rotate(45deg);
 
@@ -52,7 +57,7 @@ export const Checkmark = styled('div')`
     position: absolute;
     border-right: 2px solid;
     border-bottom: 2px solid;
-    border-color: white;
+    border-color: ${(p) => p.secondary || '#fff'};
     bottom: 6px;
     left: 6px;
     height: 10px;

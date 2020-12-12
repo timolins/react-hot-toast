@@ -12,7 +12,7 @@ to {
 }
 `;
 
-export const IconWrapper = styled('div')`
+export const AnimatedIconWrapper = styled('div')`
   position: relative;
   transform: scale(0.6);
   opacity: 0.4;

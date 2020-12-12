@@ -9,7 +9,7 @@ const defaultTimeouts: Map<ToastType, number> = new Map<ToastType, number>([
   ['loading', 30000],
 ]);
 
-type ToastOptions = Partial<
+export type ToastOptions = Partial<
   Pick<
     Toast,
     'id' | 'icon' | 'duration' | 'role' | 'ariaLive' | 'className' | 'style'

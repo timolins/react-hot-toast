@@ -5,7 +5,8 @@ import { styled, keyframes, CSSAttribute } from 'goober';
 
 import { usePreserve } from '../core/use-preserve';
 import { Toast, ToastPosition } from '../core/types';
-import { Indicator } from './indicator';
+import { Indicator, IndicatorTheme, IndicatorWrapper } from './indicator';
+import { AnimatedIconWrapper } from './icon-wrapper';
 
 const enterAnimation = (reverse: boolean) => `
 0% {transform: translate3d(0,${
@@ -24,8 +25,8 @@ const exitAnimation = (reverse: boolean) => `
 const ToastBarBase = styled('div', React.forwardRef)`
   display: flex;
   align-items: center;
-  background: ${(p) => p.theme.colors.background};
-  color: ${(p) => p.theme.colors.text};
+  background: #fff;
+  color: #363636;
   text-align: center;
   line-height: 1.3;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1), 0 3px 3px rgba(0, 0, 0, 0.05);
@@ -51,16 +52,17 @@ interface ToastBarProps {
 
   style?: Properties;
   className?: string;
+  iconTheme?: IndicatorTheme;
 }
 
 export const ToastBar: React.FC<ToastBarProps> = React.memo(
-  ({ toast, onHeight, offset, position, style, zIndex, className }) => {
+  ({ toast, position, ...props }) => {
     const prevToast = usePreserve(toast);
 
     const ref = useCallback((el: HTMLElement | null) => {
       if (el) {
         const boundingRect = el.getBoundingClientRect();
-        onHeight(boundingRect.height);
+        props.onHeight(boundingRect.height);
       }
     }, []);
 
@@ -100,6 +102,24 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
           }
       : { opacity: 0 };
 
+    const renderIcon = () => {
+      const { icon } = prevToast;
+      if (icon !== undefined) {
+        if (typeof icon === 'string') {
+          return <AnimatedIconWrapper>{icon}</AnimatedIconWrapper>;
+        } else {
+          return <IndicatorWrapper>{icon}</IndicatorWrapper>;
+        }
+      }
+
+      return (
+        <Indicator
+          theme={{ ...props.iconTheme, ...prevToast.iconTheme }}
+          type={prevToast.type}
+        />
+      );
+    };
+
     return (
       <div
         style={{
@@ -108,20 +128,20 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
           ...horizontalStyle,
           ...verticalStyle,
           transition: 'all 230ms cubic-bezier(.21,1.02,.73,1)',
-          transform: `translateY(${offset * (top ? 1 : -1)}px)`,
-          zIndex: zIndex === false ? undefined : zIndex,
+          transform: `translateY(${props.offset * (top ? 1 : -1)}px)`,
+          zIndex: props.zIndex === false ? undefined : props.zIndex,
         }}
       >
         <ToastBarBase
           ref={ref}
-          className={className}
+          className={props.className}
           style={{
             ...animationStyle,
-            ...style,
+            ...props.style,
             ...toast.style,
           }}
         >
-          <Indicator icon={prevToast.icon} type={prevToast.type} />
+          {renderIcon()}
           <Message role={prevToast.role} aria-live={prevToast.ariaLive}>
             {prevToast.message}
           </Message>
