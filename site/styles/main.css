@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+
+html,
+body,
+body > div {
+  @apply flex flex-col justify-between flex-1 min-h-full overflow-x-hidden text-toast-900;
+}
