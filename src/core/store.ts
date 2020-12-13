@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { toast } from './toast';
 import { Toast } from './types';
 
 const TOAST_LIMIT = 20;
@@ -10,7 +11,8 @@ export enum ActionType {
   DISMISS_TOAST,
   REMOVE_TOAST,
   TOAST,
-  ADD_PAUSE,
+  START_PAUSE,
+  END_PAUSE,
 }
 
 type Action =
@@ -35,75 +37,114 @@ type Action =
       toastId?: string;
     }
   | {
-      type: ActionType.ADD_PAUSE;
-      duration: number;
+      type: ActionType.START_PAUSE;
+      time: number;
+    }
+  | {
+      type: ActionType.END_PAUSE;
+      time: number;
     };
 
-export const reducer = (queue: Toast[], action: Action): Toast[] => {
+interface State {
+  toasts: Toast[];
+  pausedAt: number | undefined;
+}
+
+export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case ActionType.ADD_TOAST:
-      return [action.toast, ...queue].slice(0, TOAST_LIMIT);
+      return {
+        ...state,
+        toasts: [action.toast, ...state.toasts].slice(0, TOAST_LIMIT),
+      };
 
     case ActionType.UPDATE_TOAST:
-      return queue.map((t) =>
-        t.id === action.toast.id ? { ...t, ...action.toast } : t
-      );
+      return {
+        ...state,
+        toasts: state.toasts.map((t) =>
+          t.id === action.toast.id ? { ...t, ...action.toast } : t
+        ),
+      };
 
     case ActionType.UPSERT_TOAST:
       const { toast } = action;
-      return queue.find((t) => t.id === toast.id)
-        ? reducer(queue, { type: ActionType.UPDATE_TOAST, toast })
-        : reducer(queue, { type: ActionType.ADD_TOAST, toast });
+      return state.toasts.find((t) => t.id === toast.id)
+        ? reducer(state, { type: ActionType.UPDATE_TOAST, toast })
+        : reducer(state, { type: ActionType.ADD_TOAST, toast });
 
     case ActionType.DISMISS_TOAST:
-      return queue.map((t) =>
-        t.id === action.toastId || action.toastId === undefined
-          ? {
-              ...t,
-              visible: false,
-            }
-          : t
-      );
+      return {
+        ...state,
+        toasts: state.toasts.map((t) =>
+          t.id === action.toastId || action.toastId === undefined
+            ? {
+                ...t,
+                visible: false,
+              }
+            : t
+        ),
+      };
     case ActionType.REMOVE_TOAST:
       if (action.toastId === undefined) {
-        return [];
+        return {
+          ...state,
+          toasts: [],
+        };
       }
-      return queue.filter((t) => t.id !== action.toastId);
-    case ActionType.ADD_PAUSE:
-      return queue.map((t) => ({
-        ...t,
-        duration: t.duration + action.duration,
-      }));
+      return {
+        ...state,
+        toasts: state.toasts.filter((t) => t.id !== action.toastId),
+      };
+
+    case ActionType.START_PAUSE:
+      return {
+        ...state,
+        pausedAt: action.time,
+      };
+
+    case ActionType.END_PAUSE:
+      const diff = action.time - (state.pausedAt || 0);
+
+      return {
+        ...state,
+        pausedAt: undefined,
+        toasts: state.toasts.map((t) => ({
+          ...t,
+          duration: t.duration + diff,
+        })),
+      };
   }
 };
 
-const listeners: Array<(action: Action) => void> = [];
-let memoryQueue: Toast[] = [];
+const listeners: Array<(state: State) => void> = [];
+
+let memoryState: State = { toasts: [], pausedAt: undefined };
 
 export const dispatch = (action: Action) => {
-  memoryQueue = reducer(memoryQueue, action);
+  memoryState = reducer(memoryState, action);
   listeners.forEach((listener) => {
-    listener(action);
+    listener(memoryState);
   });
 };
 
+export const genId = (() => {
+  let count = 0;
+  return () => {
+    return (++count).toString();
+  };
+})();
+
 export const useStore = () => {
-  const [queue, setQueue] = useState<Toast[]>(memoryQueue);
+  const [state, setState] = useState<State>(memoryState);
   useEffect(() => {
-    // In case multiple notifications are submitted in sync
-    let actionQueue: Action[] = [];
-    const handler = (action: Action) => {
-      actionQueue.push(action);
-      setQueue(actionQueue.reduce(reducer, queue));
-    };
-    listeners.push(handler);
+    listeners.push(setState);
     return () => {
-      const index = listeners.indexOf(handler);
+      const index = listeners.indexOf(setState);
       if (index > -1) {
         listeners.splice(index, 1);
       }
     };
-  }, [queue]);
+  }, [state]);
 
-  return queue;
+  return state;
 };

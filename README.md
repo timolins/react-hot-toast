@@ -77,7 +77,6 @@ toast('Awesome!', {
 ```js
 toast('Hello World', {
   duration: 4000,
-  type: 'success',
   icon: '👏',
 
   // Aria

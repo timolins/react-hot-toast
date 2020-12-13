@@ -1,13 +1,12 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { dispatch, ActionType, useStore } from './store';
 
 export const useToaster = () => {
-  const toasts = useStore();
+  const { toasts, pausedAt } = useStore();
   const visibleToasts = toasts.filter((t) => t.visible);
-  const [pauseAt, setPausedAt] = useState<number | false>(false);
 
   useEffect(() => {
-    if (pauseAt) {
+    if (pausedAt) {
       return;
     }
 
@@ -39,18 +38,19 @@ export const useToaster = () => {
     return () => {
       timeouts.forEach((timeout) => timeout && clearTimeout(timeout));
     };
-  }, [toasts, pauseAt]);
+  }, [toasts, pausedAt]);
 
   const handlers = useMemo(
     () => ({
       startPause: () => {
-        setPausedAt(Date.now());
+        dispatch({
+          type: ActionType.START_PAUSE,
+          time: Date.now(),
+        });
       },
       endPause: () => {
-        if (pauseAt) {
-          const diff = Date.now() - pauseAt;
-          dispatch({ type: ActionType.ADD_PAUSE, duration: diff });
-          setPausedAt(false);
+        if (pausedAt) {
+          dispatch({ type: ActionType.END_PAUSE, time: Date.now() });
         }
       },
       updateHeight: (toastId: string, height: number) =>
@@ -76,7 +76,7 @@ export const useToaster = () => {
         return offset;
       },
     }),
-    [toasts, visibleToasts, pauseAt]
+    [toasts, visibleToasts, pausedAt]
   );
 
   return {
