@@ -117,17 +117,22 @@ const examples: Array<{
     snippet: 'TODO',
 
     action: () => {
-      toast((t) => (
+      // toast((t) => (
+      //   <span>
+      //     Custom and <b>bold</b>
+      //     <button
+      //       className="ml-2 py-1 rounded px-2 border bg-gray-100 text-gray-900"
+      //       onClick={() => toast.dismiss(t.id)}
+      //     >
+      //       Remove
+      //     </button>
+      //   </span>
+      // ));
+      toast(
         <span>
           Custom and <b>bold</b>
-          <button
-            className="ml-2 py-1 rounded px-2 border bg-gray-100 text-gray-900"
-            onClick={() => toast.dismiss(t.id)}
-          >
-            Remove
-          </button>
         </span>
-      ));
+      );
     },
   },
   {
