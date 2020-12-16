@@ -76,7 +76,6 @@ const examples: Array<{
         {
           icon: '↕️',
           duration: 6000,
-          position: 'top-left',
         }
       );
     },
