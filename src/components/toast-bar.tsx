@@ -28,11 +28,12 @@ const ToastBarBase = styled('div', React.forwardRef)`
   color: #363636;
   text-align: center;
   line-height: 1.3;
+  will-change: transform;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1), 0 3px 3px rgba(0, 0, 0, 0.05);
-  max-width: 300px;
-  margin: 8px;
+  max-width: 350px;
+  margin: 16px;
   pointer-events: auto;
-  padding: 6px 8px;
+  padding: 8px 10px;
   border-radius: 8px;
 `;
 
