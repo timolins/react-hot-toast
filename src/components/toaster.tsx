@@ -6,7 +6,6 @@ import { useToaster } from '../core/use-toaster';
 import { ToastBar } from './toast-bar';
 import { ToastPosition } from '../core/types';
 import { IndicatorTheme } from './indicator';
-export { ToastType } from '../core/types';
 
 setup(React.createElement);
 
