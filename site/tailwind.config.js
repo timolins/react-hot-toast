@@ -7,12 +7,12 @@ module.exports = {
   ],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    boxShadow: {
-      'small-button': '0px 1px 2px rgba(126, 56, 0, 0.5)',
-      button:
-        '-6px 8px 10px rgba(81, 41, 10, 0.1), 0px 2px 2px rgba(81, 41, 10, 0.2)',
-    },
     extend: {
+      boxShadow: {
+        'small-button': '0px 1px 2px rgba(126, 56, 0, 0.5)',
+        button:
+          '-6px 8px 10px rgba(81, 41, 10, 0.1), 0px 2px 2px rgba(81, 41, 10, 0.2)',
+      },
       animation: {
         enter: 'enter 200ms ease-out',
         'slide-in': 'slide-in 1.2s cubic-bezier(.29,.64,.7,1.14)',
@@ -32,7 +32,8 @@ module.exports = {
         toast: {
           '50': '#FFF6DF',
           '100': '#fdf7f1',
-          '200': '#FFE092',
+          // '200': '#FFE092',
+          '200': '#F8EEDB',
           '300': '#ebbf99',
           '400': '#dea373',
           '500': '#ce864f',
@@ -49,7 +50,11 @@ module.exports = {
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      translate: ['active'],
+      gradientColorStops: ['active'],
+      boxShadow: ['active'],
+    },
   },
   plugins: [require('@tailwindcss/typography')],
 };

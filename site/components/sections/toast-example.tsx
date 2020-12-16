@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
-import SyntaxHighlighter from 'react-syntax-highlighter';
+import { highlight, languages } from 'prismjs';
+import 'prismjs/components/prism-jsx';
 
 import { EmojiButton } from '../emoji-button';
 
@@ -68,13 +69,14 @@ const examples: Array<{
   {
     title: 'Multi Line',
     emoji: '↕️',
-
+    snippet: 'TODO',
     action: () => {
       toast(
         "This toast is super big. I don't think anyone could eat it in one bite. It's larger than you expected. You eat it but it does not seem to get smaller.",
         {
           icon: '↕️',
           duration: 6000,
+          position: 'top-left',
         }
       );
     },
@@ -82,7 +84,7 @@ const examples: Array<{
   {
     title: 'Emoji',
     emoji: '👏',
-
+    snippet: 'TODO',
     action: () => {
       toast('Good Job!', {
         icon: '👏',
@@ -92,7 +94,7 @@ const examples: Array<{
   {
     title: 'Dark Mode',
     emoji: '🌚',
-
+    snippet: 'TODO',
     action: () => {
       toast(
         <span>
@@ -113,39 +115,45 @@ const examples: Array<{
   {
     title: 'JSX Content',
     emoji: '🔩',
+    snippet: 'TODO',
 
     action: () => {
-      toast(
+      toast((t) => (
         <span>
           Custom and <b>bold</b>
           <button
             className="ml-2 py-1 rounded px-2 border bg-gray-100 text-gray-900"
-            onClick={() => toast.dismiss()}
+            onClick={() => toast.dismiss(t.id)}
           >
-            Clear All
+            Remove
           </button>
         </span>
-      );
+      ));
     },
   },
   {
     title: 'Themed',
     emoji: '🎨',
+    snippet: 'TODO',
 
     action: () => {
-      toast.success('Look I have brand styling', {
-        style: {
-          boxShadow: 'none',
-          background: '#8C4913',
-          color: 'white',
-        },
-        iconTheme: {
-          success: {
-            primary: 'white',
-            secondary: '#8C4913',
+      toast(
+        <span>
+          Look I have <b>brand styling</b>
+        </span>,
+        {
+          style: {
+            boxShadow: 'none',
+            background: 'rgba(10,10,10,0.6)',
+            padding: '20px 10px',
+            borderRadius: '8px',
+            color: 'white',
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
           },
-        },
-      });
+          icon: '🔥',
+        }
+      );
     },
   },
 ];
@@ -155,7 +163,7 @@ export const ToastExample = () => {
   return (
     <section className="grid md:grid-cols-2 gap-4">
       <div className="flex items-center">
-        <div className="w-full grid grid-cols-2 gap-2">
+        <div className="w-full grid grid-cols-2 gap-2 bg-toast-100  rounded-xl p-4">
           {examples.map((e) => (
             <EmojiButton
               emoji={e.emoji}
@@ -163,6 +171,9 @@ export const ToastExample = () => {
                 if (e.snippet) {
                   setSnippet(e.snippet);
                 }
+                (window as any).splitbee?.track('Trigger Toast', {
+                  example: e.title,
+                });
                 e.action();
               }}
             >
@@ -171,8 +182,13 @@ export const ToastExample = () => {
           ))}
         </div>
       </div>
-      <div className="h-64 flex items-center">
-        <SyntaxHighlighter language="jsx">{snippet}</SyntaxHighlighter>
+      <div className="h-64 flex items-center language-javascript bg-toast-100 rounded">
+        <code
+          className="p-4 rounded w-full flex-1"
+          dangerouslySetInnerHTML={{
+            __html: highlight(snippet, languages['javascript'], 'javascript'),
+          }}
+        ></code>
       </div>
     </section>
   );

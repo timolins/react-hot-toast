@@ -6,3 +6,8 @@ body,
 body > div {
   @apply flex flex-col justify-between flex-1 min-h-full overflow-x-hidden text-toast-900;
 }
+
+button,
+a {
+  @apply outline-none focus:outline-none ring-offset-green-900 ring-toast-900 ring-opacity-30 transition-shadow duration-100 focus:ring-4;
+}

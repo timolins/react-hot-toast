@@ -1,7 +1,9 @@
 import clsx from 'clsx';
+import { highlight, languages } from 'prismjs';
 import toast from 'react-hot-toast';
 import Arrow from '../../assets/arrow.svg';
-import SyntaxHighlighter from 'react-syntax-highlighter';
+// import Highlight, { defaultProps } from 'prism-react-renderer';
+// import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 
 import { EmojiButton } from '../emoji-button';
 
@@ -85,48 +87,50 @@ export const ToasterExample: React.FC<{
 
   return (
     <section className="grid md:grid-cols-3 gap-2">
-      <SyntaxHighlighter language="jsx">
-        {`<Toaster
-  position="${position}"
-  reverseOrder={${reverse}}
-/>`}
-      </SyntaxHighlighter>
+      {/* <Highlight
+        {...defaultProps}
+        language="jsx"
+        code={}
+      /> */}
+      <code
+        className="p-4 rounded w-full flex-1"
+        dangerouslySetInnerHTML={{
+          __html: highlight(
+            `<Toaster
+          position="${position}"
+          reverseOrder={${reverse}}
+        />`,
+            languages['javascript'],
+            'javascript'
+          ),
+        }}
+      ></code>
       <div className="order-first col-span-2 md:order-1">
-        <h3 className="text-lg font-bold mb-2 text-center">
-          Change Toaster Position
-        </h3>
-        <div className="flex flex-col justify-between bg-toast-100 rounded-xl  py-4 px-1 md:px-4">
+        <div className="flex flex-col justify-between bg-toast-100 rounded-xl gap-4  py-4 px-1 md:px-4 h-36">
           <div className="grid grid-cols-3 gap-1 md:gap-4 justify-between">
             {positions.slice(0, 3).map((p) => renderPosition(p))}
           </div>
-          <div className="flex justify-center my-4">
-            <EmojiButton
-              emoji={
-                <Arrow
-                  className={clsx(
-                    'transform transition-transform',
-                    ((position.includes('bottom') && !reverse) ||
-                      (position.includes('top') && reverse)) &&
-                      'rotate-180'
-                  )}
-                />
-              }
-              onClick={reverseIt}
-            >
-              {/* <Arrow
-        className={clsx(
-          'transform transition-transform',
-          ((p.includes('bottom') && !reverse) ||
-            (p.includes('top') && reverse)) &&
-            'rotate-180'
-        )}
-      /> */}{' '}
-              Toggle Order
-            </EmojiButton>
-          </div>
+
           <div className="grid grid-cols-3 gap-1 md:gap-4 justify-between">
             {positions.slice(3, 6).map((p) => renderPosition(p))}
           </div>
+        </div>
+        <div className="flex justify-center my-4">
+          <EmojiButton
+            emoji={
+              <Arrow
+                className={clsx(
+                  'transform transition-transform',
+                  ((position.includes('bottom') && !reverse) ||
+                    (position.includes('top') && reverse)) &&
+                    'rotate-180'
+                )}
+              />
+            }
+            onClick={reverseIt}
+          >
+            Toggle Direction
+          </EmojiButton>
         </div>
       </div>
     </section>

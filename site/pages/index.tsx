@@ -2,17 +2,19 @@ import Head from 'next/head';
 import Logo from '../assets/logo.svg';
 import Butter1 from '../assets/butter-1.svg';
 import Butter2 from '../assets/butter-2.svg';
+import GitHub from '../assets/github.svg';
 import Checkmark from '../assets/checkmark.svg';
 import toast, { Toaster, useToasterStore } from 'react-hot-toast';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 
 import { ToastExample } from '../components/sections/toast-example';
 import { ToasterExample } from '../components/sections/toaster-example';
+import * as Prism from 'prismjs';
 
 const Button: React.FC<{ onClick: () => void }> = ({ onClick, children }) => (
   <button
-    className="rounded-lg font-bold bg-gradient-to-b from-toast-200 to-toast-300 py-4 px-6 shadow-button"
+    className="rounded-lg font-bold bg-gradient-to-b from-toast-200 to-toast-300 py-4 px-6 focus:3 shadow-button"
     onClick={onClick}
   >
     {children}
@@ -60,7 +62,7 @@ const Steps = () => (
     <Step
       count={2}
       title="Add Toaster to your app"
-      subTitle="It weighs less than 5kb"
+      subTitle="Make sure it's placed at the top"
       code={
         <>
           <span className="text-toast-600">{'<div>'}</span>
@@ -72,7 +74,7 @@ const Steps = () => (
     <Step
       count={3}
       title="Start toasting!"
-      subTitle="Can be called anywhere"
+      subTitle="Call it from anywhere"
       code={
         <>
           <span className="text-toast-600">{'toast'}</span>
@@ -91,14 +93,9 @@ const Features = () => (
     <Feature>Emoji Support</Feature>
     <Feature>Customizable</Feature>
     <Feature>Promise API</Feature>
-    <Feature>Less than 5kb</Feature>
+    <Feature>Lightweight</Feature>
     <Feature>Pause on hover</Feature>
-    <Feature>
-      Headless{' '}
-      <span className="inline-block px-1 bg-toast-100 rounded font-mono4">
-        useToaster
-      </span>
-    </Feature>
+    <Feature>Headless Hooks</Feature>
   </div>
 );
 
@@ -119,18 +116,36 @@ export default function Home() {
         <div className="container  flex flex-col items-center relative">
           <Butter1
             className="absolute -left-24 md:left-24 transition-all duration-200"
+            onClick={() => {
+              // toast(
+              //   <span>
+              //     Pssst! Get -20% off Splitbee Pro:{' '}
+              //     <a href="https://splitbee.io/?butter">
+              //       <code>
+              //         <b>REACT-HOT-TOST</b>
+              //       </code>
+              //     </a>
+              //   </span>,
+              //   {
+              //     icon: <span className="text-3xl">🤫 🐝</span>,
+              //     duration: 1000,
+              //   }
+              // );
+            }}
             style={{
               opacity: shouldFade ? 0.5 : 1,
+              // filter: `blur(${shouldFade ? 5 : 0}px)`,
             }}
           />
           <Butter2 className="absolute right-24 bottom-4 " />
 
           <Logo
             role="img"
-            alt="react-hot-toast"
+            // alt="react-hot-toast"
             className="relative animate-slide-in transition-all duration-200 -mt-8 md:-mt-4"
             style={{
               opacity: shouldFade ? 0.2 : 1,
+              filter: `blur(${shouldFade ? 6 : 0}px)`,
               // transform: toasts.length
               //   ? 'translateY(-100%)'
               //   : 'translateY(0)',
@@ -145,16 +160,20 @@ export default function Home() {
             }
           >
             <h1 className="text-4xl animate-enter font-bold text-toast-900">
-              The best React toast in town.
+              The best toast in town.
             </h1>
             <h2 className="text-2xl font-bold text-toast-600 mt-2">
-              Easy. Lightweight. Smoking hot.
+              Smoking hot React notifications.
             </h2>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 gap-4 rounded-2xl bg-toast-200 p-4 w-full max-w-lg">
             <button
-              className="rounded-lg font-bold gap-4 flex bg-gradient-to-b from-toast-50 to-toast-200 py-4 px-6 shadow-button"
+              className={clsx(
+                'rounded-lg font-bold gap-4 flex bg-gradient-to-b from-white to-toast-200 shadow-button text-center',
+                'py-4 px-6',
+                'active:translate-y-0.5 active:from-toast-100 active:shadow-none active:to-toast-100 active:bg-gray-100  transform '
+              )}
               onClick={() => {
                 const promise = new Promise((res, rej) => {
                   if (Math.random() < 0.85) {
@@ -187,13 +206,14 @@ export default function Home() {
               }}
             >
               <div>🛎 </div>
-              <div>Make me a toast</div>
+              <span className="flex-1 mr-2">Make me a toast</span>
             </button>
             <button
-              className="rounded-lg font-bold bg-white py-4 px-6 shadow-button"
+              className="rounded-lg flex font-bold bg-white py-4 px-6 shadow-button  text-toast-800"
               onClick={() => {}}
             >
-              GitHub
+              <GitHub className="opacity-100" />
+              <span className="flex-1 text-toast-800">GitHub</span>
             </button>
           </div>
 
@@ -203,11 +223,17 @@ export default function Home() {
           </div>
 
           <Features />
+          <Steps />
           <div className="w-full max-w-4xl">
             <div className="my-14">
+              <h2 className="ml-5 text-2xl font-bold">Examples</h2>
               <ToastExample />
             </div>
             <div className="my-14">
+              <h2 className="mr-5 mb-4 text-right text-2xl font-bold">
+                Change Position
+              </h2>
+
               <ToasterExample
                 onReverse={setReverse}
                 reverse={reverse}
@@ -216,11 +242,32 @@ export default function Home() {
               />
             </div>
           </div>
-          <Steps />
         </div>
       </header>
 
-      <Toaster position={position} reverseOrder={reverse} />
+      <Toaster
+        position={position}
+        reverseOrder={reverse}
+        // options={{
+        //   all: {
+        //     style: {
+        //       minHeight: '200px',
+        //     },
+        //     duration: 2000,
+        //   },
+
+        //   // icon: 'JOhannes',
+        //   // style: {
+        //   //   // background: 'green',
+        //   //   minWidth: '300px',
+        //   // },
+        //   // className: 'green',
+        // }}
+        // toastStyle={(t) => ({
+        //   background: t.type === 'success' ? 'green' : 'red',
+        // })}
+      />
+      <footer className="container">test</footer>
     </div>
   );
 }
