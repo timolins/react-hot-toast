@@ -10,13 +10,13 @@ const StatusWrapper = styled('div')`
   position: absolute;
 `;
 
-export const IndicatorWrapper = styled('div')`
+const IndicatorWrapper = styled('div')`
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 20px;
-  height: 20px;
+  min-width: 20px;
+  min-height: 20px;
 `;
 
 export type IconThemes = Partial<{
