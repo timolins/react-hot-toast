@@ -93,24 +93,21 @@ export const ToasterExample: React.FC<{
   );
 
   return (
-    <section className="grid md:grid-cols-3 gap-2">
-      {/* <Highlight
-        {...defaultProps}
-        language="jsx"
-        code={}
-      /> */}
-      <Code
-        snippet={`<Toaster
+    <section className="">
+      <div className="grid md:grid-cols-3 gap-2">
+        <Code
+          snippet={`<Toaster
   position="${position}"
   reverseOrder={${reverse}}
 />`}
-      />
+        />
 
-      <div className="order-first col-span-2 md:order-1">
-        <div className="grid grid-cols-3 justify-between bg-toast-100 rounded-xl gap-x-2 gap-y-4 p-2 md:p-4">
+        <div className="col-span-2 grid grid-cols-3 justify-between bg-toast-100 rounded-xl gap-x-2 gap-y-4 p-2 md:p-4">
           {positions.map((p) => renderPosition(p))}
         </div>
-        <div className="flex justify-center my-4">
+      </div>
+      <div className="grid md:grid-cols-3">
+        <div className="col-start-2 col-span-2 flex justify-center my-4">
           <EmojiButton
             emoji={
               <Arrow

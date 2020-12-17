@@ -172,6 +172,7 @@ export const ToastExample = () => {
         <div className="w-full grid grid-cols-2 gap-2 bg-toast-100  rounded-xl p-4">
           {examples.map((e) => (
             <EmojiButton
+              key={e.title}
               emoji={e.emoji}
               onClick={() => {
                 if (e.snippet) {

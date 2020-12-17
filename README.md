@@ -1,4 +1,4 @@
-# react-hot-toast
+# [react-hot-toast](https://react-hot-toast.com)
 
 > Not yet published - improved docs coming soon
 

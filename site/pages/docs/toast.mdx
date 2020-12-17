@@ -1,0 +1,146 @@
+import Layout from '../../components/docs-layout';
+import toast from 'react-hot-toast';
+
+export const meta = {
+  title: 'toast() API',
+};
+
+# `toast()` API
+
+## Create a toast
+
+There a couple of ways to create a toast.
+
+```js
+toast('Hello World'); // Blank (No icon)
+toast.success('Successfully created!'); // Checkmark
+toast.error('This is an error!'); // Error
+toast.loading('Waiting...'); // Loading spinner
+
+// Emoji (animated)
+toast('Awesome!', {
+  icon: '🎉',
+});
+```
+
+## Available `toast()` options
+
+```js
+toast('Hello World', {
+  duration: 4000,
+
+  // Styling
+  style: {},
+  className: '',
+
+  // Custom Icon
+  icon: '👏',
+
+  // Change colors of success/error/loading icon
+  iconTheme: {
+    primary: '#000',
+    secondary: '#fff',
+  },
+
+  // Aria
+  role: 'status',
+  ariaLive: 'polite',
+});
+```
+
+<button onClick={() => toast('Test')}>Create Toast</button>
+
+### Remove a toast programmatically
+
+Toasts will auto-remove bei default.
+
+```js
+const toastId = toast.loading('Loading...');
+
+// ...
+
+toast.dismiss(toastId);
+```
+
+### Update an existing toast
+
+```js
+const toastId = toast.loading('Loading...');
+
+// ...
+
+toast.success('This worked', {
+  id: toastId,
+});
+```
+
+### Use with promises
+
+This shorthand is useful for mapping a promise to a toast. It will update when the promise resolves or fails.
+
+#### Simple Usage
+
+```js
+toast.promise(myPromise, {
+  loading: 'Loading',
+  success: 'Got the data',
+  error: 'Error when fetching',
+});
+```
+
+#### Advanced
+
+```js
+toast.promise(
+  myPromise,
+  // Messages for each outcome. Support callback to include Promise result
+  {
+    loading: 'Loading',
+    success: (data) => `Successfully saved ${data.name}`,
+    error: (err) => `This just happened: ${err.toString()}`,
+  },
+  {
+    style: {
+      minWidth: '250px',
+    },
+    // Options for each outcome
+    success: {
+      duration: 5000,
+      icon: '🔥',
+    },
+  }
+);
+```
+
+### Render custom content
+
+You can provide a React components instead of text.
+
+```jsx
+toast(
+  <span>
+    Custom and <b>bold</b>
+  </span>,
+  {
+    icon: <Icon />,
+  }
+);
+```
+
+You can also supply a function that receives the `Toast` as argument.
+
+```jsx
+toast(
+  (t) => (
+    <span>
+      Custom and <b>bold</b>
+      <button onClick={() => toast.dismiss(t.id)}>Dismiss</button>
+    </span>
+  ),
+  {
+    icon: <Icon />,
+  }
+);
+```
+
+export default ({ children, meta }) => <Layout meta={meta}>{children}</Layout>;

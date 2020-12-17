@@ -1,0 +1,49 @@
+import Layout from '../../components/docs-layout';
+import toast from 'react-hot-toast';
+
+export const meta = {
+  title: 'Documentation',
+};
+
+export default ({ children, meta }) => <Layout meta={meta}>{children}</Layout>;
+
+# Documentation
+
+Add beautiful notifications to your React app with [react-hot-toast](https://github.com/timolins/react-hot-toast).
+
+## Specs
+
+- [toast](/docs/toast)
+- [Toaster](/docs/toaster)
+- [useToaster](/docs/use-toaster)
+
+## Install
+
+### With Yarn
+
+```sh
+yarn add react-hot-toast
+```
+
+### With NPM
+
+```sh
+npm install react-hot-toast
+```
+
+## Basic usage
+
+```jsx
+import toast, { Toaster } from 'react-hot-toast';
+
+const App = () => {
+  return (
+    <div>
+      <Toaster />
+    </div>
+  );
+};
+
+// Show notifications anywhere
+toast('Hello World');
+```

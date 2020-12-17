@@ -12,10 +12,12 @@ module.exports = {
         'small-button': '0px 1px 2px rgba(126, 56, 0, 0.5)',
         button:
           '-6px 8px 10px rgba(81, 41, 10, 0.1), 0px 2px 2px rgba(81, 41, 10, 0.2)',
+        'button-active':
+          '-1px 2px 5px rgba(81, 41, 10, 0.15), 0px 1px 1px rgba(81, 41, 10, 0.15)',
       },
       animation: {
         enter: 'enter 200ms ease-out',
-        'slide-in': 'slide-in 1.2s cubic-bezier(.29,.64,.7,1.14)',
+        'slide-in': 'slide-in 1.2s cubic-bezier(.41,.73,.51,1.02)',
       },
       keyframes: {
         enter: {
@@ -43,6 +45,56 @@ module.exports = {
           '900': '#482307',
         },
       },
+      typography: (theme) => ({
+        DEFAULT: {
+          css: {
+            color: theme('colors.toast.900'),
+            h1: {
+              color: theme('colors.toast.900'),
+            },
+            h2: {
+              color: theme('colors.toast.900'),
+            },
+            h3: {
+              color: theme('colors.toast.800'),
+            },
+            h4: {
+              color: theme('colors.toast.900'),
+            },
+            pre: {
+              color: null,
+              backgroundColor: null,
+              overflowX: 'auto',
+              fontSize: theme('fontSize.base'),
+              padding: 0,
+            },
+            'pre pre': {
+              padding: theme('spacing.4'),
+              margin: 0,
+            },
+            'pre code': {
+              backgroundColor: 'transparent',
+              borderWidth: '0',
+              borderRadius: '0',
+              fontWeight: '400',
+              color: 'inherit',
+              fontFamily: 'inherit',
+              lineHeight: 'inherit',
+            },
+            code: {
+              color: theme('colors.toast.900'),
+              fontWeight: '600',
+            },
+            'code::before': {
+              content: '""',
+            },
+            'code::after': {
+              content: '""',
+            },
+            // ...
+          },
+        },
+      }),
     },
     container: {
       padding: '1rem',

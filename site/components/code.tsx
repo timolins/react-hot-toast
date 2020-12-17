@@ -99,25 +99,36 @@ const theme: PrismTheme = {
 
 export const Code: React.FC<{
   snippet: string;
-}> = ({ snippet }) => (
+  className?: string;
+}> = (props) => (
   <Highlight
     {...defaultProps}
-    code={snippet}
+    code={props.snippet}
     theme={theme}
     language={'javascript'}
   >
     {({ className, style, tokens, getLineProps, getTokenProps }) => (
       <pre
-        className={clsx(className, 'h-full w-full rounded p-4')}
+        className={clsx(
+          props.className,
+          className,
+          'h-full w-full rounded-lg p-4'
+        )}
         style={style}
       >
-        {tokens.map((line, i) => (
-          <div {...getLineProps({ line, key: i })}>
-            {line.map((token, key) => (
-              <span {...getTokenProps({ token, key })} />
-            ))}
-          </div>
-        ))}
+        {tokens.map((line, i) => {
+          if (tokens.length - 1 === i && line[0].empty) {
+            return null;
+          }
+
+          return (
+            <div {...getLineProps({ line, key: i })}>
+              {line.map((token, key) => (
+                <span {...getTokenProps({ token, key })} />
+              ))}
+            </div>
+          );
+        })}
       </pre>
     )}
   </Highlight>

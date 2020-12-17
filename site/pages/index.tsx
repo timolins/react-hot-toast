@@ -1,24 +1,17 @@
 import Head from 'next/head';
+import Link from 'next/link';
 import Logo from '../assets/logo.svg';
 import Butter1 from '../assets/butter-1.svg';
 import Butter2 from '../assets/butter-2.svg';
 import GitHub from '../assets/github.svg';
 import Checkmark from '../assets/checkmark.svg';
 import toast, { Toaster, useToasterStore } from 'react-hot-toast';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 
 import { ToastExample } from '../components/sections/toast-example';
+import { Footer } from '../components/sections/footer';
 import { ToasterExample } from '../components/sections/toaster-example';
-
-const Button: React.FC<{ onClick: () => void }> = ({ onClick, children }) => (
-  <button
-    className="rounded-lg font-bold bg-gradient-to-b from-toast-200 to-toast-300 py-4 px-6 focus:3 shadow-button"
-    onClick={onClick}
-  >
-    {children}
-  </button>
-);
 
 const Feature: React.FC = ({ children }) => (
   <div className="flex gap-1 items-center">
@@ -136,30 +129,27 @@ export default function Home() {
             }}
             style={{
               opacity: shouldFade ? 0.5 : 1,
-              // filter: `blur(${shouldFade ? 5 : 0}px)`,
             }}
           />
 
-          <Logo
-            role="img"
-            aria-label="react-hot-toast"
-            className="relative animate-slide-in transition-all duration-200 -mt-8 md:-mt-4"
-            style={{
-              opacity: shouldFade ? 0.2 : 1,
-              filter: `blur(${shouldFade ? 6 : 0}px)`,
-              // transform: toasts.length
-              //   ? 'translateY(-100%)'
-              //   : 'translateY(0)',
-            }}
-          />
-          <div
-            className="text-center my-12 relative transition-all duration-200"
-            style={
-              {
-                // transform: toasts.length ? 'translateY(-30px)' : 'translateY(0)',
-              }
-            }
-          >
+          <div>
+            <Logo
+              role="img"
+              aria-label="react-hot-toast"
+              className="relative animate-slide-in transition-all duration-200 -mt-8 md:-mt-4"
+              style={{
+                opacity: shouldFade ? 0.2 : 1,
+                filter: `blur(${shouldFade ? 6 : 0}px)`,
+                // transform: toasts.length
+                //   ? 'translateY(-100%)'
+                //   : 'translateY(0)',
+              }}
+            />
+            {/* <Link href="/docs">
+              <a className="flex">Documentation</a>
+            </Link> */}
+          </div>
+          <div className="text-center my-12 relative transition-all duration-200">
             <h1 className="text-4xl animate-enter font-bold text-toast-900">
               The Best Toast in Town.
             </h1>
@@ -175,7 +165,7 @@ export default function Home() {
               className={clsx(
                 'rounded-lg font-bold gap-4 flex bg-gradient-to-b from-white to-toast-200 shadow-button text-center',
                 'py-4 px-6',
-                'active:translate-y-0.5 active:bg-gray-100 transform transition-all ',
+                'active:translate-y-0.5 active:shadow-button-active active:bg-gray-100 transform transition-all',
                 'focus:outline-none focus:ring-4'
               )}
               onClick={() => {
@@ -207,7 +197,12 @@ export default function Home() {
               <span className="flex-1 mr-2">Make me a toast</span>
             </button>
             <a
-              className="rounded-lg flex font-bold bg-white py-4 px-6 shadow-button  text-toast-800"
+              className={clsx(
+                'rounded-lg flex font-bold bg-white py-4 px-6 shadow-button  text-toast-800',
+                'active:translate-y-0.5 active:shadow-button-active transition-all transform'
+              )}
+              data-splitbee-event="Open Link"
+              data-splitbee-event-target="GitHub"
               onClick={() => {}}
               href="https://github.com/timolins/react-hot-toast"
             >
@@ -248,11 +243,7 @@ export default function Home() {
       <div className="container flex justify-end -mt-24 pointer-events-none">
         <Butter2 className="transform translate-x-20" />
       </div>
-      <footer className="container relative max-w-4xl justify-center my-8 flex gap-8 underline">
-        <a href="https://github.com/timolins/react-hot-toast">GitHub</a>
-        <a href="/docs">Docs</a>
-        <a href="https://twitter.com/timolins">Twitter</a>
-      </footer>
+      <Footer />
     </div>
   );
 }

@@ -1,0 +1,35 @@
+import Layout from '../../components/docs-layout';
+import toast from 'react-hot-toast';
+
+export const meta = {
+  title: '<Toaster/> API',
+};
+
+# `<Toaster />` API
+
+```jsx
+<Toaster
+  position="top-center" // Support top-left, top-center, top-right, bottom-left, bottom-center & bottom-right
+  reverseOrder={false} // Toasts spawn at top by default. Set to `true` if you want new Toasts at the end
+  toastOptions={{
+    // Define default options
+    style: {
+      margin: '40px',
+      background: '#363636',
+      color: '#fff',
+      zIndex: 1,
+    },
+
+    // Default options for specific types
+    success: {
+      duration: 5000,
+      theme: {
+        primary: 'green',
+        secondary: 'black',
+      },
+    },
+  }}
+/>
+```
+
+export default ({ children, meta }) => <Layout meta={meta}>{children}</Layout>;
