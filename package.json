@@ -1,6 +1,6 @@
 {
   "name": "react-hot-toast",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "author": "Timo Lins",
   "license": "MIT",
   "main": "dist/index.js",
