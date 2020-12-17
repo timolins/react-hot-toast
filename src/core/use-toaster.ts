@@ -76,7 +76,7 @@ export const useToaster = () => {
         return offset;
       },
     }),
-    [toasts, visibleToasts, pausedAt]
+    [visibleToasts, pausedAt]
   );
 
   return {

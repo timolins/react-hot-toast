@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { toast } from './toast';
 import { Toast } from './types';
 
 const TOAST_LIMIT = 20;

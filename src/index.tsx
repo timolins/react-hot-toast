@@ -1,4 +1,10 @@
 import { toast } from './core/toast';
+
+// Type re-export workaround, to stay compatible with TS 3.7 and lower
+import {
+  ToastOptions as _ToastOptions,
+  ToastPosition as _ToastPosition,
+} from './core/types';
 export { useToaster } from './core/use-toaster';
 export { dispatch, ActionType } from './core/store';
 export { ToastBar } from './components/toast-bar';
@@ -9,8 +15,8 @@ export { CheckmarkIcon } from './components/checkmark';
 export { ErrorIcon } from './components/error';
 export { LoaderIcon } from './components/loader';
 
-export * from './core/toast';
-export * from './core/types';
+export type ToastOptions = _ToastOptions;
+export type ToastPosition = _ToastPosition;
 
 export { toast };
 export default toast;
