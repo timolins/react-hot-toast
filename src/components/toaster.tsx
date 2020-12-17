@@ -28,6 +28,7 @@ export const Toaster: React.FC<ToasterProps> = ({
     <div
       style={{
         position: 'fixed',
+        zIndex: 9999,
         ...containerStyle,
       }}
       onMouseEnter={handlers.startPause}
