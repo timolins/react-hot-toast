@@ -20,8 +20,8 @@ jobs:
       - name: Lint
         run: yarn lint
 
-      - name: Test
-        run: yarn test --ci --coverage --maxWorkers=2
+      # - name: Test
+      #   run: yarn test --ci --coverage --maxWorkers=2
 
       - name: Build
         run: yarn build
