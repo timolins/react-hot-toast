@@ -109,7 +109,6 @@ export default function Home() {
     <div>
       <Head>
         <title>react-hot-toast - The best React notifications in town</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <header className="bg-gradient-to-b from-toast-50 to-white bg-opacity-10">
         <div className="container  flex flex-col items-center relative">
@@ -171,6 +170,8 @@ export default function Home() {
 
           <div className="grid md:grid-cols-2 gap-4 rounded-2xl bg-toast-200 p-4 w-full max-w-lg">
             <button
+              data-splitbee-event="Trigger Toast"
+              data-splitbee-event-example="CTA"
               className={clsx(
                 'rounded-lg font-bold gap-4 flex bg-gradient-to-b from-white to-toast-200 shadow-button text-center',
                 'py-4 px-6',
@@ -245,7 +246,7 @@ export default function Home() {
 
       <Toaster position={position} reverseOrder={reverse} toastOptions={{}} />
       <div className="container flex justify-end -mt-24 pointer-events-none">
-        <Butter2 />
+        <Butter2 className="transform translate-x-20" />
       </div>
       <footer className="container relative max-w-4xl justify-center my-8 flex gap-8 underline">
         <a href="https://github.com/timolins/react-hot-toast">GitHub</a>

@@ -8,6 +8,7 @@ function MyApp({ Component, pageProps }) {
     <>
       <Head>
         <script async data-api="/_hive" src="/bee.js"></script>
+        <link rel="shortcut icon" href="/favicon.png" type="image/x-icon" />
       </Head>
       <Component {...pageProps} />
     </>
