@@ -31,9 +31,13 @@ toast('Hello World');
 
 ### Animated Example
 
-Instead of mapping over `visibleToasts` we'll use `toasts`. We animate them based on `toast.visible`. Toasts will be removed from `toasts` 1 second after being dismissed.
+Instead of mapping over `visibleToasts` we'll use `toasts`, which includes all hidden toasts aswell. We animate them based on `toast.visible`. Toasts will be removed from 1 second after being dismissed, which give us enough time to animate.
+
+You can play with the demo on [CodeSandbox](https://codesandbox.io/s/react-hot-toast-usetoaster-headless-example-zw7op?file=/src/App.js).
 
 ```jsx
+import { useToaster } from 'react-hot-toast';
+
 const Notifications = () => {
   const { toasts, handlers } = useToaster();
   const { startPause, endPause, calculateOffset, updateHeight } = handlers;

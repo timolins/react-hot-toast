@@ -61,6 +61,9 @@ module.exports = {
             h4: {
               color: theme('colors.toast.900'),
             },
+            strong: {
+              color: theme('colors.toast.900'),
+            },
             pre: {
               color: null,
               backgroundColor: null,
@@ -90,6 +93,22 @@ module.exports = {
             },
             'code::after': {
               content: '""',
+            },
+            thead: {
+              color: theme('colors.toast.900'),
+              fontWeight: '600',
+              borderBottomWidth: '1px',
+              borderBottomColor: theme('colors.toast.200'),
+            },
+            'tbody tr': {
+              borderBottomWidth: '1px',
+              borderBottomColor: theme('colors.toast.200'),
+            },
+            'ul > li::before': {
+              content: '""',
+              position: 'absolute',
+              backgroundColor: theme('colors.toast.600'),
+              borderRadius: '50%',
             },
             // ...
           },

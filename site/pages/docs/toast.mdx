@@ -9,21 +9,39 @@ export const meta = {
 
 ## Create a toast
 
-There a couple of ways to create a toast.
+There a different ways to create a toast.
+
+### Blank
+
+```
+toast('Hello World');
+```
+
+The most basic variant. It does not have an icon by default, but you can provide one via the options.
+
+### Success
 
 ```js
-toast('Hello World'); // Blank (No icon)
-toast.success('Successfully created!'); // Checkmark
-toast.error('This is an error!'); // Error
-toast.loading('Waiting...'); // Loading spinner
+toast.success('Successfully created!');
+```
 
-// Emoji (animated)
-toast('Awesome!', {
-  icon: '🎉',
-});
+Renders an animated checkmark as icon. The icon can be themed with `iconTheme`.
+
+### Error
+
+```js
+toast.error('This is an error!');
+```
+
+### Loading
+
+```js
+toast.loading('Waiting...');
 ```
 
 ## Available `toast()` options
+
+You can provide `ToastOptions` as second argument. They will overwrite all options received from `<Toaster/>`.
 
 ```js
 toast('Hello World', {
@@ -48,11 +66,22 @@ toast('Hello World', {
 });
 ```
 
-<button onClick={() => toast('Test')}>Create Toast</button>
+## Default Durations
 
-### Remove a toast programmatically
+Every type has their own duration. You can overwrite them `duration` with the toast options. This can be done per toast options or globally by the [`<Toaster/>`](/docs/toaster).
 
-Toasts will auto-remove bei default.
+| type      | duration |
+| --------- | -------- |
+| `blank`   | 4000     |
+| `error`   | 4000     |
+| `success` | 2000     |
+| `loading` | 30000    |
+
+### Dismiss toast programmatically
+
+You can manually dismiss a notification with `toast.dismiss`. Be aware that it triggers the exit animation and does not remove the Toast instantly. Toasts will auto-remove after 1 second by default.
+
+#### Dismiss a single toast
 
 ```js
 const toastId = toast.loading('Loading...');
@@ -60,6 +89,26 @@ const toastId = toast.loading('Loading...');
 // ...
 
 toast.dismiss(toastId);
+```
+
+You can dismiss all toasts at once, by leaving out the `toastId`.
+
+#### Dismiss all toasts at one
+
+```
+toast.dismiss()
+```
+
+To remove toasts instantly without any animations, use `toast.remove`.
+
+#### Remove toasts instanstly
+
+```
+toast.remove(toastId)
+
+// or
+
+toast.remove()
 ```
 
 ### Update an existing toast
@@ -87,6 +136,8 @@ toast.promise(myPromise, {
   error: 'Error when fetching',
 });
 ```
+
+**Prevent jumps** by adding a min-width to your `toast.promise()` calls.
 
 #### Advanced
 
