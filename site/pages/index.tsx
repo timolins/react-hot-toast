@@ -37,7 +37,7 @@ const Step: React.FC<{
     </div>
     <div className="font-bold">{props.title}</div>
     <div className="text-red-700 text-sm">{props.subTitle}</div>
-    <code className="mt-2 border border-toast-200 py-2 px-4 rounded font-bold bg-white w-full">
+    <code className="mt-2 border border-toast-200 py-2 px-4 rounded font-bold bg-white w-full text-center">
       {props.code}
     </code>
   </div>
@@ -133,6 +133,7 @@ export default function Home() {
               aria-label="react-hot-toast"
               className="relative animate-slide-in transition-all duration-200 -mt-8 md:-mt-4"
               style={{
+                willChange: 'filter',
                 opacity: shouldFade ? 0.2 : 1,
                 filter: `blur(${shouldFade ? 6 : 0}px)`,
               }}
