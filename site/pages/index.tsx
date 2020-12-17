@@ -143,7 +143,7 @@ export default function Home() {
 
           <Logo
             role="img"
-            alt="react-hot-toast"
+            aria-label="react-hot-toast"
             className="relative animate-slide-in transition-all duration-200 -mt-8 md:-mt-4"
             style={{
               opacity: shouldFade ? 0.2 : 1,
