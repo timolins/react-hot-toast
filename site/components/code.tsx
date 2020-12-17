@@ -105,14 +105,14 @@ export const Code: React.FC<{
     {...defaultProps}
     code={props.snippet}
     theme={theme}
-    language={'javascript'}
+    language={'jsx'}
   >
     {({ className, style, tokens, getLineProps, getTokenProps }) => (
       <pre
         className={clsx(
           props.className,
           className,
-          'h-full w-full rounded-lg p-4'
+          'h-full w-full rounded-lg p-4 overflow-x-auto flex flex-col items justify-center'
         )}
         style={style}
       >

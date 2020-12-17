@@ -13,6 +13,7 @@
     "@types/prismjs": "^1.16.2",
     "clsx": "^1.1.1",
     "next": "10.0.3",
+    "next-seo": "^4.17.0",
     "next-transpile-modules": "^6.0.0",
     "postcss": "^8.2.1",
     "prism-react-renderer": "^1.1.1",

@@ -1,17 +1,22 @@
-import Head from 'next/head';
-import Link from 'next/link';
+import { NextSeo } from 'next-seo';
 import Logo from '../assets/logo.svg';
 import Butter1 from '../assets/butter-1.svg';
 import Butter2 from '../assets/butter-2.svg';
 import GitHub from '../assets/github.svg';
 import Checkmark from '../assets/checkmark.svg';
-import toast, { Toaster, useToasterStore } from 'react-hot-toast';
+import toast, {
+  Toaster,
+  useToasterStore,
+  ToastPosition,
+} from 'react-hot-toast';
 import React, { useState } from 'react';
 import clsx from 'clsx';
+import { version } from '../../package.json';
 
 import { ToastExample } from '../components/sections/toast-example';
 import { Footer } from '../components/sections/footer';
 import { ToasterExample } from '../components/sections/toaster-example';
+import Link from 'next/link';
 
 const Feature: React.FC = ({ children }) => (
   <div className="flex gap-1 items-center">
@@ -32,7 +37,7 @@ const Step: React.FC<{
     </div>
     <div className="font-bold">{props.title}</div>
     <div className="text-red-700 text-sm">{props.subTitle}</div>
-    <code className="mt-2 border border-red-100 py-2 px-4 rounded font-bold bg-white w-full">
+    <code className="mt-2 border border-toast-200 py-2 px-4 rounded font-bold bg-white w-full">
       {props.code}
     </code>
   </div>
@@ -92,7 +97,7 @@ const Features = () => (
 );
 
 export default function Home() {
-  const [position, setPosition] = useState<any>('top-center');
+  const [position, setPosition] = useState<ToastPosition>('top-center');
   const [reverse, setReverse] = useState(false);
   const { toasts: allToasts } = useToasterStore();
 
@@ -100,33 +105,23 @@ export default function Home() {
     allToasts.filter((t) => t.visible).length && position.includes('top');
   return (
     <div>
-      <Head>
-        <title>react-hot-toast - The best React notifications in town</title>
-      </Head>
+      <NextSeo
+        title={'react-hot-toast - The Best React Notifications in Town'}
+        openGraph={{
+          images: [
+            {
+              url: `https://react-hot-toast.com/social-image.png`,
+              width: 1200,
+              height: 630,
+            },
+          ],
+        }}
+        description="Add beautiful notifications to your React app with react-hot-toast. Lightweight. Smoking hot by default."
+      />
       <header className="bg-gradient-to-b from-toast-50 to-white bg-opacity-10">
         <div className="container  flex flex-col items-center relative">
           <Butter1
             className="absolute -left-24 md:left-24 transition-all duration-200"
-            onClick={() => {
-              // toast(
-              //   <span>
-              //     Pssst! Get -20% off Splitbee Pro:{' '}
-              //     <a href="https://splitbee.io/?butter">
-              //       <code>
-              //         <b>REACT-HOT-TOST</b>
-              //       </code>
-              //     </a>
-              //   </span>,
-              //   {
-              //     icon: (
-              //       <div className="text-3xl min-w-2xl bg-green-500 inline-block">
-              //         🤫 🐝
-              //       </div>
-              //     ),
-              //     duration: 100000,
-              //   }
-              // );
-            }}
             style={{
               opacity: shouldFade ? 0.5 : 1,
             }}
@@ -140,20 +135,14 @@ export default function Home() {
               style={{
                 opacity: shouldFade ? 0.2 : 1,
                 filter: `blur(${shouldFade ? 6 : 0}px)`,
-                // transform: toasts.length
-                //   ? 'translateY(-100%)'
-                //   : 'translateY(0)',
               }}
             />
-            {/* <Link href="/docs">
-              <a className="flex">Documentation</a>
-            </Link> */}
           </div>
           <div className="text-center my-12 relative transition-all duration-200">
-            <h1 className="text-4xl animate-enter font-bold text-toast-900">
+            <h1 className="text-3xl md:text-4xl animate-enter font-bold text-toast-900">
               The Best Toast in Town.
             </h1>
-            <h2 className="text-2xl font-bold text-toast-600 mt-2">
+            <h2 className="text-xl md:text-2xl font-bold text-toast-600 mt-2">
               Smoking hot React notifications.
             </h2>
           </div>
@@ -210,11 +199,13 @@ export default function Home() {
               <span className="flex-1 text-toast-800 text-center">GitHub</span>
             </a>
           </div>
-
-          {/* <div className="m-4 gap-2">
-            <a href="https://github.com/timolins/react-hot-toast">GitHub</a>
-            <a href="https://twitter.com/timolins">Twitter</a>
-          </div> */}
+          <div className="text-toast-600 my-2">
+            <Link href="/docs">
+              <a className="underline">Documentation</a>
+            </Link>
+            {' · '}
+            <span>v{version}</span>
+          </div>
 
           <Features />
           <Steps />
@@ -224,9 +215,7 @@ export default function Home() {
               <ToastExample />
             </div>
             <div className="my-14">
-              <h2 className="mr-5 mb-4 text-right text-2xl font-bold">
-                Change Position
-              </h2>
+              <h2 className="mr-5 mb-4 text-2xl font-bold">Change Position</h2>
 
               <ToasterExample
                 onReverse={setReverse}
@@ -238,7 +227,6 @@ export default function Home() {
           </div>
         </div>
       </header>
-
       <Toaster position={position} reverseOrder={reverse} toastOptions={{}} />
       <div className="container flex justify-end -mt-24 pointer-events-none">
         <Butter2 className="transform translate-x-20" />
