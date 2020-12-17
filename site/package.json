@@ -13,7 +13,7 @@
     "next": "10.0.3",
     "next-transpile-modules": "^6.0.0",
     "postcss": "^8.2.1",
-    "prismjs": "^1.22.0",
+    "prism-react-renderer": "^1.1.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-hot-toast": "file:../",

@@ -1,9 +1,7 @@
 import clsx from 'clsx';
-import { highlight, languages } from 'prismjs';
 import toast from 'react-hot-toast';
 import Arrow from '../../assets/arrow.svg';
-// import Highlight, { defaultProps } from 'prism-react-renderer';
-// import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { Code } from '../code';
 
 import { EmojiButton } from '../emoji-button';
 
@@ -54,6 +52,9 @@ export const ToasterExample: React.FC<{
         }),
       750
     );
+    (window as any).splitbee?.track('Change Order', {
+      reverseOrder: !reverse,
+    });
     onReverse(!reverse);
   };
 
@@ -61,12 +62,14 @@ export const ToasterExample: React.FC<{
     <button
       id="p"
       className={clsx(
-        'rounded-xl text-center text-sm py-2 px-1 flex items-center justify-center cursor-pointer flex-col md:flex-row',
+        'rounded-xl text-center text-xs md:text-sm py-2 px- flex items-center justify-center cursor-pointer flex-col md:flex-row',
         position === p
           ? 'bg-toast-900 text-toast-100 '
           : 'bg-white shadow-small-button'
       )}
       key={p}
+      data-splitbee-event="Change Position"
+      data-splitbee-event-position={p}
       onClick={() => {
         toast.dismiss('position');
         toast.success(
@@ -77,6 +80,10 @@ export const ToasterExample: React.FC<{
             id: 'position',
           }
         );
+
+        (window as any).splitbee?.track('Change Position', {
+          position: p,
+        });
 
         onPosition(p);
       }}
@@ -92,28 +99,16 @@ export const ToasterExample: React.FC<{
         language="jsx"
         code={}
       /> */}
-      <code
-        className="p-4 rounded w-full flex-1"
-        dangerouslySetInnerHTML={{
-          __html: highlight(
-            `<Toaster
-          position="${position}"
-          reverseOrder={${reverse}}
-        />`,
-            languages['javascript'],
-            'javascript'
-          ),
-        }}
-      ></code>
-      <div className="order-first col-span-2 md:order-1">
-        <div className="flex flex-col justify-between bg-toast-100 rounded-xl gap-4  py-4 px-1 md:px-4 h-36">
-          <div className="grid grid-cols-3 gap-1 md:gap-4 justify-between">
-            {positions.slice(0, 3).map((p) => renderPosition(p))}
-          </div>
+      <Code
+        snippet={`<Toaster
+  position="${position}"
+  reverseOrder={${reverse}}
+/>`}
+      />
 
-          <div className="grid grid-cols-3 gap-1 md:gap-4 justify-between">
-            {positions.slice(3, 6).map((p) => renderPosition(p))}
-          </div>
+      <div className="order-first col-span-2 md:order-1">
+        <div className="grid grid-cols-3 justify-between bg-toast-100 rounded-xl gap-x-2 gap-y-4 p-2 md:p-4">
+          {positions.map((p) => renderPosition(p))}
         </div>
         <div className="flex justify-center my-4">
           <EmojiButton

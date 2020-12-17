@@ -34,7 +34,7 @@ const Step: React.FC<{
   code: JSX.Element;
 }> = (props) => (
   <div className="flex flex-col gap-1 items-center">
-    <div className="h-6 w-6 text-sm rounded-full bg-toast-900 text-toast-50 flex items-center justify-center">
+    <div className="h-6 w-6 mb-2 text-sm rounded-full bg-toast-900 text-toast-50 flex items-center justify-center">
       {props.count}
     </div>
     <div className="font-bold">{props.title}</div>
@@ -46,7 +46,7 @@ const Step: React.FC<{
 );
 
 const Steps = () => (
-  <div className="grid  grid-cols-1 md:grid-cols-3 gap-4 my-12">
+  <div className="grid  grid-cols-1 md:grid-cols-3 gap-x-4 gap-y-8 my-12">
     <Step
       count={1}
       title="Install package"
@@ -140,7 +140,6 @@ export default function Home() {
               // filter: `blur(${shouldFade ? 5 : 0}px)`,
             }}
           />
-          <Butter2 className="absolute right-24 bottom-4 " />
 
           <Logo
             role="img"
@@ -206,19 +205,20 @@ export default function Home() {
               <div>🛎 </div>
               <span className="flex-1 mr-2">Make me a toast</span>
             </button>
-            <button
+            <a
               className="rounded-lg flex font-bold bg-white py-4 px-6 shadow-button  text-toast-800"
               onClick={() => {}}
+              href="https://github.com/timolins/react-hot-toast"
             >
-              <GitHub className="opacity-100 " />
-              <span className="flex-1 text-toast-800">GitHub</span>
-            </button>
+              <GitHub className="opacity-100" />
+              <span className="flex-1 text-toast-800 text-center">GitHub</span>
+            </a>
           </div>
 
-          <div className="m-4 gap-2">
+          {/* <div className="m-4 gap-2">
             <a href="https://github.com/timolins/react-hot-toast">GitHub</a>
             <a href="https://twitter.com/timolins">Twitter</a>
-          </div>
+          </div> */}
 
           <Features />
           <Steps />
@@ -243,36 +243,15 @@ export default function Home() {
         </div>
       </header>
 
-      <Toaster
-        position={position}
-        reverseOrder={reverse}
-        toastOptions={
-          {}
-          // {
-          //   success: {
-          //     icon: '😀',
-          //   },
-          // }
-          // {
-          //   // position: 'bottom-center',
-          //   success: {
-          //     position: 'bottom-center',
-          //   },
-          // }
-          // {
-          //   // icon: 'JOhannes',
-          //   // style: {
-          //   //   // background: 'green',
-          //   //   minWidth: '300px',
-          //   // },
-          //   // className: 'green',
-          // }
-        }
-        // toastStyle={(t) => ({
-        //   background: t.type === 'success' ? 'green' : 'red',
-        // })}
-      />
-      <footer className="container">test</footer>
+      <Toaster position={position} reverseOrder={reverse} toastOptions={{}} />
+      <div className="container flex justify-end -mt-24 pointer-events-none">
+        <Butter2 />
+      </div>
+      <footer className="container relative max-w-4xl justify-center my-8 flex gap-8 underline">
+        <a href="https://github.com/timolins/react-hot-toast">GitHub</a>
+        <a href="/docs">Docs</a>
+        <a href="https://twitter.com/timolins">Twitter</a>
+      </footer>
     </div>
   );
 }

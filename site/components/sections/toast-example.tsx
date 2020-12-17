@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
-import { highlight, languages } from 'prismjs';
-import 'prismjs/components/prism-jsx';
 
 import { EmojiButton } from '../emoji-button';
+import { Code } from '../code';
 
 const examples: Array<{
   title: string;
@@ -190,12 +189,14 @@ export const ToastExample = () => {
         </div>
       </div>
       <div className="h-64 flex items-center language-javascript bg-toast-100 rounded">
-        <code
+        <Code snippet={snippet} />
+
+        {/* <code
           className="p-4 rounded w-full flex-1"
           dangerouslySetInnerHTML={{
             __html: highlight(snippet, languages['javascript'], 'javascript'),
           }}
-        ></code>
+        ></code> */}
       </div>
     </section>
   );
