@@ -1,4 +1,12 @@
-import { Renderable, Toast, ToastType } from './types';
+import {
+  Renderable,
+  Toast,
+  ToastOptions,
+  ToastType,
+  DefaultToastOptions,
+  ValueOrFunction,
+  resolveValueOrFunction,
+} from './types';
 import { genId } from './utils';
 import { dispatch, ActionType } from './store';
 
@@ -9,24 +17,12 @@ const defaultTimeouts: Map<ToastType, number> = new Map<ToastType, number>([
   ['loading', 30000],
 ]);
 
-export type ToastOptions = Partial<
-  Pick<
-    Toast,
-    | 'id'
-    | 'icon'
-    | 'duration'
-    | 'role'
-    | 'ariaLive'
-    | 'className'
-    | 'style'
-    | 'iconTheme'
-  >
->;
+type Message = ValueOrFunction<Renderable, Toast>;
 
-type ToastHandler = (message: Renderable, options?: ToastOptions) => string;
+type ToastHandler = (message: Message, options?: ToastOptions) => string;
 
 const createToast = (
-  message: Renderable,
+  message: Message,
   type: ToastType = 'blank',
   opts?: ToastOptions
 ): Toast => ({
@@ -50,7 +46,7 @@ const createHandler = (type?: ToastType): ToastHandler => (
   return toast.id;
 };
 
-const toast = (message: Renderable, opts?: ToastOptions) =>
+const toast = (message: Message, opts?: ToastOptions) =>
   createHandler('blank')(message, opts);
 
 toast.error = createHandler('error');
@@ -66,36 +62,28 @@ toast.promise = <T>(
   promise: Promise<T>,
   msgs: {
     loading: Renderable;
-    success: Renderable | ((result: T) => Renderable);
-    error: Renderable | ((reason: any) => Renderable);
+    success: ValueOrFunction<Renderable, T>;
+    error: ValueOrFunction<Renderable, any>;
   },
-  opts?: {
-    loading?: ToastOptions;
-    success?: ToastOptions;
-    error?: ToastOptions;
-  }
+  opts?: DefaultToastOptions
 ) => {
-  const id = toast.loading(msgs.loading, opts?.loading);
+  const id = toast.loading(msgs.loading, { ...opts, ...opts?.loading });
 
   promise
     .then((p) => {
-      toast.success(
-        typeof msgs.success === 'function' ? msgs.success(p) : msgs.success,
-        {
-          id,
-          ...opts?.success,
-        }
-      );
+      toast.success(resolveValueOrFunction(msgs.success, p), {
+        id,
+        ...opts,
+        ...opts?.success,
+      });
       return p;
     })
     .catch((e) => {
-      toast.error(
-        typeof msgs.error === 'function' ? msgs.error(e) : msgs.error,
-        {
-          id,
-          ...opts?.error,
-        }
-      );
+      toast.error(resolveValueOrFunction(msgs.error, e), {
+        id,
+        ...opts,
+        ...opts?.error,
+      });
     });
 
   return promise;

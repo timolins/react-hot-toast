@@ -5,12 +5,11 @@ import Butter2 from '../assets/butter-2.svg';
 import GitHub from '../assets/github.svg';
 import Checkmark from '../assets/checkmark.svg';
 import toast, { Toaster, useToasterStore } from 'react-hot-toast';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import clsx from 'clsx';
 
 import { ToastExample } from '../components/sections/toast-example';
 import { ToasterExample } from '../components/sections/toaster-example';
-import * as Prism from 'prismjs';
 
 const Button: React.FC<{ onClick: () => void }> = ({ onClick, children }) => (
   <button
@@ -86,7 +85,7 @@ const Steps = () => (
 );
 
 const Features = () => (
-  <div className="my-12 grid gap-x-2 gap-y-5 grid-cols-2 md:grid-cols-3">
+  <div className="my-12 grid gap-x-8 gap-y-5 grid-cols-2 md:grid-cols-3">
     <Feature>Hot by default</Feature>
     <Feature>Easy to use</Feature>
     <Feature>Accessible</Feature>
@@ -127,8 +126,12 @@ export default function Home() {
               //     </a>
               //   </span>,
               //   {
-              //     icon: <span className="text-3xl">🤫 🐝</span>,
-              //     duration: 1000,
+              //     icon: (
+              //       <div className="text-3xl min-w-2xl bg-green-500 inline-block">
+              //         🤫 🐝
+              //       </div>
+              //     ),
+              //     duration: 100000,
               //   }
               // );
             }}
@@ -141,7 +144,7 @@ export default function Home() {
 
           <Logo
             role="img"
-            // alt="react-hot-toast"
+            alt="react-hot-toast"
             className="relative animate-slide-in transition-all duration-200 -mt-8 md:-mt-4"
             style={{
               opacity: shouldFade ? 0.2 : 1,
@@ -160,7 +163,7 @@ export default function Home() {
             }
           >
             <h1 className="text-4xl animate-enter font-bold text-toast-900">
-              The best toast in town.
+              The Best Toast in Town.
             </h1>
             <h2 className="text-2xl font-bold text-toast-600 mt-2">
               Smoking hot React notifications.
@@ -172,7 +175,8 @@ export default function Home() {
               className={clsx(
                 'rounded-lg font-bold gap-4 flex bg-gradient-to-b from-white to-toast-200 shadow-button text-center',
                 'py-4 px-6',
-                'active:translate-y-0.5 active:from-toast-100 active:shadow-none active:to-toast-100 active:bg-gray-100  transform '
+                'active:translate-y-0.5 active:bg-gray-100 transform transition-all ',
+                'focus:outline-none focus:ring-4'
               )}
               onClick={() => {
                 const promise = new Promise((res, rej) => {
@@ -183,13 +187,6 @@ export default function Home() {
                   }
                 });
 
-                const opts = {
-                  style: {
-                    width: '200px',
-                    paddingRight: '10px',
-                  },
-                };
-
                 toast.promise(
                   promise,
                   {
@@ -198,9 +195,10 @@ export default function Home() {
                     success: "Here's your toast",
                   },
                   {
-                    error: opts,
-                    loading: opts,
-                    success: opts,
+                    style: {
+                      width: '200px',
+                      paddingRight: '10px',
+                    },
                   }
                 );
               }}
@@ -212,7 +210,7 @@ export default function Home() {
               className="rounded-lg flex font-bold bg-white py-4 px-6 shadow-button  text-toast-800"
               onClick={() => {}}
             >
-              <GitHub className="opacity-100" />
+              <GitHub className="opacity-100 " />
               <span className="flex-1 text-toast-800">GitHub</span>
             </button>
           </div>
@@ -248,21 +246,28 @@ export default function Home() {
       <Toaster
         position={position}
         reverseOrder={reverse}
-        // options={{
-        //   all: {
-        //     style: {
-        //       minHeight: '200px',
-        //     },
-        //     duration: 2000,
-        //   },
-
-        //   // icon: 'JOhannes',
-        //   // style: {
-        //   //   // background: 'green',
-        //   //   minWidth: '300px',
-        //   // },
-        //   // className: 'green',
-        // }}
+        toastOptions={
+          {}
+          // {
+          //   success: {
+          //     icon: '😀',
+          //   },
+          // }
+          // {
+          //   // position: 'bottom-center',
+          //   success: {
+          //     position: 'bottom-center',
+          //   },
+          // }
+          // {
+          //   // icon: 'JOhannes',
+          //   // style: {
+          //   //   // background: 'green',
+          //   //   minWidth: '300px',
+          //   // },
+          //   // className: 'green',
+          // }
+        }
         // toastStyle={(t) => ({
         //   background: t.type === 'success' ? 'green' : 'red',
         // })}

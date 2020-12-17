@@ -39,18 +39,22 @@ Toasts are removed automatically after their duration. Hovering on one toast wil
 <Toaster
   position="top-center" // Support top-left, top-center, top-right, bottom-left, bottom-center & bottom-right
   reverseOrder={false} // Toasts spawn at top by default. Set to `true` if you want new Toasts at the end
-  // Custom styling
-  toastStyle={{
-    margin: '40px',
-    background: '#363636',
-    color: '#fff',
-    zIndex: 1,
-  }}
-  toastClassName=""
-  iconTheme={{
+  toastOptions={{
+    // Define default options
+    style: {
+      margin: '40px',
+      background: '#363636',
+      color: '#fff',
+      zIndex: 1,
+    },
+
+    // Default options for specific types
     success: {
-      primary: 'green',
-      secondary: 'black',
+      duration: 5000,
+      theme: {
+        primary: 'green',
+        secondary: 'black',
+      },
     },
   }}
 />
@@ -77,7 +81,19 @@ toast('Awesome!', {
 ```js
 toast('Hello World', {
   duration: 4000,
+
+  // Styling
+  style: {},
+  className: '',
+
+  // Custom Icon
   icon: '👏',
+
+  // Change colors of success/error/loading icon
+  iconTheme: {
+    primary: '#000',
+    secondary: '#fff',
+  },
 
   // Aria
   role: 'status',
@@ -134,8 +150,11 @@ toast.promise(
     success: (data) => `Successfully saved ${data.name}`,
     error: (err) => `This just happened: ${err.toString()}`,
   },
-  // Options for each outcome
   {
+    style: {
+      minWidth: '250px',
+    },
+    // Options for each outcome
     success: {
       duration: 5000,
       icon: '🔥',
@@ -149,11 +168,26 @@ toast.promise(
 You can provide a React components instead of text.
 
 ```jsx
-// Basic usage
 toast(
   <span>
     Custom and <b>bold</b>
   </span>,
+  {
+    icon: <Icon />,
+  }
+);
+```
+
+You can also supply a function that receives the `Toast` as argument.
+
+```jsx
+toast(
+  (t) => (
+    <span>
+      Custom and <b>bold</b>
+      <button onClick={() => toast.dismiss(t.id)}>Dismiss</button>
+    </span>
+  ),
   {
     icon: <Icon />,
   }

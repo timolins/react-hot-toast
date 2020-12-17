@@ -1,5 +1,4 @@
 import { Properties } from 'csstype';
-import { IndicatorTheme } from '../components/indicator';
 
 export type ToastType = 'success' | 'error' | 'loading' | 'blank';
 export type ToastPosition =
@@ -12,10 +11,30 @@ export type ToastPosition =
 
 export type Renderable = JSX.Element | string | number | null;
 
+export interface IconTheme {
+  primary: string;
+  secondary: string;
+}
+
+export type ValueFunction<TValue, TArg> = (arg: TArg) => TValue;
+export type ValueOrFunction<TValue, TArg> =
+  | TValue
+  | ValueFunction<TValue, TArg>;
+
+const isFunction = <TValue, TArg>(
+  valOrFunction: ValueOrFunction<TValue, TArg>
+): valOrFunction is ValueFunction<TValue, TArg> =>
+  typeof valOrFunction === 'function';
+
+export const resolveValueOrFunction = <TValue, TArg>(
+  valOrFunction: ValueOrFunction<TValue, TArg>,
+  arg: TArg
+): TValue => (isFunction(valOrFunction) ? valOrFunction(arg) : valOrFunction);
+
 export interface Toast {
   type: ToastType;
   id: string;
-  message: Renderable;
+  message: ValueOrFunction<Renderable, Toast>;
   icon?: Renderable;
   duration: number;
 
@@ -24,9 +43,28 @@ export interface Toast {
 
   style?: Properties;
   className?: string;
-  iconTheme?: IndicatorTheme;
+  iconTheme?: IconTheme;
 
   createdAt: number;
   visible: boolean;
   height?: number;
 }
+
+export type ToastOptions = Partial<
+  Pick<
+    Toast,
+    | 'id'
+    | 'icon'
+    | 'duration'
+    | 'role'
+    | 'ariaLive'
+    | 'className'
+    | 'style'
+    | 'iconTheme'
+  >
+>;
+
+export type DefaultToastOptions = ToastOptions &
+  {
+    [key in ToastType]?: ToastOptions;
+  };

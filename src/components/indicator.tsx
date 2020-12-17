@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { styled } from 'goober';
 
-import { ToastType } from '../core/types';
+import { ToastType, IconTheme } from '../core/types';
 import { ErrorIcon, ErrorTheme } from './error';
 import { LoaderIcon, LoaderTheme } from './loader';
 import { CheckmarkIcon, CheckmarkTheme } from './checkmark';
@@ -19,7 +19,7 @@ export const IndicatorWrapper = styled('div')`
   height: 20px;
 `;
 
-export type IndicatorTheme = Partial<{
+export type IconThemes = Partial<{
   success: CheckmarkTheme;
   error: ErrorTheme;
   loading: LoaderTheme;
@@ -27,7 +27,7 @@ export type IndicatorTheme = Partial<{
 
 interface IndicatorProps {
   type: ToastType;
-  theme?: IndicatorTheme;
+  theme?: IconTheme;
 }
 
 export const Indicator: React.FC<IndicatorProps> = ({ type, theme }) => {
@@ -37,13 +37,13 @@ export const Indicator: React.FC<IndicatorProps> = ({ type, theme }) => {
 
   return (
     <IndicatorWrapper>
-      <LoaderIcon {...theme?.success} />
+      <LoaderIcon {...theme} />
       {type !== 'loading' && (
         <StatusWrapper>
           {type === 'error' ? (
-            <ErrorIcon {...theme?.error} />
+            <ErrorIcon {...theme} />
           ) : (
-            <CheckmarkIcon {...theme?.success} />
+            <CheckmarkIcon {...theme} />
           )}
         </StatusWrapper>
       )}

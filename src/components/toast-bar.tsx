@@ -1,10 +1,14 @@
 import * as React from 'react';
 import { useCallback } from 'react';
-import { Properties } from 'csstype';
 import { styled, keyframes, CSSAttribute } from 'goober';
 
-import { Toast, ToastPosition } from '../core/types';
-import { Indicator, IndicatorTheme, IndicatorWrapper } from './indicator';
+import {
+  Toast,
+  ToastPosition,
+  ToastOptions,
+  resolveValueOrFunction,
+} from '../core/types';
+import { Indicator } from './indicator';
 import { AnimatedIconWrapper } from './icon-wrapper';
 
 const enterAnimation = (reverse: boolean) => `
@@ -26,7 +30,6 @@ const ToastBarBase = styled('div', React.forwardRef)`
   align-items: center;
   background: #fff;
   color: #363636;
-  text-align: center;
   line-height: 1.3;
   will-change: transform;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1), 0 3px 3px rgba(0, 0, 0, 0.05);
@@ -38,6 +41,8 @@ const ToastBarBase = styled('div', React.forwardRef)`
 `;
 
 const Message = styled('p')`
+  display: flex;
+  justify-content: center;
   margin: 4px 10px;
   color: inherit;
   flex: 1;
@@ -46,16 +51,63 @@ const Message = styled('p')`
 interface ToastBarProps {
   toast: Toast;
   offset: number;
-  position: ToastPosition;
   onHeight: (height: number) => void;
 
-  style?: Properties;
-  className?: string;
-  iconTheme?: IndicatorTheme;
+  position: ToastPosition;
+  options: ToastOptions;
 }
 
+const getPositionStyle = (
+  position: ToastPosition,
+  offset: number
+): React.CSSProperties => {
+  const top = position.includes('top');
+  const verticalStyle = top ? { top: 0 } : { bottom: 0 };
+
+  const horizontalStyle: CSSAttribute = position.includes('left')
+    ? {
+        left: 0,
+      }
+    : position.includes('right')
+    ? {
+        right: 0,
+      }
+    : {
+        left: 0,
+        pointerEvents: 'none',
+        right: 0,
+        justifyContent: 'center',
+      };
+  return {
+    position: 'fixed',
+    transition: 'all 230ms cubic-bezier(.21,1.02,.73,1)',
+    transform: `translateY(${offset * (top ? 1 : -1)}px)`,
+    ...verticalStyle,
+    ...horizontalStyle,
+  };
+};
+
+const getAnimationStyle = (
+  position: ToastPosition,
+  visible: boolean
+): React.CSSProperties => {
+  const top = position.includes('top');
+  return visible
+    ? {
+        animation: `${keyframes`${enterAnimation(
+          !top
+        )}`} 0.35s cubic-bezier(.21,1.02,.73,1) forwards`,
+      }
+    : {
+        animation: `${keyframes`${exitAnimation(
+          !top
+        )}`} 0.8s forwards cubic-bezier(.06,.71,.55,1)`,
+        pointerEvents: 'none',
+      };
+};
+
 export const ToastBar: React.FC<ToastBarProps> = React.memo(
-  ({ toast, position, ...props }) => {
+  ({ toast, options, position, ...props }) => {
     const ref = useCallback((el: HTMLElement | null) => {
       if (el) {
         const boundingRect = el.getBoundingClientRect();
@@ -63,78 +115,49 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
       }
     }, []);
 
-    const top = position.includes('top');
-    const verticalStyle = top ? { top: 0 } : { bottom: 0 };
-    const horizontalStyle: CSSAttribute = position.includes('left')
-      ? {
-          left: 0,
-        }
-      : position.includes('right')
-      ? {
-          right: 0,
-        }
-      : {
-          left: 0,
-          pointerEvents: 'none',
-          right: 0,
-          justifyContent: 'center',
-        };
+    const mergeOptions = {
+      ...options,
+      ...toast,
+    };
 
-    const animationStyle: Properties = toast?.height
-      ? toast.visible
-        ? {
-            animation: `${keyframes`${enterAnimation(
-              !top
-            )}`} 0.35s cubic-bezier(.21,1.02,.73,1) forwards`,
-          }
-        : {
-            animation: `${keyframes`${exitAnimation(
-              !top
-            )}`} 0.8s forwards cubic-bezier(.06,.71,.55,1)`,
-            pointerEvents: 'none',
-          }
+    const positionStyle = getPositionStyle(position, props.offset);
+    const animationStyle = toast?.height
+      ? getAnimationStyle(position, toast.visible)
       : { opacity: 0 };
 
     const renderIcon = () => {
-      const { icon } = toast;
+      const { icon, type, iconTheme } = mergeOptions;
       if (icon !== undefined) {
         if (typeof icon === 'string') {
           return <AnimatedIconWrapper>{icon}</AnimatedIconWrapper>;
         } else {
-          return <IndicatorWrapper>{icon}</IndicatorWrapper>;
+          return icon;
         }
       }
 
-      return (
-        <Indicator
-          theme={{ ...props.iconTheme, ...toast.iconTheme }}
-          type={toast.type}
-        />
-      );
-    };
-
-    const style = {
-      ...animationStyle,
-      ...props.style,
-      ...toast.style,
+      return <Indicator theme={iconTheme} type={type} />;
     };
 
     return (
       <div
         style={{
-          position: 'fixed',
           display: 'flex',
-          ...horizontalStyle,
-          ...verticalStyle,
-          transition: 'all 230ms cubic-bezier(.21,1.02,.73,1)',
-          transform: `translateY(${props.offset * (top ? 1 : -1)}px)`,
-          zIndex: toast.visible ? style.zIndex || 9999 : undefined,
+          zIndex: toast.visible ? 9999 : undefined,
+          ...positionStyle,
         }}
       >
-        <ToastBarBase ref={ref} className={props.className} style={style}>
+        <ToastBarBase
+          ref={ref}
+          className={mergeOptions.className}
+          style={{
+            ...animationStyle,
+            ...options.style,
+            ...toast.style,
+          }}
+        >
           {renderIcon()}
-          <Message role={toast.role} aria-live={toast.ariaLive}>
-            {toast.message}
+          <Message role={mergeOptions.role} aria-live={mergeOptions.ariaLive}>
+            {resolveValueOrFunction(toast.message, toast)}
           </Message>
         </ToastBarBase>
       </div>

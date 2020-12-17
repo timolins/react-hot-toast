@@ -117,22 +117,22 @@ const examples: Array<{
     snippet: 'TODO',
 
     action: () => {
-      // toast((t) => (
-      //   <span>
-      //     Custom and <b>bold</b>
-      //     <button
-      //       className="ml-2 py-1 rounded px-2 border bg-gray-100 text-gray-900"
-      //       onClick={() => toast.dismiss(t.id)}
-      //     >
-      //       Remove
-      //     </button>
-      //   </span>
-      // ));
-      toast(
+      toast((t) => (
         <span>
           Custom and <b>bold</b>
+          <button
+            className="ml-2 py-1 rounded px-2 border bg-gray-100 text-gray-900"
+            onClick={() => toast.dismiss(t.id)}
+          >
+            Remove
+          </button>
         </span>
-      );
+      ));
+      // toast(
+      //   <span>
+      //     Custom and <b>bold</b>
+      //   </span>
+      // );
     },
   },
   {
@@ -141,7 +141,7 @@ const examples: Array<{
     snippet: 'TODO',
 
     action: () => {
-      toast(
+      toast.success(
         <span>
           Look I have <b>brand styling</b>
         </span>,
@@ -155,7 +155,10 @@ const examples: Array<{
             backdropFilter: 'blur(10px)',
             WebkitBackdropFilter: 'blur(10px)',
           },
-          icon: '🔥',
+          iconTheme: {
+            primary: 'rgb(255,255,255,1)',
+            secondary: 'rgb(10,10,10)',
+          },
         }
       );
     },
