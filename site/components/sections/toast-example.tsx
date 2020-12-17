@@ -31,11 +31,11 @@ const examples: Array<{
     title: 'Promise',
     emoji: '⏳',
     snippet: `toast.promise(
-   myPromise,
+  saveSettings(settings),
    {
-     loading: 'Loading',
-     success: 'Success',
-     error: <b>Error</b>,
+     loading: 'Saving...',
+     success: <b>Settings saved!</b>,,
+     error: <b>Could not save.</b>,
    }
  );`,
     action: () => {
@@ -43,24 +43,18 @@ const examples: Array<{
         setTimeout(Math.random() > 0.5 ? res : rej, 1000);
       });
 
-      const opts = {
-        style: {
-          width: '150px',
-          paddingRight: '10px',
-        },
-      };
-
       toast.promise(
         promise,
         {
-          error: <b>Error</b>,
-          success: 'Success',
-          loading: 'Loading',
+          loading: 'Saving...',
+          success: <b>Settings saved!</b>,
+          error: <b>Could not save.</b>,
         },
         {
-          error: opts,
-          loading: opts,
-          success: opts,
+          style: {
+            width: '200px',
+            paddingRight: '10px',
+          },
         }
       );
     },
@@ -68,12 +62,16 @@ const examples: Array<{
   {
     title: 'Multi Line',
     emoji: '↕️',
-    snippet: 'TODO',
+    snippet: `toast(
+  "This toast is super big. I don't think anyone could eat it in one bite. It's larger than you expected. You eat it but it does not seem to get smaller.",
+  {
+    duration: 6000,
+  }
+);`,
     action: () => {
       toast(
         "This toast is super big. I don't think anyone could eat it in one bite. It's larger than you expected. You eat it but it does not seem to get smaller.",
         {
-          icon: '↕️',
           duration: 6000,
         }
       );
@@ -82,7 +80,9 @@ const examples: Array<{
   {
     title: 'Emoji',
     emoji: '👏',
-    snippet: 'TODO',
+    snippet: `toast('Good Job!', {
+  icon: '👏',
+});`,
     action: () => {
       toast('Good Job!', {
         icon: '👏',
@@ -92,28 +92,39 @@ const examples: Array<{
   {
     title: 'Dark Mode',
     emoji: '🌚',
-    snippet: 'TODO',
+    snippet: `toast('Hello Darkness!',
+  {
+    icon: '👏',
+    style: {
+      borderRadius: '10px',
+      background: '#333',
+      color: '#fff',
+    },
+  }
+);`,
     action: () => {
-      toast(
-        <span>
-          Custom and <b>bold</b>
-        </span>,
-        {
-          icon: '👏',
+      toast('Hello Darkness!', {
+        icon: '👏',
 
-          style: {
-            borderRadius: '200px',
-            background: '#333',
-            color: 'white',
-          },
-        }
-      );
+        style: {
+          borderRadius: '200px',
+          background: '#333',
+          color: '#fff',
+        },
+      });
     },
   },
   {
     title: 'JSX Content',
     emoji: '🔩',
-    snippet: 'TODO',
+    snippet: `toast((t) => (
+  <span>
+    Custom and <b>bold</b>
+    <button onClick={() => toast.dismiss(t.id)}>
+      Dismiss
+    </button>
+  </span>
+));`,
 
     action: () => {
       toast((t) => (
@@ -123,43 +134,39 @@ const examples: Array<{
             className="ml-2 py-1 rounded px-2 border bg-gray-100 text-gray-900"
             onClick={() => toast.dismiss(t.id)}
           >
-            Remove
+            Dismiss
           </button>
         </span>
       ));
-      // toast(
-      //   <span>
-      //     Custom and <b>bold</b>
-      //   </span>
-      // );
     },
   },
   {
     title: 'Themed',
     emoji: '🎨',
-    snippet: 'TODO',
+    snippet: `toast.success('Look at me, I have brand styles.', {
+  style: {
+    border: '1px solid #713200',
+    padding: '16px',
+    color: '#713200',
+  },
+  iconTheme: {
+    primary: '#713200',
+    secondary: '#FFFAEE',
+  },
+});`,
 
     action: () => {
-      toast.success(
-        <span>
-          Look I have <b>brand styling</b>
-        </span>,
-        {
-          style: {
-            boxShadow: 'none',
-            background: 'rgba(10,10,10,0.6)',
-            padding: '20px 10px',
-            borderRadius: '8px',
-            color: 'white',
-            backdropFilter: 'blur(10px)',
-            WebkitBackdropFilter: 'blur(10px)',
-          },
-          iconTheme: {
-            primary: 'rgb(255,255,255,1)',
-            secondary: 'rgb(10,10,10)',
-          },
-        }
-      );
+      toast.success('Look at my styles.', {
+        style: {
+          border: '1px solid #713200',
+          padding: '16px',
+          color: '#713200',
+        },
+        iconTheme: {
+          primary: '#713200',
+          secondary: '#FFFAEE',
+        },
+      });
     },
   },
 ];
@@ -189,15 +196,8 @@ export const ToastExample = () => {
           ))}
         </div>
       </div>
-      <div className="h-64 flex items-center language-javascript bg-toast-100 rounded">
+      <div className="h-72 w-full overflow-hidden">
         <Code snippet={snippet} />
-
-        {/* <code
-          className="p-4 rounded w-full flex-1"
-          dangerouslySetInnerHTML={{
-            __html: highlight(snippet, languages['javascript'], 'javascript'),
-          }}
-        ></code> */}
       </div>
     </section>
   );

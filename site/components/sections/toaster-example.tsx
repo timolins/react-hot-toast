@@ -1,22 +1,22 @@
 import clsx from 'clsx';
-import toast from 'react-hot-toast';
+import toast, { ToastPosition } from 'react-hot-toast';
 import Arrow from '../../assets/arrow.svg';
 import { Code } from '../code';
 
 import { EmojiButton } from '../emoji-button';
 
-export const positions = [
+export const positions: Array<ToastPosition> = [
   'top-left',
   'top-center',
   'top-right',
   'bottom-left',
   'bottom-center',
   'bottom-right',
-] as const;
+];
 
 export const ToasterExample: React.FC<{
-  position: string;
-  onPosition: (pos: string) => void;
+  position: ToastPosition;
+  onPosition: (pos: ToastPosition) => void;
   reverse: boolean;
   onReverse: (rev: boolean) => void;
 }> = ({ position, onPosition, reverse, onReverse }) => {
@@ -58,7 +58,7 @@ export const ToasterExample: React.FC<{
     onReverse(!reverse);
   };
 
-  const renderPosition = (p: string) => (
+  const renderPosition = (p: ToastPosition) => (
     <button
       id="p"
       className={clsx(
@@ -93,37 +93,32 @@ export const ToasterExample: React.FC<{
   );
 
   return (
-    <section className="">
-      <div className="grid md:grid-cols-3 gap-2">
-        <Code
-          snippet={`<Toaster
+    <section className="flex flex-col md:grid grid-cols-1 md:grid-cols-3 gap-2">
+      <Code
+        snippet={`<Toaster
   position="${position}"
   reverseOrder={${reverse}}
 />`}
-        />
-
-        <div className="col-span-2 grid grid-cols-3 justify-between bg-toast-100 rounded-xl gap-x-2 gap-y-4 p-2 md:p-4">
-          {positions.map((p) => renderPosition(p))}
-        </div>
+      />
+      <div className="order-first md:order-none col-span-2 grid grid-cols-3 justify-between bg-toast-100 rounded-xl gap-x-2 gap-y-4 p-2 md:p-4">
+        {positions.map((p) => renderPosition(p))}
       </div>
-      <div className="grid md:grid-cols-3">
-        <div className="col-start-2 col-span-2 flex justify-center my-4">
-          <EmojiButton
-            emoji={
-              <Arrow
-                className={clsx(
-                  'transform transition-transform',
-                  ((position.includes('bottom') && !reverse) ||
-                    (position.includes('top') && reverse)) &&
-                    'rotate-180'
-                )}
-              />
-            }
-            onClick={reverseIt}
-          >
-            Toggle Direction
-          </EmojiButton>
-        </div>
+      <div className="col-start-2 col-span-2 flex justify-center my-4">
+        <EmojiButton
+          emoji={
+            <Arrow
+              className={clsx(
+                'transform transition-transform',
+                ((position.includes('bottom') && !reverse) ||
+                  (position.includes('top') && reverse)) &&
+                  'rotate-180'
+              )}
+            />
+          }
+          onClick={reverseIt}
+        >
+          Toggle Direction
+        </EmojiButton>
       </div>
     </section>
   );
