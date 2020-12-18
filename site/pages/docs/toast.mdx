@@ -7,9 +7,7 @@ export const meta = {
 
 # `toast()` API
 
-## Create a toast
-
-There a different ways to create a toast.
+Call it to create a toast from anywhere, even outside React. Make sure you add the `<Toaster/>` component to your app first.
 
 ### Blank
 
@@ -25,7 +23,7 @@ The most basic variant. It does not have an icon by default, but you can provide
 toast.success('Successfully created!');
 ```
 
-Renders an animated checkmark as icon. The icon can be themed with `iconTheme`.
+Creates a notification with an animated checkmark. It can be themed with `iconTheme`.
 
 ### Error
 
@@ -33,13 +31,59 @@ Renders an animated checkmark as icon. The icon can be themed with `iconTheme`.
 toast.error('This is an error!');
 ```
 
+Creates a notification with an animated error icon. It can be themed with `iconTheme`.
+
 ### Loading
 
 ```js
 toast.loading('Waiting...');
 ```
 
-## Available `toast()` options
+This will create a loading notification. Most likely you want to update it manually afterwards. For a friendly alternative, check out `toast.promise()`, which takes care of that automatically.
+
+### Promise
+
+This shorthand is useful for mapping a promise to a toast. It will update automtically when the promise resolves or fails.
+
+#### Simple Usage
+
+```js
+const myPromise = fetchData();
+
+toast.promise(myPromise, {
+  loading: 'Loading',
+  success: 'Got the data',
+  error: 'Error when fetching',
+});
+```
+
+I'd recommend to add min-width to your `toast.promise()` calls to **prevent jumps** from different message lengths.
+
+#### Advanced
+
+You can provide a function to the success/error messages to incorporate the result/error of the promise. The third argument are `toastOptions` similiar to [`<Toaster />`](/docs/toaster)
+
+```js
+toast.promise(
+  myPromise,
+  {
+    loading: 'Loading',
+    success: (data) => `Successfully saved ${data.name}`,
+    error: (err) => `This just happened: ${err.toString()}`,
+  },
+  {
+    style: {
+      minWidth: '250px',
+    },
+    success: {
+      duration: 5000,
+      icon: '🔥',
+    },
+  }
+);
+```
+
+## Available options
 
 You can provide `ToastOptions` as second argument. They will overwrite all options received from `<Toaster/>`.
 
@@ -66,7 +110,7 @@ toast('Hello World', {
 });
 ```
 
-## Default Durations
+## Default durations
 
 Every type has their own duration. You can overwrite them `duration` with the toast options. This can be done per toast options or globally by the [`<Toaster/>`](/docs/toaster).
 
@@ -123,46 +167,6 @@ toast.success('This worked', {
 });
 ```
 
-### Use with promises
-
-This shorthand is useful for mapping a promise to a toast. It will update when the promise resolves or fails.
-
-#### Simple Usage
-
-```js
-toast.promise(myPromise, {
-  loading: 'Loading',
-  success: 'Got the data',
-  error: 'Error when fetching',
-});
-```
-
-**Prevent jumps** by adding a min-width to your `toast.promise()` calls.
-
-#### Advanced
-
-```js
-toast.promise(
-  myPromise,
-  // Messages for each outcome. Support callback to include Promise result
-  {
-    loading: 'Loading',
-    success: (data) => `Successfully saved ${data.name}`,
-    error: (err) => `This just happened: ${err.toString()}`,
-  },
-  {
-    style: {
-      minWidth: '250px',
-    },
-    // Options for each outcome
-    success: {
-      duration: 5000,
-      icon: '🔥',
-    },
-  }
-);
-```
-
 ### Render custom content
 
 You can provide a React components instead of text.
@@ -178,7 +182,7 @@ toast(
 );
 ```
 
-You can also supply a function that receives the `Toast` as argument.
+You can also supply a function that receives the `Toast` as argument. This can be usefull to add a custom dismiss button.
 
 ```jsx
 toast(

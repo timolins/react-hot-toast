@@ -1,0 +1,18 @@
+import Layout from '../../components/docs-layout';
+import toast from 'react-hot-toast';
+
+export const meta = {
+  title: 'useToasterState() API',
+};
+
+export default ({ children, meta }) => <Layout meta={meta}>{children}</Layout>;
+
+# `useToasterState()` API
+
+This hooks gives you access to the internal toaster state. This is the right choice if you need access to the data without wanting to roll your own toaster.
+
+In comparison to [`useToaster()`](/docs/use-toaster) it does not handle pausing or provide handlers for creating your own notification system.
+
+```
+const { toasts, pausedAt } = useToasterState();
+```

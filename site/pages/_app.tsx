@@ -8,14 +8,20 @@ import { MDXProvider } from '@mdx-js/react';
 import { Code } from '../components/code';
 
 const components = {
-  a: Link,
+  a: (props) => (
+    <Link href={props.href}>
+      <a {...props} />
+    </Link>
+  ),
   inlineCode: (props) => (
     <code
       className="bg-toast-300 py-1 my-0.5 px-1 rounded bg-opacity-40"
       {...props}
     />
   ),
-  code: (props) => <Code snippet={props.children} />,
+  code: (props) => (
+    <Code className={props.className} snippet={props.children} />
+  ),
 };
 
 function MyApp({ Component, pageProps }) {

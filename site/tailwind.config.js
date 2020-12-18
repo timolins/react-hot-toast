@@ -107,7 +107,7 @@ module.exports = {
             'ul > li::before': {
               content: '""',
               position: 'absolute',
-              backgroundColor: theme('colors.toast.600'),
+              backgroundColor: theme('colors.toast.800'),
               borderRadius: '50%',
             },
             // ...

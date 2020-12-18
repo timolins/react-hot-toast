@@ -5,12 +5,39 @@ export const meta = {
   title: '<Toaster/> API',
 };
 
+export default ({ children, meta }) => <Layout meta={meta}>{children}</Layout>;
+
 # `<Toaster />` API
+
+This component will render all received toasts. Alternatively you can create own renderer with the headless [`useToaster()`](/docs/use-toaster) hook.
+
+### `position` Prop
+
+You can change the position of all toasts by modifieng supplying `positon` prop.
+
+| Positions   |               |              |
+| ----------- | ------------- | ------------ |
+| top-left    | top-center    | top-right    |
+| bottom-left | bottom-center | bottom-right |
+
+### `reverseOrder` Prop
+
+Toasts spawn at top by default. Set to `true` if you want new Toasts at the end.
+
+### `toastOptions` Prop
+
+These will act as default options for all toasts.
+
+#### Type specific options
+
+You can change the defaults for a specific type by adding, `success: {}`, `error: {}` or `loading: {}`.
+
+## Example with all available options
 
 ```jsx
 <Toaster
-  position="top-center" // Support top-left, top-center, top-right, bottom-left, bottom-center & bottom-right
-  reverseOrder={false} // Toasts spawn at top by default. Set to `true` if you want new Toasts at the end
+  position="top-center"
+  reverseOrder={false}
   toastOptions={{
     // Define default options
     style: {
@@ -19,10 +46,11 @@ export const meta = {
       color: '#fff',
       zIndex: 1,
     },
+    duration: 5000,
 
     // Default options for specific types
     success: {
-      duration: 5000,
+      duration: 3000,
       theme: {
         primary: 'green',
         secondary: 'black',
@@ -31,5 +59,3 @@ export const meta = {
   }}
 />
 ```
-
-export default ({ children, meta }) => <Layout meta={meta}>{children}</Layout>;

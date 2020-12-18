@@ -22,7 +22,7 @@
 
 <br />
 
-## Install
+## Getting started
 
 #### Install with yarn
 
@@ -36,10 +36,12 @@ yarn add react-hot-toast
 npm install react-hot-toast
 ```
 
-## Basic usage
+---
+
+### Add to `<Toaster/>` your app
 
 ```jsx
-import toast, { Toaster } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 
 const App = () => {
   return (
@@ -48,10 +50,25 @@ const App = () => {
     </div>
   );
 };
-
-// Show notifications anywhere
-toast('Hello World');
 ```
+
+---
+
+### Add to `<Toaster/>` your app
+
+```jsx
+import { Toaster } from 'react-hot-toast';
+
+const App = () => {
+  return (
+    <div>
+      <Toaster />
+    </div>
+  );
+};
+```
+
+---
 
 ## Full Documentation
 
