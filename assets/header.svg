@@ -88,7 +88,7 @@
 </g>
 <g id="checkmark-group">
 <circle id="circle_2" cx="329" cy="330" r="10" fill="#79D050"/>
-<g id="Group 48">
+<g id="checkmark">
 <rect id="line-1" x="323.5" y="330.071" width="2" height="6" transform="rotate(-45 323.5 330.071)" fill="white"/>
 <rect id="line-2" x="333.571" y="326" width="2" height="10" transform="rotate(45 333.571 326)" fill="white"/>
 </g>
@@ -387,7 +387,7 @@
 }
 #checkmark {
    opacity: 0;
-    animation: indicator 0.2s 1.12s cubic-bezier(.21,1.02,.73,1) forwards; 
+    animation: indicator 0.2s 1.62s cubic-bezier(.21,1.02,.73,1) forwards; 
 }
 
 
