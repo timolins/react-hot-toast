@@ -222,7 +222,9 @@ export default function Home() {
               <ToastExample />
             </div>
             <div className="my-14">
-              <h2 className="mr-5 mb-4 text-2xl font-bold">Change Position</h2>
+              <h2 className="ml-5 mr-5 mb-4 text-2xl font-bold">
+                Change Position
+              </h2>
 
               <ToasterExample
                 onReverse={setReverse}
