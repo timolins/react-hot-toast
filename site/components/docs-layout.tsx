@@ -38,7 +38,7 @@ export default function DocsLayout({ children, meta }) {
         }}
       />
 
-      <div className="md:grid gap-8 flex-1 grid-cols-1 lg:grid-cols-1 mx-auto px-2 max-w-4xl w-full">
+      <div className="md:grid gap-8 flex-1 grid-cols-5 mx-auto px-2 max-w-4xl w-full">
         <header className=" col-start-1 col-end-6 my-12 flex justify-between items-center">
           <Link href="/">
             <Logo
