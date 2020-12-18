@@ -383,21 +383,21 @@
    opacity: 0;
 
    filter: blur(10px);
-   animation: indicator 0.35s 1.5s cubic-bezier(.21,1.02,.73,1) forwards; 
+   animation: indicator 0.35s 2.5s cubic-bezier(.21,1.02,.73,1) forwards; 
 }
 #checkmark {
    opacity: 0;
-    animation: indicator 0.2s 1.62s cubic-bezier(.21,1.02,.73,1) forwards; 
+    animation: indicator 0.2s 2.62s cubic-bezier(.21,1.02,.73,1) forwards; 
 }
 
 
 #success-text {
    opacity: 0;
-    animation: text-in 0.1s 1.5s ease-out forwards; 
+    animation: text-in 0.1s 2.5s ease-out forwards; 
 }
 #loading-text {
    opacity: 1;
-   animation: text-out 0.1s 1.25s ease-out forwards; 
+   animation: text-out 0.1s 2.25s ease-out forwards; 
 }
 
 
@@ -408,13 +408,13 @@
 
 #toast {
    opacity: 0;
-  animation: enter 0.35s 0.5s cubic-bezier(.21,1.02,.73,1) forwards;
+  animation: enter 0.35s 1s cubic-bezier(.21,1.02,.73,1) forwards;
 }
 
 #try-out-button {
   color: #EBE6DF;
    cursor: pointer;
-   animation: pulse 1s 3s ease-in-out;
+   animation: pulse 1s 4s ease-in-out;
 }     
 </style>
 </svg>
