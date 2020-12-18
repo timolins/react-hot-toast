@@ -40,6 +40,8 @@ npm install react-hot-toast
 
 ### Add to `<Toaster/>` your app
 
+The Toaster will take care of rendering all notifications emitted. Make sure to place it somewhere high up in your app.
+
 ```jsx
 import { Toaster } from 'react-hot-toast';
 
@@ -54,18 +56,14 @@ const App = () => {
 
 ---
 
-### Add to `<Toaster/>` your app
+### Create toasts from anywhere
 
-```jsx
-import { Toaster } from 'react-hot-toast';
+Call `toast()` anywhere within your app to emit new notifications.
 
-const App = () => {
-  return (
-    <div>
-      <Toaster />
-    </div>
-  );
-};
+```js
+import toast from 'react-hot-toast';
+
+toast.success('Hello World!');
 ```
 
 ---
