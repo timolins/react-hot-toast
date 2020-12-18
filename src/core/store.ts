@@ -126,13 +126,6 @@ export const dispatch = (action: Action) => {
   });
 };
 
-export const genId = (() => {
-  let count = 0;
-  return () => {
-    return (++count).toString();
-  };
-})();
-
 export const useStore = () => {
   const [state, setState] = useState<State>(memoryState);
   useEffect(() => {
