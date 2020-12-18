@@ -98,7 +98,7 @@
 <g id="try-out-button">
 <rect x="696" y="313" width="124" height="33" rx="6" fill="currentColor"/>
 <g id="Try it out" filter="url(#filter4_d)">
-<text fill="#482307" xml:space="preserve" style="white-space: pre" font-family="SF Pro Display" font-size="16" font-weight="bold" letter-spacing="0.05em"><tspan x="709.753" y="335.188">Try it out</tspan></text>
+<text fill="#482307" xml:space="preserve" style="white-space: pre" font-family="ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif" font-size="16" font-weight="bold" letter-spacing="0.05em"><tspan x="709.753" y="335.188">Try it out</tspan></text>
 </g>
 <path id="Vector 20" d="M804.783 330.477C804.783 330.062 804.447 329.727 804.033 329.727C803.619 329.727 803.283 330.062 803.283 330.477H804.783ZM798.017 325.242C798.431 325.242 798.767 324.906 798.767 324.492C798.767 324.078 798.431 323.742 798.017 323.742V325.242ZM791.25 327.251V333.339H792.75V327.251H791.25ZM794.759 336.848H801.274V335.348H794.759V336.848ZM804.783 333.339V330.477H803.283V333.339H804.783ZM794.759 325.242H798.017V323.742H794.759V325.242ZM801.274 336.848C803.212 336.848 804.783 335.277 804.783 333.339H803.283C803.283 334.449 802.384 335.348 801.274 335.348V336.848ZM791.25 333.339C791.25 335.277 792.821 336.848 794.759 336.848V335.348C793.649 335.348 792.75 334.449 792.75 333.339H791.25ZM792.75 327.251C792.75 326.142 793.649 325.242 794.759 325.242V323.742C792.821 323.742 791.25 325.313 791.25 327.251H792.75Z" fill="#A2724E"/>
 <path id="Vector 21" d="M797.869 329.929L805.569 322.228M805.569 322.228V327.091M805.569 322.228H801.112" stroke="#A2724E" stroke-width="1.5" stroke-linecap="round"/>
@@ -381,8 +381,6 @@
 
 #checkmark-group {
    opacity: 0;
-
-   filter: blur(10px);
    animation: indicator 0.35s 2.5s cubic-bezier(.21,1.02,.73,1) forwards; 
 }
 #checkmark {
