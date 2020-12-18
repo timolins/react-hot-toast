@@ -121,7 +121,7 @@ export default function Home() {
       <header className="bg-gradient-to-b from-toast-50 to-white bg-opacity-10">
         <div className="container  flex flex-col items-center relative">
           <Butter1
-            className="absolute -left-24 md:left-24 transition-all duration-200"
+            className="absolute -left-24 md:left-24 transition-opacity duration-200"
             style={{
               opacity: shouldFade ? 0.5 : 1,
             }}
@@ -139,7 +139,7 @@ export default function Home() {
               }}
             />
           </div>
-          <div className="text-center my-12 relative transition-all duration-200">
+          <div className="text-center my-12 relative duration-200">
             <h1 className="text-3xl md:text-4xl animate-enter font-bold text-toast-900">
               The Best Toast in Town.
             </h1>
@@ -155,9 +155,12 @@ export default function Home() {
               className={clsx(
                 'rounded-lg font-bold gap-4 flex bg-gradient-to-b from-white to-toast-200 shadow-button text-center',
                 'py-4 px-6',
-                'active:translate-y-0.5 active:shadow-button-active active:bg-gray-100 transform transition-all',
+                'active:translate-y-0.5 active:shadow-button-active active:bg-gray-100 transform',
                 'focus:outline-none focus:ring-4'
               )}
+              style={{
+                transitionProperty: 'box-shadow, transform',
+              }}
               onClick={() => {
                 const promise = new Promise((res, rej) => {
                   if (Math.random() < 0.85) {
@@ -189,8 +192,11 @@ export default function Home() {
             <a
               className={clsx(
                 'rounded-lg flex font-bold bg-white py-4 px-6 shadow-button  text-toast-800',
-                'active:translate-y-0.5 active:shadow-button-active transition-all transform'
+                'active:translate-y-0.5 active:shadow-button-active transform'
               )}
+              style={{
+                transitionProperty: 'box-shadow, transform',
+              }}
               data-splitbee-event="Open Link"
               data-splitbee-event-target="GitHub"
               onClick={() => {}}

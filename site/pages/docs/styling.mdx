@@ -1,0 +1,87 @@
+import Layout from '../../components/docs-layout';
+import toast from 'react-hot-toast';
+
+export const meta = {
+  title: 'Styling',
+};
+
+export default ({ children, meta }) => <Layout meta={meta}>{children}</Layout>;
+
+# Styling
+
+You can style your notifications globally with the `toastOptions` inside the Toaster component, or for each notification manually.
+
+### Set default for all toasts
+
+```jsx
+<Toaster
+  toastOptions={{
+    className: '',
+    style: {
+      border: '1px solid #713200',
+      padding: '16px',
+      color: '#713200',
+    },
+  }}
+/>
+```
+
+### Set defaut for specific types
+
+```jsx
+<Toaster
+  toastOptions={{
+    success: {
+      style: {
+        background: 'green',
+      },
+    },
+    error: {
+      style: {
+        background: 'red',
+      },
+    },
+  }}
+/>
+```
+
+### Style per toast
+
+```jsx
+toast('I have a border.', {
+  style: {
+    border: '1px solid black',
+  },
+});
+```
+
+## Changing the offset
+
+If you want to change the offset of your noticiations, add a margin to your `toastOptions`.
+
+```jsx
+<Toaster
+  toastOptions={{
+    style: {
+      margin: '50px',
+    },
+  }}
+/>
+```
+
+## Change icon color
+
+All icon colors can be changed by supplying a `iconTheme` with a `primary` & `secondary` color.
+
+```jsx
+<Toaster
+  toastOptions={{
+    success: {
+      iconTheme: {
+        primary: 'green',
+        secondary: 'black',
+      },
+    },
+  }}
+/>
+```

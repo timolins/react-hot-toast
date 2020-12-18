@@ -1,10 +1,14 @@
 import clsx from 'clsx';
-import Highlight, { defaultProps, PrismTheme } from 'prism-react-renderer';
+import Highlight, {
+  defaultProps,
+  Language,
+  PrismTheme,
+} from 'prism-react-renderer';
 
 const theme: PrismTheme = {
   plain: {
-    backgroundColor: '#2a2734',
-    color: '#9a86fd',
+    backgroundColor: '#351e11',
+    color: '#d6ceff',
   },
   styles: [
     {
@@ -100,36 +104,40 @@ const theme: PrismTheme = {
 export const Code: React.FC<{
   snippet: string;
   className?: string;
-}> = (props) => (
-  <Highlight
-    {...defaultProps}
-    code={props.snippet}
-    theme={theme}
-    language={'jsx'}
-  >
-    {({ className, style, tokens, getLineProps, getTokenProps }) => (
-      <pre
-        className={clsx(
-          props.className,
-          className,
-          'h-full w-full rounded-lg p-4 overflow-x-auto flex flex-col items justify-center'
-        )}
-        style={style}
-      >
-        {tokens.map((line, i) => {
-          if (tokens.length - 1 === i && line[0].empty) {
-            return null;
-          }
+}> = (props) => {
+  const language = (props.className?.replace(/language-/, '') as any) || 'jsx';
 
-          return (
-            <div {...getLineProps({ line, key: i })}>
-              {line.map((token, key) => (
-                <span {...getTokenProps({ token, key })} />
-              ))}
-            </div>
-          );
-        })}
-      </pre>
-    )}
-  </Highlight>
-);
+  return (
+    <Highlight
+      {...defaultProps}
+      code={props.snippet}
+      theme={theme}
+      language={language}
+    >
+      {({ className, style, tokens, getLineProps, getTokenProps }) => (
+        <pre
+          className={clsx(
+            props.className,
+            className,
+            'h-full w-full rounded-lg p-4 overflow-x-auto flex flex-col items justify-center'
+          )}
+          style={style}
+        >
+          {tokens.map((line, i) => {
+            if (tokens.length - 1 === i && line[0].empty) {
+              return null;
+            }
+
+            return (
+              <div {...getLineProps({ line, key: i })}>
+                {line.map((token, key) => (
+                  <span {...getTokenProps({ token, key })} />
+                ))}
+              </div>
+            );
+          })}
+        </pre>
+      )}
+    </Highlight>
+  );
+};

@@ -196,7 +196,7 @@ export const ToastExample = () => {
           ))}
         </div>
       </div>
-      <div className="h-72 w-full overflow-hidden">
+      <div className="md:h-72 w-full overflow-hidden">
         <Code snippet={snippet} />
       </div>
     </section>

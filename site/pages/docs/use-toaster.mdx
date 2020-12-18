@@ -13,6 +13,8 @@ Create your own notifications with **headless mode**. Tree shaking is supported,
 
 It's recommended to only have one `<Toaster/>` or `useToaster()` in your app at a time. If you need the current state without the handlers, you should use [`useToasterStore()`](/docs/use-toaster-state) instead.
 
+### Basic Example
+
 ```jsx
 const Notifications = () => {
   const { visibleToasts, handlers } = useToaster();
