@@ -7,8 +7,8 @@
 </a>
 </div>
 <br />
-<div align="center"><strong>Smoking hot React notifications.</strong></div>
-<div align="center">Notifications for React. Lightweight, customizable and hot by default.</div>
+<div align="center"><strong>Smoking hot  Notifications for React.</strong></div>
+<div align="center"> Lightweight, customizable and beautiful by default.</div>
 <br />
 <div align="center">
 <a href="https://react-hot-toast.com/">Website</a> 
