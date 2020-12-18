@@ -1,4 +1,4 @@
-<a href="https://react-hot-toast.com/"><img alt="react-hot-toast - Try it out" src="https://github.com/timolins/react-hot-toast/raw/master/assets/header.svg"/></a>
+<a href="https://react-hot-toast.com/"><img alt="react-hot-toast - Try it out" src="https://github.com/timolins/react-hot-toast/raw/main/assets/header.svg"/></a>
 
 [Website](https://react-hot-toast.com) · [Documentation](https://react-hot-toast.com/docs)
 
