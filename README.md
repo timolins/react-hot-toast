@@ -18,9 +18,16 @@
 <a href="https://twitter.com/timolins">Twitter</a>
 </div>
 
->
-
 <br />
+
+## Features
+
+- 🔥 **Hot by default**
+- 🔩 **Easily Customizable**
+- ⏳ **Promise API** - _Automatic loader from a promise_
+- 🕊 **Lightweight** - _less than 5kb including styles_
+- ✅ **Accessible**
+- 🤯 **Headless Hooks** - _Create your own with [`useToaster()`](https://react-hot-toast.com/docs/use-toaster)_
 
 ## Getting started
 
