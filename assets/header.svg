@@ -80,8 +80,8 @@
 <g id="base_2" filter="url(#filter3_dd)">
 <rect x="308" y="308" width="209" height="44" rx="8" fill="white"/>
 </g>
-<text id="loading-text" fill="#363636" xml:space="preserve" style="white-space: pre" font-family="ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif" font-size="16" font-weight="600" letter-spacing="0em"><tspan x="371.438" y="335.188">Making toast...</tspan></text>
-<text id="success-text" fill="#363636" xml:space="preserve" style="white-space: pre" font-family="ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif" font-size="16" font-weight="600" letter-spacing="0em"><tspan x="361.039" y="335.188">Here is your toast.</tspan></text>
+<text id="loading-text" fill="#363636" xml:space="preserve" style="white-space: pre" font-family="ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif" font-size="16" font-weight="600" letter-spacing="0em"><tspan x="365" y="335">Making toast...</tspan></text>
+<text id="success-text" fill="#363636" xml:space="preserve" style="white-space: pre" font-family="ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif" font-size="16" font-weight="600" letter-spacing="0em"><tspan x="356" y="335">Here is your toast.</tspan></text>
 <g id="loader">
 <rect id="circle" x="324" y="325" width="10" height="10" rx="5" stroke="#E0E0E0" stroke-width="2"/>
 <path id="progress" d="M329 325C329.657 325 330.307 325.129 330.913 325.381C331.52 325.632 332.071 326 332.536 326.464C333 326.929 333.368 327.48 333.619 328.087C333.871 328.693 334 329.343 334 330" stroke="#616161" stroke-width="2"/>
