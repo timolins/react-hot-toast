@@ -9,9 +9,15 @@ export default ({ children, meta }) => <Layout meta={meta}>{children}</Layout>;
 
 # `useToaster()` API
 
-Create your own notifications with **headless mode**. Tree shaking is supported, so you won't ship any unused styles.
+Create your own notifications with **headless mode**. It will provide you with the current state, so you can render on own components. Tree shaking is supported, so you won't ship any styles included in the library.
 
 It's recommended to only have one `<Toaster/>` or `useToaster()` in your app at a time. If you need the current state without the handlers, you should use [`useToasterStore()`](/docs/use-toaster-store) instead.
+
+## Usage with React Native
+
+Headless mode is perfectly suited to add notifications to your React Native app. You can check out [this example](<https://snack.expo.io/@timo/react-hot-toast---usetoaster()---react-native>).
+
+## Examples
 
 ### Basic Example
 

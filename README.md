@@ -29,53 +29,40 @@
 - ✅ **Accessible**
 - 🤯 **Headless Hooks** - _Create your own with [`useToaster()`](https://react-hot-toast.com/docs/use-toaster)_
 
-## Getting started
+## Installation
 
-#### Install with yarn
+#### With yarn
 
 ```sh
 yarn add react-hot-toast
 ```
 
-#### Install with NPM
+#### With NPM
 
 ```sh
 npm install react-hot-toast
 ```
 
----
+## Getting Started
 
-### Add to `<Toaster/>` your app
-
-The Toaster will take care of rendering all notifications emitted. Make sure to place it somewhere high up in your app.
+Add the Toaster to your app first. It will take care of rendering all notifications emitted. Now you can trigger `toast()` from anywhere!
 
 ```jsx
-import { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
+
+const notify = () => toast('Here is your toast.');
 
 const App = () => {
   return (
     <div>
+      <button onClick={notify}>Make me a toast</button>
       <Toaster />
     </div>
   );
 };
 ```
 
----
-
-### Create toasts from anywhere
-
-Call `toast()` anywhere within your app to emit new notifications.
-
-```js
-import toast from 'react-hot-toast';
-
-toast.success('Hello World!');
-```
-
----
-
-## Full Documentation
+## Documentation
 
 Find the full API reference on [official documentation](https://react-hot-toast.com/docs).
 
