@@ -22,6 +22,7 @@ export const useToaster = (toastOptions?: DefaultToastOptions) => {
     const timeouts = toasts.map((t) => {
       const duration =
         t.duration ||
+        toastOptions?.[t.type]?.duration ||
         toastOptions?.duration ||
         defaultTimeouts.get(t.type) ||
         4000;
