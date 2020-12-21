@@ -60,11 +60,9 @@ export const useToaster = () => {
         }),
       calculateOffset: (
         toastId: string,
-        {
-          reverseOrder = false,
-          margin = 8,
-        }: { reverseOrder?: boolean; margin?: number }
+        opts?: { reverseOrder?: boolean; margin?: number }
       ) => {
+        const { reverseOrder = false, margin = 8 } = opts || {};
         const index = visibleToasts.findIndex((toast) => toast.id === toastId);
         const offset =
           index !== -1
