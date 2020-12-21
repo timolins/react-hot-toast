@@ -36,7 +36,8 @@ export interface Toast {
   id: string;
   message: ValueOrFunction<Renderable, Toast>;
   icon?: Renderable;
-  duration: number;
+  duration?: number;
+  pauseDuration: number;
 
   role: 'status' | 'alert';
   ariaLive: 'assertive' | 'off' | 'polite';

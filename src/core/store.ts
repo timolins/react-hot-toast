@@ -109,7 +109,7 @@ export const reducer = (state: State, action: Action): State => {
         pausedAt: undefined,
         toasts: state.toasts.map((t) => ({
           ...t,
-          duration: t.duration + diff,
+          pauseDuration: t.pauseDuration + diff,
         })),
       };
   }
