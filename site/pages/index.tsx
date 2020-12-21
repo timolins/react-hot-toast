@@ -64,7 +64,7 @@ const Steps = () => (
         <>
           <span className="text-toast-600">{'<div>'}</span>
           <span className="text-toast-800">{'<Toaster/>'}</span>
-          <span className="text-toast-600">{'<div>'}</span>
+          <span className="text-toast-600">{'</div>'}</span>
         </>
       }
     ></Step>
