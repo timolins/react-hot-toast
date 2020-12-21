@@ -10,13 +10,6 @@ import {
 import { genId } from './utils';
 import { dispatch, ActionType } from './store';
 
-const defaultTimeouts: Map<ToastType, number> = new Map<ToastType, number>([
-  ['blank', 4000],
-  ['error', 4000],
-  ['success', 2000],
-  ['loading', 30000],
-]);
-
 type Message = ValueOrFunction<Renderable, Toast>;
 
 type ToastHandler = (message: Message, options?: ToastOptions) => string;
@@ -32,8 +25,8 @@ const createToast = (
   type,
   role: 'status',
   ariaLive: 'polite',
-  duration: defaultTimeouts.get(type) || 4000,
   message,
+  pauseDuration: 0,
   ...opts,
 });
 

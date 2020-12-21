@@ -1,7 +1,15 @@
 import { useEffect, useMemo } from 'react';
 import { dispatch, ActionType, useStore } from './store';
+import { DefaultToastOptions, ToastType } from './types';
 
-export const useToaster = () => {
+const defaultTimeouts: Map<ToastType, number> = new Map<ToastType, number>([
+  ['blank', 4000],
+  ['error', 4000],
+  ['success', 2000],
+  ['loading', 30000],
+]);
+
+export const useToaster = (toastOptions?: DefaultToastOptions) => {
   const { toasts, pausedAt } = useStore();
   const visibleToasts = toasts.filter((t) => t.visible);
 
@@ -12,7 +20,13 @@ export const useToaster = () => {
 
     const now = Date.now();
     const timeouts = toasts.map((t) => {
-      const duration = t.duration - (now - t.createdAt);
+      const duration =
+        t.duration ||
+        toastOptions?.duration ||
+        defaultTimeouts.get(t.type) ||
+        4000;
+      const durationLeft = duration + t.pauseDuration - (now - t.createdAt);
+
       const dismiss = () => {
         dispatch({
           type: ActionType.DISMISS_TOAST,
@@ -26,13 +40,13 @@ export const useToaster = () => {
         }, 1000);
       };
 
-      if (duration < 0) {
+      if (durationLeft < 0) {
         if (t.visible) {
           dismiss();
         }
         return;
       }
-      return setTimeout(dismiss, duration);
+      return setTimeout(dismiss, durationLeft);
     });
 
     return () => {

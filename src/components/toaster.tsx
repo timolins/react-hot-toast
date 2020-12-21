@@ -22,7 +22,7 @@ export const Toaster: React.FC<ToasterProps> = ({
   containerStyle,
   toastOptions,
 }) => {
-  const { toasts, handlers } = useToaster();
+  const { toasts, handlers } = useToaster(toastOptions);
 
   return (
     <div
