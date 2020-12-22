@@ -153,8 +153,8 @@ export const useStore = (toastOptions: DefaultToastOptions = {}) => {
     ...t,
     duration:
       t.duration ||
-      toastOptions?.duration ||
       toastOptions[t.type]?.duration ||
+      toastOptions?.duration ||
       defaultTimeouts[t.type],
     style: {
       ...toastOptions.style,
