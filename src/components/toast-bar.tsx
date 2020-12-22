@@ -2,12 +2,7 @@ import * as React from 'react';
 import { useCallback } from 'react';
 import { styled, keyframes, CSSAttribute } from 'goober';
 
-import {
-  Toast,
-  ToastPosition,
-  ToastOptions,
-  resolveValueOrFunction,
-} from '../core/types';
+import { Toast, ToastPosition, resolveValueOrFunction } from '../core/types';
 import { Indicator } from './indicator';
 import { AnimatedIconWrapper } from './icon-wrapper';
 
@@ -50,7 +45,6 @@ interface ToastBarProps {
   onHeight: (height: number) => void;
 
   position: ToastPosition;
-  options: ToastOptions;
 }
 
 const getPositionStyle = (
@@ -104,7 +98,7 @@ const getAnimationStyle = (
 };
 
 export const ToastBar: React.FC<ToastBarProps> = React.memo(
-  ({ toast, options, position, ...props }) => {
+  ({ toast, position, ...props }) => {
     const ref = useCallback((el: HTMLElement | null) => {
       if (el) {
         const boundingRect = el.getBoundingClientRect();
@@ -112,18 +106,13 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
       }
     }, []);
 
-    const mergeOptions = {
-      ...options,
-      ...toast,
-    };
-
     const positionStyle = getPositionStyle(position, props.offset);
     const animationStyle = toast?.height
       ? getAnimationStyle(position, toast.visible)
       : { opacity: 0 };
 
     const renderIcon = () => {
-      const { icon, type, iconTheme } = mergeOptions;
+      const { icon, type, iconTheme } = toast;
       if (icon !== undefined) {
         if (typeof icon === 'string') {
           return <AnimatedIconWrapper>{icon}</AnimatedIconWrapper>;
@@ -145,15 +134,14 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
       >
         <ToastBarBase
           ref={ref}
-          className={mergeOptions.className}
+          className={toast.className}
           style={{
             ...animationStyle,
-            ...options.style,
             ...toast.style,
           }}
         >
           {renderIcon()}
-          <Message role={mergeOptions.role} aria-live={mergeOptions.ariaLive}>
+          <Message role={toast.role} aria-live={toast.ariaLive}>
             {resolveValueOrFunction(toast.message, toast)}
           </Message>
         </ToastBarBase>
