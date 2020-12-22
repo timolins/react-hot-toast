@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Toast } from './types';
+import { DefaultToastOptions, Toast, ToastType } from './types';
 
 const TOAST_LIMIT = 20;
 
@@ -126,7 +126,16 @@ export const dispatch = (action: Action) => {
   });
 };
 
-export const useStore = () => {
+const defaultTimeouts: {
+  [key in ToastType]: number;
+} = {
+  blank: 4000,
+  error: 4000,
+  success: 2000,
+  loading: 30000,
+};
+
+export const useStore = (toastOptions: DefaultToastOptions = {}) => {
   const [state, setState] = useState<State>(memoryState);
   useEffect(() => {
     listeners.push(setState);
@@ -138,5 +147,24 @@ export const useStore = () => {
     };
   }, [state]);
 
-  return state;
+  const mergedToasts = state.toasts.map((t) => ({
+    ...toastOptions,
+    ...toastOptions[t.type],
+    ...t,
+    duration:
+      t.duration ||
+      toastOptions?.duration ||
+      toastOptions[t.type]?.duration ||
+      defaultTimeouts[t.type],
+    style: {
+      ...toastOptions.style,
+      ...toastOptions[t.type]?.style,
+      ...t.style,
+    },
+  }));
+
+  return {
+    ...state,
+    toasts: mergedToasts,
+  };
 };
