@@ -44,10 +44,6 @@ export const Toaster: React.FC<ToasterProps> = ({
               reverseOrder,
             })}
             position={position}
-            options={{
-              ...toastOptions,
-              ...toastOptions?.[t.type],
-            }}
           />
         );
       })}
