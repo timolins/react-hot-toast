@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useCallback } from 'react';
-import { styled, keyframes, CSSAttribute } from 'goober';
+import { styled, keyframes } from 'goober';
 
 import { Toast, ToastPosition, resolveValueOrFunction } from '../core/types';
 import { Indicator } from './indicator';
@@ -41,41 +41,10 @@ const Message = styled('div')`
 
 interface ToastBarProps {
   toast: Toast;
-  offset: number;
   onHeight: (height: number) => void;
 
   position: ToastPosition;
 }
-
-const getPositionStyle = (
-  position: ToastPosition,
-  offset: number
-): React.CSSProperties => {
-  const top = position.includes('top');
-  const verticalStyle = top ? { top: 0 } : { bottom: 0 };
-
-  const horizontalStyle: CSSAttribute = position.includes('left')
-    ? {
-        left: 0,
-      }
-    : position.includes('right')
-    ? {
-        right: 0,
-      }
-    : {
-        left: 0,
-        pointerEvents: 'none',
-        right: 0,
-        justifyContent: 'center',
-      };
-  return {
-    position: 'fixed',
-    transition: 'all 230ms cubic-bezier(.21,1.02,.73,1)',
-    transform: `translateY(${offset * (top ? 1 : -1)}px)`,
-    ...verticalStyle,
-    ...horizontalStyle,
-  };
-};
 
 const getAnimationStyle = (
   position: ToastPosition,
@@ -98,15 +67,14 @@ const getAnimationStyle = (
 };
 
 export const ToastBar: React.FC<ToastBarProps> = React.memo(
-  ({ toast, position, ...props }) => {
+  ({ toast, position, onHeight }) => {
     const ref = useCallback((el: HTMLElement | null) => {
       if (el) {
         const boundingRect = el.getBoundingClientRect();
-        props.onHeight(boundingRect.height);
+        onHeight(boundingRect.height);
       }
     }, []);
 
-    const positionStyle = getPositionStyle(position, props.offset);
     const animationStyle = toast?.height
       ? getAnimationStyle(position, toast.visible)
       : { opacity: 0 };
@@ -125,27 +93,19 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
     };
 
     return (
-      <div
+      <ToastBarBase
+        ref={ref}
+        className={toast.className}
         style={{
-          display: 'flex',
-          zIndex: toast.visible ? 9999 : undefined,
-          ...positionStyle,
+          ...animationStyle,
+          ...toast.style,
         }}
       >
-        <ToastBarBase
-          ref={ref}
-          className={toast.className}
-          style={{
-            ...animationStyle,
-            ...toast.style,
-          }}
-        >
-          {renderIcon()}
-          <Message role={toast.role} aria-live={toast.ariaLive}>
-            {resolveValueOrFunction(toast.message, toast)}
-          </Message>
-        </ToastBarBase>
-      </div>
+        {renderIcon()}
+        <Message role={toast.role} aria-live={toast.ariaLive}>
+          {resolveValueOrFunction(toast.message, toast)}
+        </Message>
+      </ToastBarBase>
     );
   }
 );
