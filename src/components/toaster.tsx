@@ -1,18 +1,12 @@
 import * as React from 'react';
-import { CSSAttribute } from 'goober';
+import { CSSAttribute, setup } from 'goober';
 import CSS from 'csstype';
 
 import { useToaster } from '../core/use-toaster';
 import { ToastBar } from './toast-bar';
 import { ToastPosition, DefaultToastOptions } from '../core/types';
 
-interface ToasterProps {
-  position?: ToastPosition;
-  reverseOrder?: boolean;
-  containerStyle?: CSS.Properties;
-
-  toastOptions?: DefaultToastOptions;
-}
+setup(React.createElement);
 
 const getPositionStyle = (
   position: ToastPosition,
@@ -43,6 +37,14 @@ const getPositionStyle = (
     ...horizontalStyle,
   };
 };
+
+interface ToasterProps {
+  position?: ToastPosition;
+  reverseOrder?: boolean;
+  containerStyle?: CSS.Properties;
+
+  toastOptions?: DefaultToastOptions;
+}
 
 export const Toaster: React.FC<ToasterProps> = ({
   reverseOrder,
