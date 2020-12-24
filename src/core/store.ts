@@ -135,7 +135,7 @@ const defaultTimeouts: {
   loading: 30000,
 };
 
-export const useStore = (toastOptions: DefaultToastOptions = {}) => {
+export const useStore = (toastOptions: DefaultToastOptions = {}): State => {
   const [state, setState] = useState<State>(memoryState);
   useEffect(() => {
     listeners.push(setState);
