@@ -31,7 +31,7 @@ const ToastBarBase = styled('div', React.forwardRef)`
   border-radius: 8px;
 `;
 
-const Message = styled('p')`
+const Message = styled('div')`
   display: flex;
   justify-content: center;
   margin: 4px 10px;
