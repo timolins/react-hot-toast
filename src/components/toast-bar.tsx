@@ -124,6 +124,8 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
       return <Indicator theme={iconTheme} type={type} />;
     };
 
+    const DataToRender = resolveValueOrFunction(toast.message, toast)
+
     return (
       <div
         style={{
@@ -142,7 +144,7 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
         >
           {renderIcon()}
           <Message role={toast.role} aria-live={toast.ariaLive}>
-            {resolveValueOrFunction(toast.message, toast)}
+            {typeof DataToRender === 'function' ? React.createElement(DataToRender, null, null) : DataToRender}
           </Message>
         </ToastBarBase>
       </div>
