@@ -19,6 +19,11 @@
 </div>
 
 <br />
+<div align="center">
+  <sub>Cooked by <a href="https://twitter.com/timolins">Timo Lins</a> 👨‍🍳</sub>
+</div>
+
+<br />
 
 ## Features
 
@@ -65,7 +70,3 @@ const App = () => {
 ## Documentation
 
 Find the full API reference on [official documentation](https://react-hot-toast.com/docs).
-
-## Credits
-
-**react-hot-toast** was cooked by [Timo Lins](https://timo.sh) 👨‍🍳
