@@ -24,7 +24,7 @@ export type ValueOrFunction<TValue, TArg> =
 const isFunction = <TValue, TArg>(
   valOrFunction: ValueOrFunction<TValue, TArg>
 ): valOrFunction is ValueFunction<TValue, TArg> =>
-  typeof valOrFunction === 'function';
+  typeof valOrFunction === 'function' && !(String(valOrFunction).includes('createElement') || !valOrFunction.prototype.isReactComponent);
 
 export const resolveValueOrFunction = <TValue, TArg>(
   valOrFunction: ValueOrFunction<TValue, TArg>,
