@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useCallback } from 'react';
-import { styled, keyframes, CSSAttribute } from 'goober';
+import { css, styled, keyframes, CSSAttribute } from 'goober';
 
 import { Toast, ToastPosition, resolveValueOrFunction } from '../core/types';
 import { Indicator } from './indicator';
@@ -16,20 +16,45 @@ const exitAnimation = (factor: number) => `
 100% {transform: translate3d(0,${factor * -130}px,-1px) scale(.5); opacity:0;}
 `;
 
-const ToastBarBase = styled('div', React.forwardRef)`
-  display: flex;
-  align-items: center;
-  background: #fff;
-  color: #363636;
-  line-height: 1.3;
-  will-change: transform;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1), 0 3px 3px rgba(0, 0, 0, 0.05);
-  max-width: 350px;
-  margin: 16px;
-  pointer-events: auto;
-  padding: 8px 10px;
-  border-radius: 8px;
-`;
+const ToastBarBase = (() => {
+  interface Style {
+    [propertyName: string]: string | any;
+  }
+  interface ToastBarBaseProps {
+    className?: String;
+    children?: JSX.Element | JSX.Element[];
+    style?: Style;
+  }
+  const DEFAULT_STYLING = {
+    display: 'flex',
+    alignItems: 'center',
+    background: '#fff', // rather backgroundColor
+    color: '#363636',
+    lineHeight: '1.3',
+    willChange: 'transform',
+    boxShadow: '0 3px 10px rgba(0, 0, 0, 0.1), 0 3px 3px rgba(0, 0, 0, 0.05)',
+    maxWidth: 350,
+    margin: 16,
+    pointerEvents: 'auto',
+    padding: '8px 10px',
+    borderRadius: 8,
+  };
+
+  return React.forwardRef(
+    (
+      { className, children, style = {}, ...rest }: ToastBarBaseProps,
+      ref?: React.Ref<HTMLDivElement>
+    ): JSX.Element => {
+      const sanitizedStyle = Object.entries(DEFAULT_STYLING).reduce(
+        (acc, [prop, val]) => ({ ...acc, [prop]: style[prop] ?? val }),
+        { style } // ensures that additional CSS properties are added!
+      );
+      const cls = [css(sanitizedStyle), className].filter((x) => x).join(' ');
+
+      return <div ref={ref} {...rest} className={cls} children={children} />;
+    }
+  );
+})();
 
 const Message = styled('div')`
   display: flex;
@@ -135,10 +160,7 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
         <ToastBarBase
           ref={ref}
           className={toast.className}
-          style={{
-            ...animationStyle,
-            ...toast.style,
-          }}
+          style={{ ...animationStyle, ...toast.style }}
         >
           {renderIcon()}
           <Message role={toast.role} aria-live={toast.ariaLive}>
