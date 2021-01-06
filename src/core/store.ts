@@ -9,7 +9,6 @@ export enum ActionType {
   UPSERT_TOAST,
   DISMISS_TOAST,
   REMOVE_TOAST,
-  TOAST,
   START_PAUSE,
   END_PAUSE,
 }
