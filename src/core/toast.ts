@@ -7,7 +7,7 @@ import {
   ValueOrFunction,
   resolveValueOrFunction,
 } from './types';
-import { genId } from './utils';
+import { genId, dismissToast } from './utils';
 import { dispatch, ActionType } from './store';
 
 type Message = ValueOrFunction<Renderable, Toast>;
@@ -46,15 +46,7 @@ toast.error = createHandler('error');
 toast.success = createHandler('success');
 toast.loading = createHandler('loading');
 
-toast.dismiss = (toastId?: string) => {
-  dispatch({ type: ActionType.DISMISS_TOAST, toastId });
-  setTimeout(() => {
-    dispatch({
-      type: ActionType.REMOVE_TOAST,
-      toastId,
-    });
-  }, 1000);
-};
+toast.dismiss = (toastId?: string) => dismissToast(toastId);
 
 toast.remove = (toastId?: string) =>
   dispatch({ type: ActionType.REMOVE_TOAST, toastId });
