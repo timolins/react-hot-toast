@@ -34,7 +34,7 @@ const examples: Array<{
   saveSettings(settings),
    {
      loading: 'Saving...',
-     success: <b>Settings saved!</b>,,
+     success: <b>Settings saved!</b>,
      error: <b>Could not save.</b>,
    }
  );`,
