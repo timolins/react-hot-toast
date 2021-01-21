@@ -24,6 +24,7 @@
     "start": "tsdx watch",
     "build": "tsdx build",
     "lint": "tsdx lint",
+    "test": "echo \"No test specified\" && exit 1",
     "prepare": "tsdx build",
     "size": "size-limit",
     "analyze": "size-limit --why"
