@@ -28,6 +28,14 @@ export function Footer() {
           </a>
         </span>
       </div>
+      <div>
+        <a href="https://splitbee.io">
+          <img
+            src="https://splitbee.io/splitbee-badge.svg"
+            alt="Splitbee Analytics"
+          />
+        </a>
+      </div>
     </footer>
   );
 }

@@ -70,8 +70,10 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
   ({ toast, position, onHeight }) => {
     const ref = useCallback((el: HTMLElement | null) => {
       if (el) {
-        const boundingRect = el.getBoundingClientRect();
-        onHeight(boundingRect.height);
+        setTimeout(() => {
+          const boundingRect = el.getBoundingClientRect();
+          onHeight(boundingRect.height);
+        });
       }
     }, []);
 

@@ -81,10 +81,6 @@ export const ToasterExample: React.FC<{
           }
         );
 
-        (window as any).splitbee?.track('Change Position', {
-          position: p,
-        });
-
         onPosition(p);
       }}
     >

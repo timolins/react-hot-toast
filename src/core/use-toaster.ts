@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { dispatch, ActionType, useStore } from './store';
+import { toast } from './toast';
 import { DefaultToastOptions } from './types';
 
 export const useToaster = (toastOptions?: DefaultToastOptions) => {
@@ -16,26 +17,13 @@ export const useToaster = (toastOptions?: DefaultToastOptions) => {
       const durationLeft =
         (t.duration || 0) + t.pauseDuration - (now - t.createdAt);
 
-      const dismiss = () => {
-        dispatch({
-          type: ActionType.DISMISS_TOAST,
-          toastId: t.id,
-        });
-        setTimeout(() => {
-          dispatch({
-            type: ActionType.REMOVE_TOAST,
-            toastId: t.id,
-          });
-        }, 1000);
-      };
-
       if (durationLeft < 0) {
         if (t.visible) {
-          dismiss();
+          toast.dismiss(t.id);
         }
         return;
       }
-      return setTimeout(dismiss, durationLeft);
+      return setTimeout(() => toast.dismiss(t.id), durationLeft);
     });
 
     return () => {

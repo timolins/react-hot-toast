@@ -28,7 +28,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <script async data-api="/_hive" src="/bee.js"></script>
+        <script async data-no-cookie data-api="/_hive" src="/bee.js"></script>
         <link rel="shortcut icon" href="/favicon.png" type="image/x-icon" />
       </Head>
       <MDXProvider components={components}>
