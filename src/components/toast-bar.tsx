@@ -29,6 +29,9 @@ const ToastBarBase = styled('div', React.forwardRef)`
   pointer-events: auto;
   padding: 8px 10px;
   border-radius: 8px;
+  @media (prefers-reduced-motion) {
+    animation-play-state: paused
+  }
 `;
 
 const Message = styled('div')`
