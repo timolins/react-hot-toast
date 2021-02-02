@@ -93,14 +93,14 @@ const getAnimationStyle = (
   const factor = top ? 1 : -1;
   return visible
     ? {
-        animation: `${!prefersReducedMotion() ? `${keyframes `${enterAnimation(
+        animation: `${!prefersReducedMotion() && `${keyframes `${enterAnimation(
           factor
-        )}`} 0.35s cubic-bezier(.21,1.02,.73,1) forwards` : ''}`,
+        )}`} 0.35s cubic-bezier(.21,1.02,.73,1) forwards`}`,
       }
     : {
-        animation: `${!prefersReducedMotion() ? `${keyframes `${exitAnimation(
+        animation: `${!prefersReducedMotion() && `${keyframes `${exitAnimation(
           factor
-        )}`} 0.8s forwards cubic-bezier(.06,.71,.55,1)` : ''}`,
+        )}`} 0.8s forwards cubic-bezier(.06,.71,.55,1)`}`,
         pointerEvents: 'none',
       };
 };
