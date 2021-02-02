@@ -6,6 +6,14 @@ import { Toast, ToastPosition, resolveValueOrFunction } from '../core/types';
 import { Indicator } from './indicator';
 import { AnimatedIconWrapper } from './icon-wrapper';
 
+
+const  prefersReducedMotion = () => {
+  // Grab the prefers reduced media query.
+  const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+  // Check if the media query matches or is not available.
+  return (!mediaQuery || mediaQuery.matches) ? true : false;
+}
+
 const enterAnimation = (factor: number) => `
 0% {transform: translate3d(0,${factor * -80}px,0) scale(.6); opacity:.5;}
 100% {transform: translate3d(0,0,0) scale(1); opacity:1;}
@@ -29,10 +37,6 @@ const ToastBarBase = styled('div', React.forwardRef)`
   pointer-events: auto;
   padding: 8px 10px;
   border-radius: 8px;
-  @media (prefers-reduced-motion) {
-    animation-play-state: paused;
-    transition: none;
-  }
 `;
 
 const Message = styled('div')`
@@ -74,7 +78,7 @@ const getPositionStyle = (
       };
   return {
     position: 'fixed',
-    transition: 'all 230ms cubic-bezier(.21,1.02,.73,1)',
+    transition: `${!prefersReducedMotion() && 'all 230ms cubic-bezier(.21,1.02,.73,1)'}`,
     transform: `translateY(${offset * (top ? 1 : -1)}px)`,
     ...verticalStyle,
     ...horizontalStyle,
@@ -89,14 +93,14 @@ const getAnimationStyle = (
   const factor = top ? 1 : -1;
   return visible
     ? {
-        animation: `${keyframes`${enterAnimation(
+        animation: `${!prefersReducedMotion() ? `${keyframes `${enterAnimation(
           factor
-        )}`} 0.35s cubic-bezier(.21,1.02,.73,1) forwards`,
+        )}`} 0.35s cubic-bezier(.21,1.02,.73,1) forwards` : ''}`,
       }
     : {
-        animation: `${keyframes`${exitAnimation(
+        animation: `${!prefersReducedMotion() ? `${keyframes `${exitAnimation(
           factor
-        )}`} 0.8s forwards cubic-bezier(.06,.71,.55,1)`,
+        )}`} 0.8s forwards cubic-bezier(.06,.71,.55,1)` : ''}`,
         pointerEvents: 'none',
       };
 };
