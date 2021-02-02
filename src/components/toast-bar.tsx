@@ -64,7 +64,6 @@ const getPositionStyle = (
       }
     : {
         left: 0,
-        pointerEvents: 'none',
         right: 0,
         justifyContent: 'center',
       };
@@ -131,6 +130,7 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
         style={{
           display: 'flex',
           zIndex: toast.visible ? 9999 : undefined,
+          pointerEvents: 'none',
           ...positionStyle,
         }}
       >
@@ -138,6 +138,7 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
           ref={ref}
           className={toast.className}
           style={{
+            pointerEvents: 'initial',
             ...animationStyle,
             ...toast.style,
           }}
