@@ -71,7 +71,6 @@ export const ToasterExample: React.FC<{
       data-splitbee-event="Change Position"
       data-splitbee-event-position={p}
       onClick={() => {
-        toast.dismiss('position');
         toast.success(
           <span>
             Position set to <b>{p}</b>
