@@ -14,7 +14,7 @@ export const useToaster = (toastOptions?: DefaultToastOptions) => {
 
     const now = Date.now();
     const timeouts = toasts.map((t) => {
-      if (t.duration === -1) {
+      if (t.duration === Infinity) {
         return;
       }
 
