@@ -31,8 +31,8 @@ export function Footer() {
       <div>
         <a href="https://splitbee.io">
           <img
-            src="https://splitbee.io/splitbee-badge.svg"
-            alt="Splitbee Analytics"
+            src="https://splitbee-cdn.fra1.cdn.digitaloceanspaces.com/static/badge/splitbee-badge.svg"
+            alt="Analytics by Splitbee.io"
           />
         </a>
       </div>
