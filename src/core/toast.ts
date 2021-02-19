@@ -19,7 +19,6 @@ const createToast = (
   type: ToastType = 'blank',
   opts?: ToastOptions
 ): Toast => ({
-  id: opts?.id || genId(),
   createdAt: Date.now(),
   visible: true,
   type,
@@ -28,6 +27,7 @@ const createToast = (
   message,
   pauseDuration: 0,
   ...opts,
+  id: opts?.id || genId(),
 });
 
 const createHandler = (type?: ToastType): ToastHandler => (
