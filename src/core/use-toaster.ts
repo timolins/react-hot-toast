@@ -14,6 +14,10 @@ export const useToaster = (toastOptions?: DefaultToastOptions) => {
 
     const now = Date.now();
     const timeouts = toasts.map((t) => {
+      if (t.duration === Infinity) {
+        return;
+      }
+
       const durationLeft =
         (t.duration || 0) + t.pauseDuration - (now - t.createdAt);
 
