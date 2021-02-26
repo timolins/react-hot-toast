@@ -64,18 +64,21 @@ toast.remove = (toastId?: string) =>
 
 toast.promise = <T>(
   promise: Promise<T>,
-  msgs: Partial<{
+  msgs?: Partial<{
     loading: Renderable;
     success: ValueOrFunction<Renderable, T>;
     error: ValueOrFunction<Renderable, any>;
   }>,
   opts?: DefaultToastOptions
 ) => {
-  const id = toast.loading(msgs?.loading ?? "Loading", { ...opts, ...opts?.loading });
+  const id = toast.loading(msgs?.loading ?? 'Loading', {
+    ...opts,
+    ...opts?.loading,
+  });
 
   promise
     .then((p) => {
-      toast.success(resolveValueOrFunction(msgs?.success ?? "Success", p), {
+      toast.success(resolveValueOrFunction(msgs?.success ?? 'Success', p), {
         id,
         ...opts,
         ...opts?.success,
@@ -83,7 +86,7 @@ toast.promise = <T>(
       return p;
     })
     .catch((e) => {
-      toast.error(resolveValueOrFunction(msgs?.error ?? "Error", e), {
+      toast.error(resolveValueOrFunction(msgs?.error ?? 'Error', e), {
         id,
         ...opts,
         ...opts?.error,
