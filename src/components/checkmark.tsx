@@ -3,12 +3,12 @@ import { styled, keyframes } from 'goober';
 const circleAnimation = keyframes`
   from {
     transform: scale(0) rotate(45deg);
-	 opacity: 0;
+	  opacity: 0;
   }
 
   to {
     transform: scale(1) rotate(45deg);
-	 opacity: 1;
+	  opacity: 1;
   }
 `;
 

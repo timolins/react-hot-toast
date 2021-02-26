@@ -1,15 +1,15 @@
 import { styled, keyframes } from 'goober';
 
 const enter = keyframes`
-from {
-  transform: scale(0.6);
-  opacity: 0.4;
-}
-
-to {
-  transform: scale(1);
-  opacity: 1;
-}
+  from {
+    transform: scale(0.6);
+    opacity: 0.4;
+  }
+  
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 `;
 
 export const AnimatedIconWrapper = styled('div')`

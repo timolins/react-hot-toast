@@ -12,7 +12,6 @@ interface ToasterProps {
   position?: ToastPosition;
   reverseOrder?: boolean;
   containerStyle?: CSS.Properties;
-
   toastOptions?: DefaultToastOptions;
 }
 

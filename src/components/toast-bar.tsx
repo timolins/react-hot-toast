@@ -7,13 +7,27 @@ import { Indicator } from './indicator';
 import { AnimatedIconWrapper } from './icon-wrapper';
 
 const enterAnimation = (factor: number) => `
-0% {transform: translate3d(0,${factor * -80}px,0) scale(.6); opacity:.5;}
-100% {transform: translate3d(0,0,0) scale(1); opacity:1;}
+  0% {
+    transform: translate3d(0, ${factor * -80}px, 0) scale(0.6);
+    opacity: 0.5;
+  }
+  
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 1;
+  }
 `;
 
 const exitAnimation = (factor: number) => `
-0% {transform: translate3d(0,0,-1px) scale(1); opacity:1;}
-100% {transform: translate3d(0,${factor * -130}px,-1px) scale(.5); opacity:0;}
+  0% {
+    transform: translate3d(0, 0, -1px) scale(1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate3d(0, ${factor * -130}px, -1px) scale(0.5);
+    opacity: 0;
+  }
 `;
 
 const ToastBarBase = styled('div', React.forwardRef)`
@@ -43,7 +57,6 @@ interface ToastBarProps {
   toast: Toast;
   offset: number;
   onHeight: (height: number) => void;
-
   position: ToastPosition;
 }
 
@@ -55,18 +68,11 @@ const getPositionStyle = (
   const verticalStyle = top ? { top: 0 } : { bottom: 0 };
 
   const horizontalStyle: CSSAttribute = position.includes('left')
-    ? {
-        left: 0,
-      }
+    ? { left: 0 }
     : position.includes('right')
-    ? {
-        right: 0,
-      }
-    : {
-        left: 0,
-        right: 0,
-        justifyContent: 'center',
-      };
+    ? { right: 0 }
+    : { left: 0, right: 0, justifyContent: 'center' };
+
   return {
     position: 'fixed',
     transition: 'all 230ms cubic-bezier(.21,1.02,.73,1)',
