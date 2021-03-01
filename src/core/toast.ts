@@ -51,12 +51,6 @@ toast.dismiss = (toastId?: string) => {
     type: ActionType.DISMISS_TOAST,
     toastId,
   });
-  setTimeout(() => {
-    dispatch({
-      type: ActionType.REMOVE_TOAST,
-      toastId,
-    });
-  }, 1000);
 };
 
 toast.remove = (toastId?: string) =>
