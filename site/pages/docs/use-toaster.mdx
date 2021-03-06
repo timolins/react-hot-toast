@@ -9,7 +9,7 @@ export default ({ children, meta }) => <Layout meta={meta}>{children}</Layout>;
 
 # `useToaster()` API
 
-Create your own notifications with **headless mode**. It will provide you with the current state, so you can render on own components. Tree shaking is supported, so you won't ship any styles included in the library.
+Create your own notification system with **headless mode**. The `useToaster()` hook will manage the notification state for you. This includes keeping track of all toast created with  [`toast()`](/docs/toast), auto-dimiss, pause on hover and an unmount delay for exit animations. The hook will provide you with the current state, so you can render on own components. Tree shaking is supported, so you won't ship any unused styles from library.
 
 It's recommended to only have one `<Toaster/>` or `useToaster()` in your app at a time. If you need the current state without the handlers, you should use [`useToasterStore()`](/docs/use-toaster-store) instead.
 
