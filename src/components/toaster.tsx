@@ -5,6 +5,7 @@ import CSS from 'csstype';
 import { useToaster } from '../core/use-toaster';
 import { ToastBar } from './toast-bar';
 import { ToastPosition, DefaultToastOptions } from '../core/types';
+import { createRectRef } from '../core/utils';
 
 setup(React.createElement);
 
@@ -70,19 +71,23 @@ export const Toaster: React.FC<ToasterProps> = ({
         });
         const positionStyle = getPositionStyle(position, offset);
 
+        const ref = t.height
+          ? undefined
+          : createRectRef((rect) => {
+              handlers.updateHeight(t.id, rect.height);
+            });
+
         return (
           <div
+            ref={ref}
             key={t.id}
             style={{
               zIndex: t.visible ? 9999 : undefined,
+              margin: 16,
               ...positionStyle,
             }}
           >
-            <ToastBar
-              onHeight={(height) => handlers.updateHeight(t.id, height)}
-              toast={t}
-              position={position}
-            />
+            <ToastBar toast={t} position={position} />
           </div>
         );
       })}

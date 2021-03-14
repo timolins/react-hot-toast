@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useCallback } from 'react';
 import { styled, keyframes } from 'goober';
 
 import { Toast, ToastPosition, resolveValueOrFunction } from '../core/types';
@@ -25,7 +24,6 @@ const ToastBarBase = styled('div', React.forwardRef)`
   will-change: transform;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1), 0 3px 3px rgba(0, 0, 0, 0.05);
   max-width: 350px;
-  margin: 16px;
   pointer-events: auto;
   padding: 8px 10px;
   border-radius: 8px;
@@ -41,8 +39,6 @@ const Message = styled('div')`
 
 interface ToastBarProps {
   toast: Toast;
-  onHeight: (height: number) => void;
-
   position: ToastPosition;
 }
 
@@ -67,16 +63,7 @@ const getAnimationStyle = (
 };
 
 export const ToastBar: React.FC<ToastBarProps> = React.memo(
-  ({ toast, position, onHeight }) => {
-    const ref = useCallback((el: HTMLElement | null) => {
-      if (el) {
-        setTimeout(() => {
-          const boundingRect = el.getBoundingClientRect();
-          onHeight(boundingRect.height);
-        });
-      }
-    }, []);
-
+  ({ toast, position }) => {
     const animationStyle = toast?.height
       ? getAnimationStyle(position, toast.visible)
       : { opacity: 0 };
@@ -96,7 +83,6 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
 
     return (
       <ToastBarBase
-        ref={ref}
         className={toast.className}
         style={{
           ...animationStyle,
