@@ -4,7 +4,7 @@ import CSS from 'csstype';
 
 import { useToaster } from '../core/use-toaster';
 import { ToastBar } from './toast-bar';
-import { ToastPosition, DefaultToastOptions } from '../core/types';
+import { ToastPosition, DefaultToastOptions, Toast } from '../core/types';
 import { createRectRef } from '../core/utils';
 
 setup(React.createElement);
@@ -45,6 +45,7 @@ interface ToasterProps {
   containerStyle?: CSS.Properties;
 
   toastOptions?: DefaultToastOptions;
+  renderToast?: (toast: Toast) => JSX.Element;
 }
 
 export const Toaster: React.FC<ToasterProps> = ({
@@ -52,6 +53,7 @@ export const Toaster: React.FC<ToasterProps> = ({
   position = 'top-center',
   containerStyle,
   toastOptions,
+  renderToast,
 }) => {
   const { toasts, handlers } = useToaster(toastOptions);
 
@@ -91,7 +93,11 @@ export const Toaster: React.FC<ToasterProps> = ({
               ...positionStyle,
             }}
           >
-            <ToastBar toast={t} position={position} />
+            {renderToast ? (
+              renderToast(t)
+            ) : (
+              <ToastBar toast={t} position={position} />
+            )}
           </div>
         );
       })}
