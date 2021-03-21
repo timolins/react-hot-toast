@@ -31,7 +31,7 @@ const getPositionStyle = (
       };
   return {
     display: 'flex',
-    position: 'fixed',
+    position: 'absolute',
     transition: 'all 230ms cubic-bezier(.21,1.02,.73,1)',
     transform: `translateY(${offset * (top ? 1 : -1)}px)`,
     ...verticalStyle,
@@ -58,8 +58,13 @@ export const Toaster: React.FC<ToasterProps> = ({
   return (
     <div
       style={{
-        position: 'fixed',
+        top: 16,
+        left: 16,
+        right: 16,
+        bottom: 16,
         zIndex: 9999,
+        pointerEvents: 'none',
+        position: 'fixed',
         ...containerStyle,
       }}
       onMouseEnter={handlers.startPause}
@@ -83,7 +88,6 @@ export const Toaster: React.FC<ToasterProps> = ({
             key={t.id}
             style={{
               zIndex: t.visible ? 9999 : undefined,
-              margin: 16,
               ...positionStyle,
             }}
           >
