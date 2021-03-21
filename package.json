@@ -3,6 +3,7 @@
   "version": "1.0.2",
   "author": "Timo Lins",
   "license": "MIT",
+  "sideEffects": false,
   "repository": "timolins/react-hot-toast",
   "keywords": [
     "react",
