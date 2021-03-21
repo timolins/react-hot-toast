@@ -73,10 +73,12 @@ export const Toaster: React.FC<ToasterProps> = ({
       onMouseLeave={handlers.endPause}
     >
       {toasts.map((t) => {
-        const offset = handlers.calculateOffset(t.id, {
+        const toastPosition = t.position || position;
+        const offset = handlers.calculateOffset(t, {
           reverseOrder,
+          defaultPosition: position,
         });
-        const positionStyle = getPositionStyle(position, offset);
+        const positionStyle = getPositionStyle(toastPosition, offset);
 
         const ref = t.height
           ? undefined
@@ -96,7 +98,7 @@ export const Toaster: React.FC<ToasterProps> = ({
             {renderToast ? (
               renderToast(t)
             ) : (
-              <ToastBar toast={t} position={position} />
+              <ToastBar toast={t} position={toastPosition} />
             )}
           </div>
         );

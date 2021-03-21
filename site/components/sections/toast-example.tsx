@@ -169,6 +169,18 @@ const examples: Array<{
       });
     },
   },
+  {
+    title: 'Custom Position',
+    emoji: '⬇️',
+    snippet: `toast.success('Always at the bottom.', {
+  position: "bottom-center"
+})`,
+    action: () => {
+      toast.success('Always at the bottom.', {
+        position: 'bottom-center',
+      });
+    },
+  },
 ];
 
 export const ToastExample = () => {

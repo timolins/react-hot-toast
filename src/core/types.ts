@@ -38,6 +38,7 @@ export interface Toast {
   icon?: Renderable;
   duration?: number;
   pauseDuration: number;
+  position?: ToastPosition;
 
   role: 'status' | 'alert';
   ariaLive: 'assertive' | 'off' | 'polite';

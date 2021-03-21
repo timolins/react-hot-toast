@@ -23,16 +23,18 @@ Headless mode is perfectly suited to add notifications to your React Native app.
 
 ```jsx
 const Notifications = () => {
-  const { visibleToasts, handlers } = useToaster();
+  const { toasts, handlers } = useToaster();
   const { startPause, endPause } = handlers;
 
   return (
     <div onMouseEnter={startPause} onMouseLeave={endPause}>
-      {visibleToasts.map((toast) => (
-        <div key={toast.id} role={toast.role} aria-live={toast.ariaLive}>
-          {toast.message}
-        </div>
-      ))}
+      {toasts
+        .filter((toast) => toast.visible)
+        .map((toast) => (
+          <div key={toast.id} role={toast.role} aria-live={toast.ariaLive}>
+            {toast.message}
+          </div>
+        ))}
     </div>
   );
 };
