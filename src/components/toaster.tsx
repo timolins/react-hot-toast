@@ -43,6 +43,7 @@ interface ToasterProps {
   position?: ToastPosition;
   reverseOrder?: boolean;
   containerStyle?: CSS.Properties;
+  containerClassName?: string;
 
   toastOptions?: DefaultToastOptions;
   renderToast?: (toast: Toast) => JSX.Element;
@@ -53,6 +54,7 @@ export const Toaster: React.FC<ToasterProps> = ({
   position = 'top-center',
   containerStyle,
   toastOptions,
+  containerClassName,
   renderToast,
 }) => {
   const { toasts, handlers } = useToaster(toastOptions);
@@ -69,6 +71,7 @@ export const Toaster: React.FC<ToasterProps> = ({
         position: 'fixed',
         ...containerStyle,
       }}
+      className={containerClassName}
       onMouseEnter={handlers.startPause}
       onMouseLeave={handlers.endPause}
     >
