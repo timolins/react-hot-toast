@@ -6,7 +6,6 @@ import {
   ToastPosition as _ToastPosition,
 } from './core/types';
 export { useToaster } from './core/use-toaster';
-export { dispatch, ActionType } from './core/store';
 export { ToastBar } from './components/toast-bar';
 export { Toaster } from './components/toaster';
 export { useStore as useToasterStore } from './core/store';
