@@ -5,6 +5,7 @@ import CSS from 'csstype';
 import { useToaster } from '../core/use-toaster';
 import { ToastBar } from './toast-bar';
 import { ToastPosition, DefaultToastOptions } from '../core/types';
+import { createRectRef } from '../core/utils';
 
 setup(React.createElement);
 
@@ -30,7 +31,7 @@ const getPositionStyle = (
       };
   return {
     display: 'flex',
-    position: 'fixed',
+    position: 'absolute',
     transition: 'all 230ms cubic-bezier(.21,1.02,.73,1)',
     transform: `translateY(${offset * (top ? 1 : -1)}px)`,
     ...verticalStyle,
@@ -57,8 +58,13 @@ export const Toaster: React.FC<ToasterProps> = ({
   return (
     <div
       style={{
-        position: 'fixed',
+        top: 16,
+        left: 16,
+        right: 16,
+        bottom: 16,
         zIndex: 9999,
+        pointerEvents: 'none',
+        position: 'fixed',
         ...containerStyle,
       }}
       onMouseEnter={handlers.startPause}
@@ -70,19 +76,22 @@ export const Toaster: React.FC<ToasterProps> = ({
         });
         const positionStyle = getPositionStyle(position, offset);
 
+        const ref = t.height
+          ? undefined
+          : createRectRef((rect) => {
+              handlers.updateHeight(t.id, rect.height);
+            });
+
         return (
           <div
+            ref={ref}
             key={t.id}
             style={{
               zIndex: t.visible ? 9999 : undefined,
               ...positionStyle,
             }}
           >
-            <ToastBar
-              onHeight={(height) => handlers.updateHeight(t.id, height)}
-              toast={t}
-              position={position}
-            />
+            <ToastBar toast={t} position={position} />
           </div>
         );
       })}

@@ -4,3 +4,14 @@ export const genId = (() => {
     return (++count).toString();
   };
 })();
+
+export const createRectRef = (onRect: (rect: DOMRect) => void) => (
+  el: HTMLElement | null
+) => {
+  if (el) {
+    setTimeout(() => {
+      const boundingRect = el.getBoundingClientRect();
+      onRect(boundingRect);
+    });
+  }
+};
