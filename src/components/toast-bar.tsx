@@ -6,13 +6,13 @@ import { Indicator } from './indicator';
 import { AnimatedIconWrapper } from './icon-wrapper';
 
 const enterAnimation = (factor: number) => `
-0% {transform: translate3d(0,${factor * -80}px,0) scale(.6); opacity:.5;}
+0% {transform: translate3d(0,${factor * -200}%,0) scale(.6); opacity:.5;}
 100% {transform: translate3d(0,0,0) scale(1); opacity:1;}
 `;
 
 const exitAnimation = (factor: number) => `
 0% {transform: translate3d(0,0,-1px) scale(1); opacity:1;}
-100% {transform: translate3d(0,${factor * -130}px,-1px) scale(.5); opacity:0;}
+100% {transform: translate3d(0,${factor * -150}%,-1px) scale(.6); opacity:0;}
 `;
 
 const ToastBarBase = styled('div', React.forwardRef)`
@@ -57,7 +57,7 @@ const getAnimationStyle = (
     : {
         animation: `${keyframes`${exitAnimation(
           factor
-        )}`} 0.8s forwards cubic-bezier(.06,.71,.55,1)`,
+        )}`} 0.4s forwards cubic-bezier(.06,.71,.55,1)`,
         pointerEvents: 'none',
       };
 };

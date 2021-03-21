@@ -58,18 +58,19 @@ export const useToaster = (toastOptions?: DefaultToastOptions) => {
         opts?: { reverseOrder?: boolean; margin?: number }
       ) => {
         const { reverseOrder = false, margin = 8 } = opts || {};
-        const index = visibleToasts.findIndex((toast) => toast.id === toastId);
-        const offset =
-          index !== -1
-            ? visibleToasts
-                .slice(...(reverseOrder ? [index + 1] : [0, index]))
-                .reduce((acc, t) => acc + (t.height || 0) + margin, 0)
-            : 0;
+        const toastIndex = toasts.findIndex((toast) => toast.id === toastId);
+        const toastsBefore = toasts.filter(
+          (toast, i) => i < toastIndex && toast.visible
+        ).length;
+
+        const offset = visibleToasts
+          .slice(...(reverseOrder ? [toastsBefore + 1] : [0, toastsBefore]))
+          .reduce((acc, t) => acc + (t.height || 0) + margin, 0);
 
         return offset;
       },
     }),
-    [visibleToasts, pausedAt]
+    [toasts, visibleToasts, pausedAt]
   );
 
   return {
