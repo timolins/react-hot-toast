@@ -5,7 +5,7 @@ import {
   ToastType,
   DefaultToastOptions,
   ValueOrFunction,
-  resolveValueOrFunction,
+  resolveValue,
 } from './types';
 import { genId } from './utils';
 import { dispatch, ActionType } from './store';
