@@ -62,6 +62,7 @@ export type ToastOptions = Partial<
     | 'ariaLive'
     | 'className'
     | 'style'
+    | 'position'
     | 'iconTheme'
   >
 >;
