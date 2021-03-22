@@ -2,6 +2,7 @@ import * as React from 'react';
 import { styled, keyframes } from 'goober';
 
 import { Toast, ToastPosition, resolveValue } from '../core/types';
+import { ToastIcon } from './toast-icon';
 
 const enterAnimation = (factor: number) => `
 0% {transform: translate3d(0,${factor * -200}%,0) scale(.6); opacity:.5;}
@@ -38,6 +39,7 @@ const Message = styled('div')`
 interface ToastBarProps {
   toast: Toast;
   position: ToastPosition;
+  style?: React.CSSProperties;
 }
 
 const getAnimationStyle = (
@@ -61,33 +63,21 @@ const getAnimationStyle = (
 };
 
 export const ToastBar: React.FC<ToastBarProps> = React.memo(
-  ({ toast, position }) => {
+  ({ toast, position, style }) => {
     const animationStyle = toast?.height
       ? getAnimationStyle(position, toast.visible)
       : { opacity: 0 };
-
-    const renderIcon = () => {
-      const { icon, type, iconTheme } = toast;
-      if (icon !== undefined) {
-        if (typeof icon === 'string') {
-          return <AnimatedIconWrapper>{icon}</AnimatedIconWrapper>;
-        } else {
-          return icon;
-        }
-      }
-
-      return <Indicator theme={iconTheme} type={type} />;
-    };
 
     return (
       <ToastBarBase
         className={toast.className}
         style={{
           ...animationStyle,
+          ...style,
           ...toast.style,
         }}
       >
-        {renderIcon()}
+        <ToastIcon toast={toast} />
         <Message role={toast.role} aria-live={toast.ariaLive}>
           {resolveValue(toast.message, toast)}
         </Message>

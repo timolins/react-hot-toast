@@ -7,12 +7,10 @@ import {
 } from './core/types';
 export { useToaster } from './core/use-toaster';
 export { ToastBar } from './components/toast-bar';
+export { ToastIcon } from './components/toast-icon';
 export { Toaster } from './components/toaster';
 export { useStore as useToasterStore } from './core/store';
-
-export { CheckmarkIcon } from './components/checkmark';
-export { ErrorIcon } from './components/error';
-export { LoaderIcon } from './components/loader';
+export { resolveValue } from './core/types';
 
 export type ToastOptions = _ToastOptions;
 export type ToastPosition = _ToastPosition;
