@@ -1,4 +1,4 @@
-import { Properties } from 'csstype';
+import { CSSProperties } from 'react';
 
 export type ToastType = 'success' | 'error' | 'loading' | 'blank';
 export type ToastPosition =
@@ -43,7 +43,7 @@ export interface Toast {
   role: 'status' | 'alert';
   ariaLive: 'assertive' | 'off' | 'polite';
 
-  style?: Properties;
+  style?: CSSProperties;
   className?: string;
   iconTheme?: IconTheme;
 

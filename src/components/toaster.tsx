@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { CSSAttribute, setup } from 'goober';
-import CSS from 'csstype';
+import { setup } from 'goober';
 
 import { useToaster } from '../core/use-toaster';
 import { ToastBar } from './toast-bar';
@@ -14,8 +13,8 @@ const getPositionStyle = (
   offset: number
 ): React.CSSProperties => {
   const top = position.includes('top');
-  const verticalStyle: CSSAttribute = top ? { top: 0 } : { bottom: 0 };
-  const horizontalStyle: CSSAttribute = position.includes('left')
+  const verticalStyle: React.CSSProperties = top ? { top: 0 } : { bottom: 0 };
+  const horizontalStyle: React.CSSProperties = position.includes('left')
     ? {
         left: 0,
       }
@@ -42,7 +41,7 @@ const getPositionStyle = (
 interface ToasterProps {
   position?: ToastPosition;
   reverseOrder?: boolean;
-  containerStyle?: CSS.Properties;
+  containerStyle?: React.CSSProperties;
   containerClassName?: string;
 
   toastOptions?: DefaultToastOptions;
