@@ -1,9 +1,7 @@
 import * as React from 'react';
 import { styled, keyframes } from 'goober';
 
-import { Toast, ToastPosition, resolveValueOrFunction } from '../core/types';
-import { Indicator } from './indicator';
-import { AnimatedIconWrapper } from './icon-wrapper';
+import { Toast, ToastPosition, resolveValue } from '../core/types';
 
 const enterAnimation = (factor: number) => `
 0% {transform: translate3d(0,${factor * -200}%,0) scale(.6); opacity:.5;}
@@ -91,7 +89,7 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
       >
         {renderIcon()}
         <Message role={toast.role} aria-live={toast.ariaLive}>
-          {resolveValueOrFunction(toast.message, toast)}
+          {resolveValue(toast.message, toast)}
         </Message>
       </ToastBarBase>
     );

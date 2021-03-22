@@ -3,7 +3,12 @@ import { setup } from 'goober';
 
 import { useToaster } from '../core/use-toaster';
 import { ToastBar } from './toast-bar';
-import { ToastPosition, DefaultToastOptions, Toast } from '../core/types';
+import {
+  ToastPosition,
+  DefaultToastOptions,
+  Toast,
+  resolveValue,
+} from '../core/types';
 import { createRectRef } from '../core/utils';
 
 setup(React.createElement);
@@ -97,7 +102,9 @@ export const Toaster: React.FC<ToasterProps> = ({
               ...positionStyle,
             }}
           >
-            {renderToast ? (
+            {t.type === 'custom' ? (
+              resolveValue(t.message, t)
+            ) : renderToast ? (
               renderToast(t)
             ) : (
               <ToastBar toast={t} position={toastPosition} />

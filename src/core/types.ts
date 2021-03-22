@@ -9,7 +9,7 @@ export type ToastPosition =
   | 'bottom-center'
   | 'bottom-right';
 
-export type Renderable = JSX.Element | string | number | null;
+export type Renderable = JSX.Element | string | null;
 
 export interface IconTheme {
   primary: string;
@@ -26,7 +26,7 @@ const isFunction = <TValue, TArg>(
 ): valOrFunction is ValueFunction<TValue, TArg> =>
   typeof valOrFunction === 'function';
 
-export const resolveValueOrFunction = <TValue, TArg>(
+export const resolveValue = <TValue, TArg>(
   valOrFunction: ValueOrFunction<TValue, TArg>,
   arg: TArg
 ): TValue => (isFunction(valOrFunction) ? valOrFunction(arg) : valOrFunction);
