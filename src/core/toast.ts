@@ -35,6 +35,9 @@ const createHandler = (type?: ToastType): ToastHandler => (
   options
 ) => {
   const toast = createToast(message, type, options);
+  if (options?.unique) {
+    dispatch({ type: ActionType.REMOVE_TOAST });
+  }
   dispatch({ type: ActionType.UPSERT_TOAST, toast });
   return toast.id;
 };

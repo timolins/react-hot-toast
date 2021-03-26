@@ -49,6 +49,7 @@ export interface Toast {
   createdAt: number;
   visible: boolean;
   height?: number;
+  unique?: boolean;
 }
 
 export type ToastOptions = Partial<
@@ -62,6 +63,7 @@ export type ToastOptions = Partial<
     | 'className'
     | 'style'
     | 'iconTheme'
+    | 'unique'
   >
 >;
 

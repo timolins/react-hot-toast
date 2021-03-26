@@ -169,6 +169,16 @@ const examples: Array<{
       });
     },
   },
+  {
+    title: 'Unique Toast',
+    emoji: '☝',
+    snippet: "toast('Unquie toast. Never get stack !')",
+    action: () => {
+      toast('Unquie toast. Never get stack !!', {
+        unique: true,
+      });
+    },
+  },
 ];
 
 export const ToastExample = () => {
