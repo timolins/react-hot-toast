@@ -2,19 +2,84 @@ import * as React from 'react';
 import { useCallback } from 'react';
 import { styled, keyframes, CSSAttribute } from 'goober';
 
-import { Toast, ToastPosition, resolveValueOrFunction } from '../core/types';
+import {
+  Toast,
+  ToastPosition,
+  resolveValueOrFunction,
+  ToastAnimation,
+} from '../core/types';
 import { Indicator } from './indicator';
 import { AnimatedIconWrapper } from './icon-wrapper';
 
-const enterAnimation = (factor: number) => `
-0% {transform: translate3d(0,${factor * -80}px,0) scale(.6); opacity:.5;}
-100% {transform: translate3d(0,0,0) scale(1); opacity:1;}
-`;
+type AnimationFactors = {
+  verticalFactor: number;
+  animation?: ToastAnimation;
+};
 
-const exitAnimation = (factor: number) => `
-0% {transform: translate3d(0,0,-1px) scale(1); opacity:1;}
-100% {transform: translate3d(0,${factor * -130}px,-1px) scale(.5); opacity:0;}
-`;
+const enterAnimation = ({ verticalFactor, animation }: AnimationFactors) => {
+  if (!animation) {
+    return `
+      0% {transform: translate3d(0,${verticalFactor *
+        -80}px,0) scale(.6); opacity:.5;}
+      100% {transform: translate3d(0,0,0) scale(1); opacity:1;}
+      `;
+  }
+
+  switch (animation) {
+    case 'slide-down':
+      return `
+        0% {transform: translate3d(0,-80px,0) scale(.6); opacity:.5;}
+        100% {transform: translate3d(0,0,0) scale(1); opacity:1;}
+        `;
+    case 'slide-up':
+      return `
+        0% {transform: translate3d(0,80px,0) scale(.6); opacity:.5;}
+        100% {transform: translate3d(0,0,0) scale(1); opacity:1;}
+        `;
+    case 'slide-left':
+      return `
+        0% {transform: translate3d(1000px,0,0) scale(.6); opacity:.5;}
+        100% {transform: translate3d(0,0,0) scale(1); opacity:1;}
+        `;
+    case 'slide-right':
+      return `
+        0% {transform: translate3d(-1000px,0,0) scale(.6); opacity:.5;}
+        100% {transform: translate3d(0,0,0) scale(1); opacity:1;}
+        `;
+  }
+};
+
+const exitAnimation = ({ verticalFactor, animation }: AnimationFactors) => {
+  if (!animation)
+    return `
+      0% {transform: translate3d(0,0,-1px) scale(1); opacity:1;}
+      100% {transform: translate3d(0,${verticalFactor *
+        -130}px,-1px) scale(.5); opacity:0;}
+      `;
+
+  switch (animation) {
+    case 'slide-down':
+      return `
+        0% {transform: translate3d(0,0,-1px) scale(1); opacity:1;}
+        100% {transform: translate3d(0,-130px,-1px) scale(.5); opacity:0;}
+        `;
+    case 'slide-up':
+      return `
+        0% {transform: translate3d(0,0,-1px) scale(1); opacity:1;}
+        100% {transform: translate3d(0,130px,-1px) scale(.5); opacity:0;}
+        `;
+    case 'slide-left':
+      return `
+        0% {transform: translate3d(0,0,-1px) scale(1); opacity:1;}
+        100% {transform: translate3d(300px,0,-1px) scale(.5); opacity:0;}
+        `;
+    case 'slide-right':
+      return `
+        0% {transform: translate3d(0,0,-1px) scale(1); opacity:1;}
+        100% {transform: translate3d(-300px,0,-1px) scale(.5); opacity:0;}
+        `;
+  }
+};
 
 const ToastBarBase = styled('div', React.forwardRef)`
   display: flex;
@@ -78,20 +143,24 @@ const getPositionStyle = (
 
 const getAnimationStyle = (
   position: ToastPosition,
-  visible: boolean
+  visible: boolean,
+  animation?: ToastAnimation
 ): React.CSSProperties => {
   const top = position.includes('top');
-  const factor = top ? 1 : -1;
+  const verticalFactor = top ? 1 : -1;
+
   return visible
     ? {
-        animation: `${keyframes`${enterAnimation(
-          factor
-        )}`} 0.35s cubic-bezier(.21,1.02,.73,1) forwards`,
+        animation: `${keyframes`${enterAnimation({
+          verticalFactor,
+          animation,
+        })}`} 0.35s cubic-bezier(.21,1.02,.73,1) forwards`,
       }
     : {
-        animation: `${keyframes`${exitAnimation(
-          factor
-        )}`} 0.8s forwards cubic-bezier(.06,.71,.55,1)`,
+        animation: `${keyframes`${exitAnimation({
+          verticalFactor,
+          animation,
+        })}`} 0.8s forwards cubic-bezier(.06,.71,.55,1)`,
         pointerEvents: 'none',
       };
 };
@@ -109,7 +178,7 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
 
     const positionStyle = getPositionStyle(position, props.offset);
     const animationStyle = toast?.height
-      ? getAnimationStyle(position, toast.visible)
+      ? getAnimationStyle(position, toast.visible, toast.animation)
       : { opacity: 0 };
 
     const renderIcon = () => {

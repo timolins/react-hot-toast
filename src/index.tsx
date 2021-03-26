@@ -4,6 +4,7 @@ import { toast } from './core/toast';
 import {
   ToastOptions as _ToastOptions,
   ToastPosition as _ToastPosition,
+  ToastAnimation as _ToastAnimation,
 } from './core/types';
 export { useToaster } from './core/use-toaster';
 export { dispatch, ActionType } from './core/store';
@@ -17,6 +18,7 @@ export { LoaderIcon } from './components/loader';
 
 export type ToastOptions = _ToastOptions;
 export type ToastPosition = _ToastPosition;
+export type ToastAnimation = _ToastAnimation;
 
 export { toast };
 export default toast;

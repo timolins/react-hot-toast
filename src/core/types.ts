@@ -9,6 +9,12 @@ export type ToastPosition =
   | 'bottom-center'
   | 'bottom-right';
 
+export type ToastAnimation =
+  | 'slide-down'
+  | 'slide-up'
+  | 'slide-right'
+  | 'slide-left';
+
 export type Renderable = JSX.Element | string | number | null;
 
 export interface IconTheme {
@@ -49,6 +55,7 @@ export interface Toast {
   createdAt: number;
   visible: boolean;
   height?: number;
+  animation?: ToastAnimation;
 }
 
 export type ToastOptions = Partial<
@@ -62,6 +69,7 @@ export type ToastOptions = Partial<
     | 'className'
     | 'style'
     | 'iconTheme'
+    | 'animation'
   >
 >;
 

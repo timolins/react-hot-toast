@@ -17,6 +17,8 @@ import { ToastExample } from '../components/sections/toast-example';
 import { Footer } from '../components/sections/footer';
 import { ToasterExample } from '../components/sections/toaster-example';
 import Link from 'next/link';
+import { ToastAnimation } from '../../src/core/types';
+import { ToasterAnimationExample } from '../components/sections/toaster-animationn-example';
 
 const Feature: React.FC = ({ children }) => (
   <div className="flex gap-1 items-center">
@@ -98,6 +100,7 @@ const Features = () => (
 
 export default function Home() {
   const [position, setPosition] = useState<ToastPosition>('top-center');
+  const [animation, setAnimation] = useState<ToastAnimation>();
   const [reverse, setReverse] = useState(false);
   const { toasts: allToasts } = useToasterStore();
 
@@ -233,10 +236,21 @@ export default function Home() {
                 onPosition={setPosition}
               />
             </div>
+
+            <div className="my-14">
+              <h2 className="ml-5 mr-5 mb-4 text-2xl font-bold">
+                Change Animation
+              </h2>
+
+              <ToasterAnimationExample                
+                animation={animation}
+                onAnimation={setAnimation}
+              />
+            </div>
           </div>
         </div>
       </header>
-      <Toaster position={position} reverseOrder={reverse} toastOptions={{}} />
+      <Toaster position={position} reverseOrder={reverse} toastOptions={{animation}} />
       <div className="container flex justify-end -mt-24 pointer-events-none">
         <Butter2 className="transform translate-x-20" />
       </div>
