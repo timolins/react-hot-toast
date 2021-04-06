@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { setup } from 'goober';
-import CSS from 'csstype';
+import * as CSS from 'csstype';
 
 import { useToaster } from '../core/use-toaster';
 import { ToastBar } from './toast-bar';
