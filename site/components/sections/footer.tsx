@@ -19,7 +19,7 @@ export function Footer() {
         </a>
       </div>
       <div className="text-toast-600">
-        <span>© 2020 react-hot-toast</span>
+        <span>© {new Date().getFullYear()} react-hot-toast</span>
         {' · '}
         <span>
           <span>Built by </span>
