@@ -36,7 +36,7 @@ const Message = styled('div')`
   justify-content: center;
   margin: 4px 10px;
   color: inherit;
-  flex: 1;
+  flex: 1 1 auto;
 `;
 
 interface ToastBarProps {
