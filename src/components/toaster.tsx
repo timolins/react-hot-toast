@@ -48,6 +48,7 @@ const getPositionStyle = (
 interface ToasterProps {
   position?: ToastPosition;
   reverseOrder?: boolean;
+  gutter?: number;
   containerStyle?: React.CSSProperties;
   containerClassName?: string;
 
@@ -85,6 +86,7 @@ export const Toaster: React.FC<ToasterProps> = ({
         const toastPosition = t.position || position;
         const offset = handlers.calculateOffset(t, {
           reverseOrder,
+          gutter,
           defaultPosition: position,
         });
         const positionStyle = getPositionStyle(toastPosition, offset);
