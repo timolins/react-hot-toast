@@ -19,21 +19,18 @@ const getPositionStyle = (
 ): React.CSSProperties => {
   const top = position.includes('top');
   const verticalStyle: React.CSSProperties = top ? { top: 0 } : { bottom: 0 };
-  const horizontalStyle: React.CSSProperties = position.includes('left')
+  const horizontalStyle: React.CSSProperties = position.includes('center')
     ? {
-        left: 0,
+        justifyContent: 'center',
       }
     : position.includes('right')
     ? {
-        right: 0,
+        justifyContent: 'flex-end',
       }
-    : {
-        left: 0,
-        pointerEvents: 'none',
-        right: 0,
-        justifyContent: 'center',
-      };
+    : {};
   return {
+    left: 0,
+    right: 0,
     display: 'flex',
     position: 'absolute',
     transition: `all ${
