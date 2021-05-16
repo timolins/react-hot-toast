@@ -52,10 +52,12 @@ interface ToasterProps {
   toastOptions?: DefaultToastOptions;
   renderToast?: (toast: Toast) => JSX.Element;
 }
+const DEFAULT_OFFSET = 16;
 
 export const Toaster: React.FC<ToasterProps> = ({
   reverseOrder,
   position = 'top-center',
+  gutter,
   containerStyle,
   toastOptions,
   containerClassName,
@@ -66,13 +68,13 @@ export const Toaster: React.FC<ToasterProps> = ({
   return (
     <div
       style={{
-        top: 16,
-        left: 16,
-        right: 16,
-        bottom: 16,
-        zIndex: 9999,
-        pointerEvents: 'none',
         position: 'fixed',
+        zIndex: 9999,
+        top: DEFAULT_OFFSET,
+        left: DEFAULT_OFFSET,
+        right: DEFAULT_OFFSET,
+        bottom: DEFAULT_OFFSET,
+        pointerEvents: 'none',
         ...containerStyle,
       }}
       className={containerClassName}
