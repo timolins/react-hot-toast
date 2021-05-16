@@ -40,8 +40,10 @@ export interface Toast {
   pauseDuration: number;
   position?: ToastPosition;
 
-  role: 'status' | 'alert';
-  ariaLive: 'assertive' | 'off' | 'polite';
+  ariaProps: {
+    role: 'status' | 'alert';
+    'aria-live': 'assertive' | 'off' | 'polite';
+  };
 
   style?: CSSProperties;
   className?: string;
@@ -58,8 +60,7 @@ export type ToastOptions = Partial<
     | 'id'
     | 'icon'
     | 'duration'
-    | 'role'
-    | 'ariaLive'
+    | 'ariaProps'
     | 'className'
     | 'style'
     | 'position'

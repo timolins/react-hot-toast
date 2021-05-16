@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { styled, keyframes } from 'goober';
 
-import { Toast, ToastPosition, resolveValue } from '../core/types';
+import { Toast, ToastPosition, resolveValue, Renderable } from '../core/types';
 import { ToastIcon } from './toast-icon';
 import { prefersReducedMotion } from '../core/utils';
 
@@ -41,6 +41,10 @@ interface ToastBarProps {
   toast: Toast;
   position?: ToastPosition;
   style?: React.CSSProperties;
+  children?: (components: {
+    icon: Renderable;
+    message: Renderable;
+  }) => Renderable;
 }
 
 const getAnimationStyle = (
@@ -59,11 +63,11 @@ const getAnimationStyle = (
         animation: `${keyframes`${exitAnimation(
           factor
         )}`} 0.4s forwards cubic-bezier(.06,.71,.55,1)`,
-        pointerEvents: 'none',
       };
 };
 
 export const ToastBar: React.FC<ToastBarProps> = React.memo(
+  ({ toast, position, style, children }) => {
     const animationStyle: React.CSSProperties = toast?.height
       ? prefersReducedMotion()
         ? {}
@@ -72,6 +76,13 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
             toast.visible
           )
       : { opacity: 0 };
+
+    const icon = <ToastIcon toast={toast} />;
+    const message = (
+      <Message {...toast.ariaProps}>
+        {resolveValue(toast.message, toast)}
+      </Message>
+    );
 
     return (
       <ToastBarBase
@@ -82,10 +93,12 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
           ...toast.style,
         }}
       >
-        <ToastIcon toast={toast} />
-        <Message role={toast.role} aria-live={toast.ariaLive}>
-          {resolveValue(toast.message, toast)}
-        </Message>
+        {typeof children === 'function'
+          ? children({
+              icon,
+              message,
+            })
+          : [icon, message]}
       </ToastBarBase>
     );
   }

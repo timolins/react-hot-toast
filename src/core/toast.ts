@@ -22,8 +22,10 @@ const createToast = (
   createdAt: Date.now(),
   visible: true,
   type,
-  role: 'status',
-  ariaLive: 'polite',
+  ariaProps: {
+    role: 'status',
+    'aria-live': 'polite',
+  },
   message,
   pauseDuration: 0,
   ...opts,
