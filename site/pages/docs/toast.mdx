@@ -7,7 +7,38 @@ export const meta = {
 
 # `toast()` API
 
-Call it to create a toast from anywhere, even outside React. Make sure you add the `<Toaster/>` component to your app first.
+Call it to create a toast from anywhere, even outside React. Make sure you add the [`<Toaster/>`](/docs/toaster) component to your app first.
+
+## Available toast options
+
+You can provide `ToastOptions` as the second argument. They will overwrite all options received from [`<Toaster/>`](/docs/toaster).
+
+```js
+toast('Hello World', {
+  duration: 4000,
+
+  // Styling
+  style: {},
+  className: '',
+
+  // Custom Icon
+  icon: '👏',
+
+  // Change colors of success/error/loading icon
+  iconTheme: {
+    primary: '#000',
+    secondary: '#fff',
+  },
+
+  // Aria
+  ariaProps: {
+    role: 'status',
+    'aria-live': 'polite',
+  },
+});
+```
+
+## Creating a toast
 
 ### Blank
 
@@ -23,7 +54,7 @@ The most basic variant. It does not have an icon by default, but you can provide
 toast.success('Successfully created!');
 ```
 
-Creates a notification with an animated checkmark. It can be themed with `iconTheme`.
+Creates a notification with an animated checkmark. It can be themed with the `iconTheme` option.
 
 ### Error
 
@@ -31,7 +62,15 @@ Creates a notification with an animated checkmark. It can be themed with `iconTh
 toast.error('This is an error!');
 ```
 
-Creates a notification with an animated error icon. It can be themed with `iconTheme`.
+Creates a notification with an animated error icon. It can be themed with the `iconTheme` option.
+
+### Custom (JSX)
+
+```js
+toast.custom(<div>Hello World</div>);
+```
+
+Creates a custom notification with JSX without default styles.
 
 ### Loading
 
@@ -39,7 +78,7 @@ Creates a notification with an animated error icon. It can be themed with `iconT
 toast.loading('Waiting...');
 ```
 
-This will create a loading notification. Most likely you want to update it manually afterwards. For a friendly alternative, check out `toast.promise()`, which takes care of that automatically.
+This will create a loading notification. Most likely, you want to update it manually afterwards. For a friendly alternative, check out `toast.promise()`, which takes care of that automatically.
 
 ### Promise
 
@@ -83,42 +122,16 @@ toast.promise(
 );
 ```
 
-## Available options
-
-You can provide `ToastOptions` as second argument. They will overwrite all options received from `<Toaster/>`.
-
-```js
-toast('Hello World', {
-  duration: 4000,
-
-  // Styling
-  style: {},
-  className: '',
-
-  // Custom Icon
-  icon: '👏',
-
-  // Change colors of success/error/loading icon
-  iconTheme: {
-    primary: '#000',
-    secondary: '#fff',
-  },
-
-  // Aria
-  role: 'status',
-  ariaLive: 'polite',
-});
-```
-
 ## Default durations
 
-Every type has their own duration. You can overwrite them `duration` with the toast options. This can be done per toast options or globally by the [`<Toaster/>`](/docs/toaster).
+Every type has its own duration. You can overwrite them `duration` with the toast options. This can be done per toast options or globally by the [`<Toaster/>`](/docs/toaster).
 
 | type      | duration |
 | --------- | -------- |
 | `blank`   | 4000     |
 | `error`   | 4000     |
 | `success` | 2000     |
+| `custom`  | 4000     |
 | `loading` | Infinity |
 
 ### Dismiss toast programmatically
@@ -157,6 +170,8 @@ toast.remove()
 
 ### Update an existing toast
 
+Each toast call returns a unique id. Use in the toast options to update the existing toast.
+
 ```js
 const toastId = toast.loading('Loading...');
 
@@ -167,9 +182,19 @@ toast.success('This worked', {
 });
 ```
 
+### Prevent duplicate toasts
+
+To prevent duplicates of the same kind, you can provide a unique permanent id.
+
+```js
+toast.success('Copied to clipboard!', {
+  id: 'clipboard',
+});
+```
+
 ### Render JSX custom content
 
-You can provide a React components instead of text.
+You can provide a React component instead of text. If you don't want any default styles use `toast.custom()` instead.
 
 ```jsx
 toast(
@@ -182,7 +207,7 @@ toast(
 );
 ```
 
-You can also supply a function that receives the `Toast` as argument. This can be usefull to add a custom dismiss button.
+You can also supply a function that receives the `Toast` as an argument, giving you access to all properties. This allows you to access the toast id, which can be used to add a dismiss button.
 
 ```jsx
 toast(

@@ -9,7 +9,7 @@ const TableItem: React.FC<{
   href: string;
 }> = ({ children, href }) => (
   <Link href={href}>
-    <a className="rounded px-3 py-2 transition-colors duration-200 relative block hover:text-toast-500 text-toast-700">
+    <a className="rounded px-3 py-1.5 transition-colors duration-200 relative block hover:text-toast-500 text-toast-700">
       {children}
     </a>
   </Link>
@@ -53,8 +53,8 @@ export default function DocsLayout({ children, meta }) {
             GitHub
           </a>
         </header>
-        <nav className="font-medium rounded-lg">
-          <div className="flex flex-col mb-8">
+        <nav className="font-medium rounded-lg ">
+          <div className="flex flex-col mb-8 sticky top-0">
             <TableHeader>Overview</TableHeader>
 
             <TableItem href="/docs">Get Started</TableItem>
@@ -62,13 +62,16 @@ export default function DocsLayout({ children, meta }) {
             <TableHeader>API</TableHeader>
 
             <TableItem href="/docs/toast">toast()</TableItem>
-            <TableItem href="/docs/toaster">Toaster</TableItem>
+            <TableItem href="/docs/toaster">{`Toaster`}</TableItem>
+            <TableItem href="/docs/toast-bar">{`ToastBar`}</TableItem>
             <TableItem href="/docs/use-toaster">useToaster()</TableItem>
             <TableItem href="/docs/use-toaster-store">
               useToasterStore()
             </TableItem>
             <TableHeader>Guides</TableHeader>
             <TableItem href="/docs/styling">Styling</TableItem>
+            <TableHeader>Releases</TableHeader>
+            <TableItem href="/docs/version-2">New in 2.0</TableItem>
           </div>
         </nav>
 

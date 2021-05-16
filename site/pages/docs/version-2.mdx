@@ -1,0 +1,160 @@
+import { RelativeToaster } from '../../components/docs/relative-toaster';
+import Layout from '../../components/docs-layout';
+import toast from 'react-hot-toast';
+
+export const meta = {
+  title: 'react-hot-toast 2.0 changes',
+};
+
+export default ({ children, meta }) => <Layout meta={meta}>{children}</Layout>;
+
+# What's new in react-hot-toast 2.0
+
+This release is all about **flexibility**.
+It is now even simpler to create the notification system of your dreams. Before we dig deeper into the new APIs, I'll walk you through new possibilities.
+
+From now on, you can **render your own components**. Create **one-off custom toasts** with `toast.custom()`. **Animations are now smoother** and overwritable. Better accessibility by supporting **reduced motion**. Toasts can be **positioned individually**. And a lot more.
+
+## Introducing `toast.custom()`
+
+This new function allows you to **render any React component** on the fly. Pass in JSX and it will be rendered inside the notification stack. There are no default styles applied, giving you complete control.
+
+This makes it super easy to add [Tailwind UI Notifications](https://tailwindui.com/components/application-ui/overlays/notifications) to your React app.
+
+```jsx
+// Minimal Example
+toast.custom(<div>Minimal Example</div>);
+
+// Tailwind Example
+toast.custom((t) => (
+  <div
+    className={`bg-white px-6 py-4 shadow rounded-full ${
+      t.visible ? 'animate-enter' : 'animate-leave'
+    }`}
+  >
+    Hello TailwindCSS! 👋
+  </div>
+));
+```
+
+<button
+  className="bg-toast-800 text-toast-100 py-2 px-4 shadow-md rounded-lg"
+  onClick={() => {
+    toast.custom((t) => (
+      <div
+        className={`bg-white px-6 py-4 shadow rounded-full ${
+          t.visible ? 'animate-enter' : 'animate-leave'
+        }`}
+      >
+        Hello from TailwindCSS! 👋
+      </div>
+    ));
+  }}
+>
+  Run Example
+</button>
+
+In the example above, we pass in a **function that returns JSX**. This allows us to access the current toast state and toggle between the enter and exit animation.
+
+## Support for custom render functions
+
+It is now possible to **replace the default renderer**. You can do this by passing a function as child to the [`<Toaster/>`](/docs/toaster). It will receive a [Toast](https://github.com/timolins/react-hot-toast/blob/main/src/core/types.ts#L34) as the first argument, giving you the flexibility to render whatever you want.
+
+This is a great higher-level alternative to the [`useToaster()`](/docs/use-toaster) hook.
+
+This API allows us to dynamically react to to current state our toasts. This can be used to **change the default animations**, add **a custom dismiss button** or render a custom notification, like [TailwindUI Notifications](https://tailwindui.com/components/application-ui/overlays/notifications).
+
+```jsx
+import { Toaster, ToastBar } from 'react-hot-toast';
+
+const CustomToaster = () => (
+  <Toaster>
+    {(t) => (
+      <ToastBar>
+        {({ icon, message }) => (
+          <>
+            {icon}
+            {message}
+            {t.type !== 'loading' && (
+              <button onClick={() => toast.dismiss(t.id)}>X</button>
+            )}
+          </>
+        )}
+      </ToastBar>
+    )}
+  </Toaster>
+);
+```
+
+This example adapts the ToastBar with its new render function API. You can read more about the APIs in the [Toaster](/docs/toaster) & [ToastBar](/docs/toast-bar) docs.
+
+## Per toast positioning
+
+From now on, it's possible to have toasts at multiple positions at once. Just add the `position` you want as option when dispatching a toast.
+
+```jsx
+toast.success('Always at the bottom', {
+  position: 'bottom-center',
+});
+```
+
+<button
+  className="bg-toast-800 text-toast-100 py-2 px-4 shadow-md rounded-lg"
+  onClick={() => {
+    toast.success('Always at the bottom', {
+      position: 'bottom-center',
+    });
+  }}
+>
+  Run Example
+</button>
+
+## Relative positioning
+
+Previously the Toaster was at a fixed position to the window. With this release, you can overwrite this behaviour and position it anywhere you want.
+
+```jsx
+<Toaster containerStyle={{ position: 'absolute' }} />
+```
+
+## Simpler offset styling
+
+There is now a `gutter` option to control the gap between toasts.
+
+```jsx
+<Toaster gutter={30} />
+```
+
+The offset to the edge is now controlled by the Toaster and can be changed by overwriting the `top`, `right`, `bottom` and `left` styles.
+
+```jsx
+<Toaster containerStyle={{ top: 0 }} />
+```
+
+## The future and beyond
+
+With this version, React Hot Toast got a lot more flexible, laying the **foundation for future releases**. With the next releases, I plan to add the [most requested feature](https://github.com/timolins/react-hot-toast/issues/7): a dismiss button. As well as support for [custom toast types](https://github.com/timolins/react-hot-toast/issues/23).
+
+## Changelog
+
+### New
+
+- Easier Customization
+  - Create your own toast renderer (without useToaster)
+    - Support for custom render function in Toaster
+    - Support for custom render function in ToastBar
+  - `toast.custom()` - Render custom one-off toasts. No default styling will be applied.
+- Per toast positioning
+- New exit animation
+- Change the gutter between toasts with `<Toaster gutter={20} />`
+- Support for relative positioning
+- Respect reduce motion OS setting
+- Create persistent toasts with `duration: Infinity`
+
+### Breaking Changes
+
+- Use the `top`, `right`, `bottom`, `left` to in `containerStyle` to change the offset, instead of margin
+- Loading toasts no longer disappear after 30 seconds
+- `role` & `ariaLive` got moved into `ariaProps`
+- `useToaster()` no longer exposes `visibleToasts`
+- No longer expose `dispatch`

@@ -55,18 +55,39 @@ toast('I have a border.', {
 });
 ```
 
-## Changing the offset
+## Change the offset
 
-If you want to change the offset of your noticiations, add a margin to your `toastOptions`.
+If you want to change the offset of your notifications, you can adapt the absolute position in `containerStyle`.
 
 ```jsx
 <Toaster
-  toastOptions={{
-    style: {
-      margin: '50px',
-    },
+  containerStyle={{
+    top: 20,
+    left: 20,
+    bottom: 20,
+    right: 20,
   }}
 />
+```
+
+## Change position of the toaster
+
+By default, the toaster is position fixed in the window. If you want to place it somewhere else, you can ovewrite the position with `containerStyle`.
+
+```jsx
+<Toaster
+  containerStyle={{
+    position: 'relative',
+  }}
+/>
+```
+
+## Change offset between toasts
+
+If you want to change the offset between notifications change the gutter.
+
+```jsx
+<Toaster gutter={24} />
 ```
 
 ## Change icon color
@@ -84,4 +105,24 @@ All icon colors can be changed by supplying a `iconTheme` with a `primary` & `se
     },
   }}
 />
+```
+
+## Change enter and exit animations
+
+In this example, we provide a render function with the default `<ToastBar />`. We overwrite the animation style based on the current state.
+
+```jsx
+import { Toaster, ToastBar } from 'react-hot-toast';
+
+<Toaster>
+  {(t) => (
+    <ToastBar
+      toast={t}
+      style={{
+        ...t.style,
+        animation: t.visible ? 'custom-enter 1s ease' : 'custom-exit 1s ease',
+      }}
+    />
+  )}
+</Toaster>;
 ```

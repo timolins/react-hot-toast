@@ -1,0 +1,50 @@
+import Layout from '../../components/docs-layout';
+import toast from 'react-hot-toast';
+
+export const meta = {
+  title: '<ToasterBar/> API',
+};
+
+export default ({ children, meta }) => <Layout meta={meta}>{children}</Layout>;
+
+# `<ToasterBar />` API
+
+This is the **default toast component** rendered by the [Toaster](/docs/toaster). You can use this component in a [Toaster](/docs/toaster) with a custom render function to overwrite its defaults.
+
+## Available options
+
+```jsx
+<ToastBar
+  toast={t}
+  style={{}} // Overwrite styles
+  position="top-center" // Used to adapt the animation
+/>
+```
+
+## Add custom content
+
+You can add a **render function to the ToastBar to modify its content**. An object containing The `icon` as well as the `message` are passed into the function.
+
+### Add a dismiss button
+
+In this example we add a basic dismiss button to all toasts, except if the loading one.
+
+```jsx
+import { Toaster, ToastBar } from 'react-hot-toast';
+
+<Toaster>
+  {(t) => (
+    <ToastBar toast={t}>
+      {({ icon, message }) => (
+        <>
+          {icon}
+          {message}
+          {t.type !== 'loading' && (
+            <button onClick={() => toast.dismiss(t.id)}>X</button>
+          )}
+        </>
+      )}
+    </ToastBar>
+  )}
+</Toaster>;
+```

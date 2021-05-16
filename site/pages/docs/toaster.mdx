@@ -9,45 +9,25 @@ export default ({ children, meta }) => <Layout meta={meta}>{children}</Layout>;
 
 # `<Toaster />` API
 
-This component will render all received toasts. Alternatively you can create own renderer with the headless [`useToaster()`](/docs/use-toaster) hook.
+This component will render all toasts. Alternatively you can create own renderer with the headless [`useToaster()`](/docs/use-toaster) hook.
 
-### `position` Prop
-
-You can change the position of all toasts by modifying supplying `positon` prop.
-
-| Positions   |               |              |
-| ----------- | ------------- | ------------ |
-| top-left    | top-center    | top-right    |
-| bottom-left | bottom-center | bottom-right |
-
-### `reverseOrder` Prop
-
-Toasts spawn at top by default. Set to `true` if you want new Toasts at the end.
-
-### `toastOptions` Prop
-
-These will act as default options for all toasts.
-
-#### Type specific options
-
-You can change the defaults for a specific type by adding, `success: {}`, `error: {}` or `loading: {}`.
-
-## Example with all available options
+## Available options
 
 ```jsx
 <Toaster
   position="top-center"
   reverseOrder={false}
+  gutter={8}
+  containerClassName=""
+  containerStyle={{}}
   toastOptions={{
     // Define default options
     className: '',
+    duration: 5000,
     style: {
-      margin: '40px',
       background: '#363636',
       color: '#fff',
-      zIndex: 1,
     },
-    duration: 5000,
 
     // Default options for specific types
     success: {
@@ -60,3 +40,81 @@ You can change the defaults for a specific type by adding, `success: {}`, `error
   }}
 />
 ```
+
+### `position` Prop
+
+You can change the position of all toasts by modifying supplying `positon` prop.
+
+| Positions   |               |              |
+| ----------- | ------------- | ------------ |
+| top-left    | top-center    | top-right    |
+| bottom-left | bottom-center | bottom-right |
+
+### `reverseOrder` Prop
+
+Toasts spawn at top by default. Set to `true` if you want new toasts at the end.
+
+### `containerClassName` Prop
+
+Add a custom CSS class name to toaster div. Defaults to `undefined`.
+
+### `containerStyle` Prop
+
+Customize the style of toaster div. This can be used to change the offset of all toasts
+
+### `gutter` Prop
+
+Changes the gap between each toast. Defaults to `8`.
+
+### `toastOptions` Prop
+
+These will act as default options for all toasts. See [`toast()`](/docs/toast) for all available options.
+
+#### Type specific options
+
+You can change the defaults for a specific type by adding, `success: {}`, `error: {}`, `loading: {}` or `custom: {}`.
+
+## Use a custom render function
+
+You can provide your **own render function** to the Toaster by passing it as children. It will be called for each [Toast](https://github.com/timolins/react-hot-toast/blob/main/src/core/types.ts#L34) allowing you to render any component based on the toast state.
+
+### Minimal example
+
+```jsx
+import { Toaster, resolveValue } from 'react-hot-toast';
+
+// In your app
+<Toaster>
+  {(t) => (
+    <div
+      style={{ opacity: t.visible ? 1 : 0, background: 'white', padding: 8 }}
+    >
+      {resolveValue(t.message, t)}
+    </div>
+  )}
+</Toaster>;
+```
+
+`resolveValue()` is needed to resolve all message types: Text, JSX or a function that resolves to JSX.
+
+### Adapting the default [`<ToastBar/>`](/docs/toast-bar)
+
+You can use this API to modify the defualt ToastBar as well. In this example we overwrite the animation style based on the current state.
+
+```jsx
+import { Toaster, ToastBar } from 'react-hot-toast';
+
+<Toaster>
+  {(t) => (
+    <ToastBar
+      toast={t}
+      style={{
+        ...t.style,
+        animation: t.visible ? 'custom-enter 1s ease' : 'custom-exit 1s ease',
+      }}
+    />
+  )}
+</Toaster>;
+```
+
+Check out the [`<ToastBar/>`](/docs/toast-bar) docs for more options.
