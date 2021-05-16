@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { setup } from 'goober';
+import { setup, css } from 'goober';
 
 import { useToaster } from '../core/use-toaster';
 import { ToastBar } from './toast-bar';
@@ -42,6 +42,13 @@ const getPositionStyle = (
   };
 };
 
+const activeClass = css`
+  z-index: 9999;
+  > * {
+    pointer-events: auto;
+  }
+`;
+
 interface ToasterProps {
   position?: ToastPosition;
   toastOptions?: DefaultToastOptions;
@@ -51,17 +58,17 @@ interface ToasterProps {
   containerClassName?: string;
   children?: (toast: Toast) => JSX.Element;
 }
+
 const DEFAULT_OFFSET = 16;
 
 export const Toaster: React.FC<ToasterProps> = ({
   reverseOrder,
   position = 'top-center',
+  toastOptions,
   gutter,
   children,
   containerStyle,
-  toastOptions,
   containerClassName,
-  renderToast,
 }) => {
   const { toasts, handlers } = useToaster(toastOptions);
 
@@ -99,11 +106,9 @@ export const Toaster: React.FC<ToasterProps> = ({
         return (
           <div
             ref={ref}
+            className={t.visible ? activeClass : ''}
             key={t.id}
-            style={{
-              zIndex: t.visible ? 9999 : undefined,
-              ...positionStyle,
-            }}
+            style={positionStyle}
           >
             {t.type === 'custom' ? (
               resolveValue(t.message, t)
