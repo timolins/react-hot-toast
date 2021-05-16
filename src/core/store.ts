@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { DefaultToastOptions, Toast, ToastType } from './types';
+import { prefersReducedMotion } from './utils';
 
 const TOAST_LIMIT = 20;
 
@@ -55,13 +56,16 @@ const addToRemoveQueue = (toastId: string) => {
     return;
   }
 
-  const timeout = setTimeout(() => {
-    toastTimeouts.delete(toastId);
-    dispatch({
-      type: ActionType.REMOVE_TOAST,
-      toastId: toastId,
-    });
-  }, 1000);
+  const timeout = setTimeout(
+    () => {
+      toastTimeouts.delete(toastId);
+      dispatch({
+        type: ActionType.REMOVE_TOAST,
+        toastId: toastId,
+      });
+    },
+    prefersReducedMotion() ? 0 : 1000
+  );
 
   toastTimeouts.set(toastId, timeout);
 };

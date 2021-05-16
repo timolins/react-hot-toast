@@ -66,7 +66,7 @@ export const useToaster = (toastOptions?: DefaultToastOptions) => {
         const relevantToasts = toasts.filter(
           (t) =>
             (t.position || defaultPosition) ===
-            (toast.position || defaultPosition)
+              (toast.position || defaultPosition) && t.height
         );
         const toastIndex = relevantToasts.findIndex((t) => t.id === toast.id);
         const toastsBefore = relevantToasts.filter(

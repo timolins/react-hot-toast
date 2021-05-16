@@ -3,6 +3,7 @@ import { styled, keyframes } from 'goober';
 
 import { Toast, ToastPosition, resolveValue } from '../core/types';
 import { ToastIcon } from './toast-icon';
+import { prefersReducedMotion } from '../core/utils';
 
 const enterAnimation = (factor: number) => `
 0% {transform: translate3d(0,${factor * -200}%,0) scale(.6); opacity:.5;}
@@ -38,7 +39,7 @@ const Message = styled('div')`
 
 interface ToastBarProps {
   toast: Toast;
-  position: ToastPosition;
+  position?: ToastPosition;
   style?: React.CSSProperties;
 }
 
@@ -63,9 +64,13 @@ const getAnimationStyle = (
 };
 
 export const ToastBar: React.FC<ToastBarProps> = React.memo(
-  ({ toast, position, style }) => {
-    const animationStyle = toast?.height
-      ? getAnimationStyle(position, toast.visible)
+    const animationStyle: React.CSSProperties = toast?.height
+      ? prefersReducedMotion()
+        ? {}
+        : getAnimationStyle(
+            toast.position || position || 'top-center',
+            toast.visible
+          )
       : { opacity: 0 };
 
     return (
