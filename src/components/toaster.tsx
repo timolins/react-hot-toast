@@ -44,13 +44,12 @@ const getPositionStyle = (
 
 interface ToasterProps {
   position?: ToastPosition;
+  toastOptions?: DefaultToastOptions;
   reverseOrder?: boolean;
   gutter?: number;
   containerStyle?: React.CSSProperties;
   containerClassName?: string;
-
-  toastOptions?: DefaultToastOptions;
-  renderToast?: (toast: Toast) => JSX.Element;
+  children?: (toast: Toast) => JSX.Element;
 }
 const DEFAULT_OFFSET = 16;
 
@@ -58,6 +57,7 @@ export const Toaster: React.FC<ToasterProps> = ({
   reverseOrder,
   position = 'top-center',
   gutter,
+  children,
   containerStyle,
   toastOptions,
   containerClassName,
@@ -107,8 +107,8 @@ export const Toaster: React.FC<ToasterProps> = ({
           >
             {t.type === 'custom' ? (
               resolveValue(t.message, t)
-            ) : renderToast ? (
-              renderToast(t)
+            ) : children ? (
+              children(t)
             ) : (
               <ToastBar toast={t} position={toastPosition} />
             )}
