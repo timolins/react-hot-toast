@@ -93,12 +93,17 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
           ...toast.style,
         }}
       >
-        {typeof children === 'function'
-          ? children({
-              icon,
-              message,
-            })
-          : [icon, message]}
+        {typeof children === 'function' ? (
+          children({
+            icon,
+            message,
+          })
+        ) : (
+          <>
+            {icon}
+            {message}
+          </>
+        )}
       </ToastBarBase>
     );
   }
