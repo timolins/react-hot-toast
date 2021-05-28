@@ -103,9 +103,10 @@ const theme: PrismTheme = {
 
 export const Code: React.FC<{
   snippet: string;
+  language?: Language;
   className?: string;
 }> = (props) => {
-  const language = (props.className?.replace(/language-/, '') as any) || 'jsx';
+  const language = props.language || 'jsx';
 
   return (
     <Highlight

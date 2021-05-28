@@ -1,7 +1,10 @@
 module.exports = {
+  mode: 'jit',
   purge: [
     './pages/*.tsx',
     './pages/**/*.tsx',
+    './pages/*.mdx',
+    './pages/**/*.mdx',
     './components/*.tsx',
     './components/**/*.tsx',
   ],

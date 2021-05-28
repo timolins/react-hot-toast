@@ -20,7 +20,7 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-hot-toast": "file:../",
-    "tailwindcss": "^2.0.2"
+    "tailwindcss": "^2.1.2"
   },
   "devDependencies": {
     "@types/node": "^14.14.13",
