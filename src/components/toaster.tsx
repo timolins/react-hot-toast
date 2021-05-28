@@ -33,9 +33,9 @@ const getPositionStyle = (
     right: 0,
     display: 'flex',
     position: 'absolute',
-    transition: `all ${
-      prefersReducedMotion() ? 0 : 230
-    }ms cubic-bezier(.21,1.02,.73,1)`,
+    transition: prefersReducedMotion()
+      ? undefined
+      : `all 230ms cubic-bezier(.21,1.02,.73,1)`,
     transform: `translateY(${offset * (top ? 1 : -1)}px)`,
     ...verticalStyle,
     ...horizontalStyle,

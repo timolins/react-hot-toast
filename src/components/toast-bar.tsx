@@ -15,6 +15,9 @@ const exitAnimation = (factor: number) => `
 100% {transform: translate3d(0,${factor * -150}%,-1px) scale(.6); opacity:0;}
 `;
 
+const fadeInAnimation = `0%{opacity:0;} 100%{opacity:1;}`;
+const fadeOutAnimation = `0%{opacity:1;} 100%{opacity:0;}`;
+
 const ToastBarBase = styled('div', React.forwardRef)`
   display: flex;
   align-items: center;
@@ -53,28 +56,25 @@ const getAnimationStyle = (
 ): React.CSSProperties => {
   const top = position.includes('top');
   const factor = top ? 1 : -1;
-  return visible
-    ? {
-        animation: `${keyframes`${enterAnimation(
-          factor
-        )}`} 0.35s cubic-bezier(.21,1.02,.73,1) forwards`,
-      }
-    : {
-        animation: `${keyframes`${exitAnimation(
-          factor
-        )}`} 0.4s forwards cubic-bezier(.06,.71,.55,1)`,
-      };
+
+  const [enter, exit] = prefersReducedMotion()
+    ? [fadeInAnimation, fadeOutAnimation]
+    : [enterAnimation(factor), exitAnimation(factor)];
+
+  return {
+    animation: visible
+      ? `${keyframes(enter)} 0.35s cubic-bezier(.21,1.02,.73,1) forwards`
+      : `${keyframes(exit)} 0.4s forwards cubic-bezier(.06,.71,.55,1)`,
+  };
 };
 
 export const ToastBar: React.FC<ToastBarProps> = React.memo(
   ({ toast, position, style, children }) => {
     const animationStyle: React.CSSProperties = toast?.height
-      ? prefersReducedMotion()
-        ? {}
-        : getAnimationStyle(
-            toast.position || position || 'top-center',
-            toast.visible
-          )
+      ? getAnimationStyle(
+          toast.position || position || 'top-center',
+          toast.visible
+        )
       : { opacity: 0 };
 
     const icon = <ToastIcon toast={toast} />;
