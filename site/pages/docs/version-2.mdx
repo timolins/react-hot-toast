@@ -11,30 +11,37 @@ export default ({ children, meta }) => <Layout meta={meta}>{children}</Layout>;
 
 This release is all about **flexibility**. It allows you to create the notification system of your dreams, even simpler. Before we dig deeper into the new APIs, check out what's included in this release:
 
-<div className="text-lg">
-<span style={{ margin: '10px' }}>✨</span> <span className="font-semibold">toast.custom()</span> <span className="text-toast-700">- Dispatch components as toast</span>
+<div className="">
+<span style={{ margin: '10px' }}>✨</span> <a href="#introducing-toastcustom" className="font-semibold">toast.custom()</a> <span className="">- Dispatch components as toast</span>
 <br />
 
-<span style={{ margin: '10px' }}>👀</span> <span className="font-semibold">
+<span style={{ margin: '10px' }}>👀</span> <a
+  href="#better-accessibility"
+  className="font-semibold"
+>
   Reduced-motion support
-</span> <span className="text-toast-700">
-  - Automatically adapts to system preference
-</span>
+</a> <span className="">- Automatically adapts to system preference</span>
 <br />
 
-<span style={{ margin: '10px' }}>🔀</span> <span className="font-semibold">
+<span style={{ margin: '10px' }}>🔀</span> <a
+  href="#per-toast-positioning"
+  className="font-semibold"
+>
   Individually position toasts{' '}
-</span> <span className="text-toast-700"></span>
+</a> <span className=""></span>
 <br />
-<span style={{ margin: '10px' }}>
-  🧈
-</span> <span className="font-semibold">Smoother exit animations</span> <span className="text-toast-700"></span>
+<span style={{ margin: '10px' }}>🧈</span> <a
+  href="#smoother-exit-animation"
+  className="font-semibold"
+>
+  Smoother exit animations
+</a> <span className=""></span>
 <br />
 
-<span style={{ margin: '10px' }}>⚙️</span> <span className="font-semibold">Custom Renderer API</span> <span className="text-toast-700">- Supply your own render function</span>
+<span style={{ margin: '10px' }}>⚙️</span> <a href="#custom-renderer-api" className="font-semibold">Custom Renderer API</a> <span className="">- Supply your own render function</span>
 </div>
 
-As well as a many other improvements and fixes.
+As well as a many [other improvements and fixes](#changelog).
 
 ## Introducing `toast.custom()`
 
@@ -136,7 +143,7 @@ The offset is now controlled by the Toaster and can be changed by overwriting th
 
 ## Custom Renderer API
 
-You can now use the [`<Toaster/>`](/docs/toaster) to render your own components. Pass in a function that receives a [Toast](https://github.com/timolins/react-hot-toast/blob/main/src/core/types.ts#L34) as the first argument, allowing you to render whatever you please.
+You can now use the [`<Toaster/>`](/docs/toaster#using-a-custom-render-function) to render your own components. Pass in a function that receives a [Toast](https://github.com/timolins/react-hot-toast/blob/main/src/core/types.ts#L34) as the first argument, allowing you to render whatever you please.
 
 This is a great alternative if you are using [`useToaster()`](/docs/use-toaster) to render create custom notfications.
 

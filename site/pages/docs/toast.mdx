@@ -46,7 +46,7 @@ toast('Hello World', {
 toast('Hello World');
 ```
 
-The most basic variant. It does not have an icon by default, but you can provide one via the options.
+The most basic variant. It does not have an icon by default, but you can provide one via the options. If you don't want any default styles, use `toast.custom()` instead.
 
 ### Success
 
@@ -78,7 +78,7 @@ Creates a custom notification with JSX without default styles.
 toast.loading('Waiting...');
 ```
 
-This will create a loading notification. Most likely, you want to update it manually afterwards. For a friendly alternative, check out `toast.promise()`, which takes care of that automatically.
+This will create a loading notification. Most likely, you want to update it afterwards. For a friendly alternative, check out `toast.promise()`, which takes care of that automatically.
 
 ### Promise
 
@@ -153,7 +153,7 @@ You can dismiss all toasts at once, by leaving out the `toastId`.
 #### Dismiss all toasts at one
 
 ```js
-toast.dismiss()
+toast.dismiss();
 ```
 
 To remove toasts instantly without any animations, use `toast.remove`.
@@ -161,11 +161,11 @@ To remove toasts instantly without any animations, use `toast.remove`.
 #### Remove toasts instanstly
 
 ```js
-toast.remove(toastId)
+toast.remove(toastId);
 
 // or
 
-toast.remove()
+toast.remove();
 ```
 
 ### Update an existing toast
