@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 
-export function Footer() {
+export function Footer({ noBadge }: { noBadge?: boolean }) {
   return (
     <footer className="container relative justify-center my-8 flex flex-col items-center space-y-4">
       <div className="flex space-x-4">
@@ -28,14 +28,20 @@ export function Footer() {
           </a>
         </span>
       </div>
-      <div>
-        <a href="https://splitbee.io">
-          <img
-            src="https://splitbee-cdn.fra1.cdn.digitaloceanspaces.com/static/badge/splitbee-badge.svg"
-            alt="Analytics by Splitbee.io"
-          />
-        </a>
-      </div>
+      {!noBadge && (
+        <div>
+          <a
+            href="https://splitbee.io/?ref=rht"
+            data-splitbee-event="Click Splitbee Analytics"
+            data-splitbee-event-location="Footer"
+          >
+            <img
+              src="https://splitbee-cdn.fra1.cdn.digitaloceanspaces.com/static/badge/splitbee-badge.svg"
+              alt="Analytics by Splitbee.io"
+            />
+          </a>
+        </div>
+      )}
     </footer>
   );
 }

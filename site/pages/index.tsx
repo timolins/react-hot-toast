@@ -16,6 +16,7 @@ import { version } from '../../package.json';
 import { ToastExample } from '../components/sections/toast-example';
 import { Footer } from '../components/sections/footer';
 import { ToasterExample } from '../components/sections/toaster-example';
+import { SplitbeeCounter } from '../components/sections/splitbee-counter';
 import Link from 'next/link';
 
 const Feature: React.FC = ({ children }) => (
@@ -236,11 +237,12 @@ export default function Home() {
           </div>
         </div>
       </header>
+      <SplitbeeCounter />
       <Toaster position={position} reverseOrder={reverse} toastOptions={{}} />
-      <div className="container flex justify-end -mt-24 pointer-events-none">
+      <div className="container flex justify-end -mt-10 pointer-events-none">
         <Butter2 className="transform translate-x-20" />
       </div>
-      <Footer />
+      <Footer noBadge />
     </div>
   );
 }
