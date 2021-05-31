@@ -1,40 +1,34 @@
 import { styled, keyframes } from 'goober';
 
 const circleAnimation = keyframes`
-  from {
-    transform: scale(0) rotate(45deg);
-	 opacity: 0;
-  }
-
-  to {
-    transform: scale(1) rotate(45deg);
-	 opacity: 1;
-  }
-`;
+from {
+  transform: scale(0) rotate(45deg);
+	opacity: 0;
+}
+to {
+ transform: scale(1) rotate(45deg);
+  opacity: 1;
+}`;
 
 const firstLineAnimation = keyframes`
-  from {
-    transform: scale(0);
-	 opacity: 0;
-  }
-
-  to {
-    transform: scale(1);
-	 opacity: 1;
-  }
-`;
+from {
+  transform: scale(0);
+  opacity: 0;
+}
+to {
+  transform: scale(1);
+  opacity: 1;
+}`;
 
 const secondLineAnimation = keyframes`
-  from {
-    transform: scale(0) rotate(90deg);
-	 opacity: 0;
-  }
-
-  to {
-    transform: scale(1) rotate(90deg);
-	 opacity: 1;
-  }
-`;
+from {
+  transform: scale(0) rotate(90deg);
+	opacity: 0;
+}
+to {
+  transform: scale(1) rotate(90deg);
+	opacity: 1;
+}`;
 
 export interface ErrorTheme {
   primary?: string;

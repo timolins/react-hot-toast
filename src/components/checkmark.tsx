@@ -1,35 +1,30 @@
 import { styled, keyframes } from 'goober';
 
 const circleAnimation = keyframes`
-  from {
-    transform: scale(0) rotate(45deg);
-	 opacity: 0;
-  }
-
-  to {
-    transform: scale(1) rotate(45deg);
-	 opacity: 1;
-  }
-`;
+from {
+  transform: scale(0) rotate(45deg);
+	opacity: 0;
+}
+to {
+  transform: scale(1) rotate(45deg);
+	opacity: 1;
+}`;
 
 const checkmarkAnimation = keyframes`
-  0% {
-		height: 0;
-		width: 0;
-		opacity: 0;
-  }
-
-  40% {
-		height: 0;
-		width: 6px;
-		opacity: 1;
-  }
-
-  100% {
-    opacity: 1;
-		height: 10px;
-  }
-`;
+0% {
+	height: 0;
+	width: 0;
+	opacity: 0;
+}
+40% {
+  height: 0;
+	width: 6px;
+	opacity: 1;
+}
+100% {
+  opacity: 1;
+  height: 10px;
+}`;
 
 export interface CheckmarkTheme {
   primary?: string;

@@ -5,7 +5,7 @@ import {
   ToastType,
   DefaultToastOptions,
   ValueOrFunction,
-  resolveValueOrFunction,
+  resolveValue,
 } from './types';
 import { genId } from './utils';
 import { dispatch, ActionType } from './store';
@@ -22,8 +22,10 @@ const createToast = (
   createdAt: Date.now(),
   visible: true,
   type,
-  role: 'status',
-  ariaLive: 'polite',
+  ariaProps: {
+    role: 'status',
+    'aria-live': 'polite',
+  },
   message,
   pauseDuration: 0,
   ...opts,
@@ -45,6 +47,7 @@ const toast = (message: Message, opts?: ToastOptions) =>
 toast.error = createHandler('error');
 toast.success = createHandler('success');
 toast.loading = createHandler('loading');
+toast.custom = createHandler('custom');
 
 toast.dismiss = (toastId?: string) => {
   dispatch({
@@ -69,7 +72,7 @@ toast.promise = <T>(
 
   promise
     .then((p) => {
-      toast.success(resolveValueOrFunction(msgs.success, p), {
+      toast.success(resolveValue(msgs.success, p), {
         id,
         ...opts,
         ...opts?.success,
@@ -77,7 +80,7 @@ toast.promise = <T>(
       return p;
     })
     .catch((e) => {
-      toast.error(resolveValueOrFunction(msgs.error, e), {
+      toast.error(resolveValue(msgs.error, e), {
         id,
         ...opts,
         ...opts?.error,

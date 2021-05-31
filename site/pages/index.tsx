@@ -104,7 +104,7 @@ export default function Home() {
   const shouldFade =
     allToasts.filter((t) => t.visible).length && position.includes('top');
   return (
-    <div>
+    <div className="overflow-x-hidden">
       <NextSeo
         title={'react-hot-toast - The Best React Notifications in Town'}
         openGraph={{

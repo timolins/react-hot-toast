@@ -1,11 +1,10 @@
 import { useEffect, useMemo } from 'react';
 import { dispatch, ActionType, useStore } from './store';
 import { toast } from './toast';
-import { DefaultToastOptions } from './types';
+import { DefaultToastOptions, Toast, ToastPosition } from './types';
 
 export const useToaster = (toastOptions?: DefaultToastOptions) => {
   const { toasts, pausedAt } = useStore(toastOptions);
-  const visibleToasts = toasts.filter((t) => t.visible);
 
   useEffect(() => {
     if (pausedAt) {
@@ -54,27 +53,39 @@ export const useToaster = (toastOptions?: DefaultToastOptions) => {
           toast: { id: toastId, height },
         }),
       calculateOffset: (
-        toastId: string,
-        opts?: { reverseOrder?: boolean; margin?: number }
+        toast: Toast,
+        opts?: {
+          reverseOrder?: boolean;
+          gutter?: number;
+          defaultPosition?: ToastPosition;
+        }
       ) => {
-        const { reverseOrder = false, margin = 8 } = opts || {};
-        const index = visibleToasts.findIndex((toast) => toast.id === toastId);
-        const offset =
-          index !== -1
-            ? visibleToasts
-                .slice(...(reverseOrder ? [index + 1] : [0, index]))
-                .reduce((acc, t) => acc + (t.height || 0) + margin, 0)
-            : 0;
+        const { reverseOrder = false, gutter = 8, defaultPosition } =
+          opts || {};
+
+        const relevantToasts = toasts.filter(
+          (t) =>
+            (t.position || defaultPosition) ===
+              (toast.position || defaultPosition) && t.height
+        );
+        const toastIndex = relevantToasts.findIndex((t) => t.id === toast.id);
+        const toastsBefore = relevantToasts.filter(
+          (toast, i) => i < toastIndex && toast.visible
+        ).length;
+
+        const offset = relevantToasts
+          .filter((t) => t.visible)
+          .slice(...(reverseOrder ? [toastsBefore + 1] : [0, toastsBefore]))
+          .reduce((acc, t) => acc + (t.height || 0) + gutter, 0);
 
         return offset;
       },
     }),
-    [visibleToasts, pausedAt]
+    [toasts, pausedAt]
   );
 
   return {
     toasts,
-    visibleToasts,
     handlers,
   };
 };

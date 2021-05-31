@@ -1,6 +1,6 @@
-import { Properties } from 'csstype';
+import { CSSProperties } from 'react';
 
-export type ToastType = 'success' | 'error' | 'loading' | 'blank';
+export type ToastType = 'success' | 'error' | 'loading' | 'blank' | 'custom';
 export type ToastPosition =
   | 'top-left'
   | 'top-center'
@@ -9,7 +9,7 @@ export type ToastPosition =
   | 'bottom-center'
   | 'bottom-right';
 
-export type Renderable = JSX.Element | string | number | null;
+export type Renderable = JSX.Element | string | null;
 
 export interface IconTheme {
   primary: string;
@@ -26,7 +26,7 @@ const isFunction = <TValue, TArg>(
 ): valOrFunction is ValueFunction<TValue, TArg> =>
   typeof valOrFunction === 'function';
 
-export const resolveValueOrFunction = <TValue, TArg>(
+export const resolveValue = <TValue, TArg>(
   valOrFunction: ValueOrFunction<TValue, TArg>,
   arg: TArg
 ): TValue => (isFunction(valOrFunction) ? valOrFunction(arg) : valOrFunction);
@@ -38,11 +38,14 @@ export interface Toast {
   icon?: Renderable;
   duration?: number;
   pauseDuration: number;
+  position?: ToastPosition;
 
-  role: 'status' | 'alert';
-  ariaLive: 'assertive' | 'off' | 'polite';
+  ariaProps: {
+    role: 'status' | 'alert';
+    'aria-live': 'assertive' | 'off' | 'polite';
+  };
 
-  style?: Properties;
+  style?: CSSProperties;
   className?: string;
   iconTheme?: IconTheme;
 
@@ -57,10 +60,10 @@ export type ToastOptions = Partial<
     | 'id'
     | 'icon'
     | 'duration'
-    | 'role'
-    | 'ariaLive'
+    | 'ariaProps'
     | 'className'
     | 'style'
+    | 'position'
     | 'iconTheme'
   >
 >;

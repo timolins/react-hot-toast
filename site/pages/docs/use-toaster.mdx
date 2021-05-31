@@ -9,7 +9,11 @@ export default ({ children, meta }) => <Layout meta={meta}>{children}</Layout>;
 
 # `useToaster()` API
 
-Create your own notification system with **headless mode**. The `useToaster()` hook will manage the notification state for you. This includes keeping track of all toast created with  [`toast()`](/docs/toast), auto-dimiss, pause on hover and an unmount delay for exit animations. The hook will provide you with the current state, so you can render on own components. Tree shaking is supported, so you won't ship any unused styles from library.
+The `useToaster()` hook provides you a **headless system that will manage the notification state** for you. This includes keeping track of all toast created with [`toast()`](/docs/toast), auto-dimiss, pause on hover, and an unmount delay for exit animations.
+
+Be aware: [react-hot-toast 2.0](/docs/version-2) adds support for **custom render functions**, an easier method to render custom notification components.
+
+Tree shaking is supported so that you won't ship any unused styles from the library.
 
 It's recommended to only have one `<Toaster/>` or `useToaster()` in your app at a time. If you need the current state without the handlers, you should use [`useToasterStore()`](/docs/use-toaster-store) instead.
 
@@ -23,16 +27,18 @@ Headless mode is perfectly suited to add notifications to your React Native app.
 
 ```jsx
 const Notifications = () => {
-  const { visibleToasts, handlers } = useToaster();
+  const { toasts, handlers } = useToaster();
   const { startPause, endPause } = handlers;
 
   return (
     <div onMouseEnter={startPause} onMouseLeave={endPause}>
-      {visibleToasts.map((toast) => (
-        <div key={toast.id} role={toast.role} aria-live={toast.ariaLive}>
-          {toast.message}
-        </div>
-      ))}
+      {toasts
+        .filter((toast) => toast.visible)
+        .map((toast) => (
+          <div key={toast.id} role={toast.role} aria-live={toast.ariaLive}>
+            {toast.message}
+          </div>
+        ))}
     </div>
   );
 };
@@ -43,7 +49,7 @@ toast('Hello World');
 
 ### Animated Example
 
-Instead of mapping over `visibleToasts` we'll use `toasts`, which includes all hidden toasts aswell. We animate them based on `toast.visible`. Toasts will be removed from 1 second after being dismissed, which give us enough time to animate.
+Instead of mapping over `visibleToasts` we'll use `toasts`, which includes all hidden toasts. We animate them based on `toast.visible`. Toasts will be removed from 1 second after being dismissed, which give us enough time to animate.
 
 You can play with the demo on [CodeSandbox](https://codesandbox.io/s/react-hot-toast-usetoaster-headless-example-zw7op?file=/src/App.js).
 
@@ -65,9 +71,9 @@ const Notifications = () => {
       onMouseLeave={endPause}
     >
       {toasts.map((toast) => {
-        const offset = calculateOffset(toast.id, {
+        const offset = calculateOffset(toast, {
           reverseOrder: false,
-          margin: 8,
+          gutter: 8,
         });
 
         const ref = (el) => {

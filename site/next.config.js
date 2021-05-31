@@ -1,6 +1,11 @@
 const withTM = require('next-transpile-modules')(['react-hot-toast']);
+const remarkSlugs = require('rehype-slug');
+
 const withMDX = require('@next/mdx')({
-  extension: /\.mdx?$/,
+  extension: /.mdx?$/,
+  options: {
+    rehypePlugins: [remarkSlugs],
+  },
 });
 const withPlugins = require('next-compose-plugins');
 
@@ -8,7 +13,7 @@ const withSvgr = (nextConfig = {}, nextComposePlugins = {}) => {
   return Object.assign({}, nextConfig, {
     webpack(config, options) {
       config.module.rules.push({
-        test: /\.svg$/,
+        test: /.svg$/,
         use: ['@svgr/webpack'],
       });
 

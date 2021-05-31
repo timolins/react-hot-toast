@@ -1,8 +1,9 @@
 {
   "name": "react-hot-toast",
-  "version": "1.0.2",
+  "version": "2.0.0-beta.0",
   "author": "Timo Lins",
   "license": "MIT",
+  "sideEffects": false,
   "repository": "timolins/react-hot-toast",
   "keywords": [
     "react",
@@ -60,10 +61,11 @@
     "@size-limit/preset-small-lib": "^4.9.1",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "csstype": "^3.0.7",
     "size-limit": "^4.9.1",
     "tsdx": "^0.14.1"
   },
   "dependencies": {
-    "goober": "^2.0.15"
+    "goober": "^2.0.35"
   }
 }
