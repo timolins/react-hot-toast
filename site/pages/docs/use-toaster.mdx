@@ -35,7 +35,7 @@ const Notifications = () => {
       {toasts
         .filter((toast) => toast.visible)
         .map((toast) => (
-          <div key={toast.id} role={toast.role} aria-live={toast.ariaLive}>
+          <div key={toast.id} {...toast.ariaProps}>
             {toast.message}
           </div>
         ))}
@@ -94,6 +94,7 @@ const Notifications = () => {
               opacity: toast.visible ? 1 : 0,
               transform: `translateY(${offset}px)`,
             }}
+            {...toast.ariaProps}
           >
             {toast.message}
           </div>
