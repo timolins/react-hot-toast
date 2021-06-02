@@ -9,7 +9,7 @@ export const useSplitbeeCount = <T extends string>(
   const socket = React.useRef(null);
   React.useEffect(() => {
     if (typeof window !== undefined) {
-      socket.current = new WebSocket('wss://api.splitbee.io/realtime');
+      socket.current = new WebSocket('wss://realtime.react-hot-toast.com/');
       socket.current.onopen = (e) => {
         socket.current.send(
           JSON.stringify({
