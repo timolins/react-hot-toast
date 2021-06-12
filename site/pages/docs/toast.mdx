@@ -36,6 +36,8 @@ toast('Hello World', {
     role: 'status',
     'aria-live': 'polite',
   },
+
+  dismissDelay: 500,
 });
 ```
 
@@ -158,6 +160,20 @@ toast.dismiss();
 ```
 
 To remove toasts instantly without any animations, use `toast.remove`.
+
+#### Configure toasts dismiss delay
+
+```js
+toast.custom(
+    (t) => (
+      // custom jsx here.
+    ),
+    { dismissDelay: 500 }
+);
+```
+
+By defualt, the dismiss operation is delayed by 1000ms, i.e. the delay between dismissing the toast and
+the visual effect of it being removed from the UI. This duration (number in milliseconds) can be configured when calling the toast.
 
 #### Remove toasts instanstly
 
