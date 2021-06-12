@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { DefaultToastOptions, Toast, ToastType } from './types';
 
 const TOAST_LIMIT = 20;
+const THOUSAND_MILLISECONDS = 1000;
 
 export enum ActionType {
   ADD_TOAST,
@@ -50,7 +51,10 @@ interface State {
 
 const toastTimeouts = new Map<Toast['id'], ReturnType<typeof setTimeout>>();
 
-const addToRemoveQueue = (toastId: string) => {
+const addToRemoveQueue = (
+  toastId: string,
+  dismissDelay = THOUSAND_MILLISECONDS
+) => {
   if (toastTimeouts.has(toastId)) {
     return;
   }
@@ -61,7 +65,7 @@ const addToRemoveQueue = (toastId: string) => {
       type: ActionType.REMOVE_TOAST,
       toastId: toastId,
     });
-  }, 1000);
+  }, dismissDelay);
 
   toastTimeouts.set(toastId, timeout);
 };
@@ -105,10 +109,13 @@ export const reducer = (state: State, action: Action): State => {
 
       // ! Side effects ! - This could be execrated into a dismissToast() action, but I'll keep it here for simplicity
       if (toastId) {
-        addToRemoveQueue(toastId);
+        addToRemoveQueue(
+          toastId,
+          state.toasts.find((t) => t.id === toastId)?.dismissDelay
+        );
       } else {
         state.toasts.forEach((toast) => {
-          addToRemoveQueue(toast.id);
+          addToRemoveQueue(toast.id, toast.dismissDelay);
         });
       }
 
@@ -192,6 +199,10 @@ export const useStore = (toastOptions: DefaultToastOptions = {}): State => {
     ...toastOptions,
     ...toastOptions[t.type],
     ...t,
+    dismissDelay:
+      t.dismissDelay ||
+      toastOptions[t.type]?.dismissDelay ||
+      toastOptions?.dismissDelay,
     duration:
       t.duration ||
       toastOptions[t.type]?.duration ||
@@ -203,7 +214,6 @@ export const useStore = (toastOptions: DefaultToastOptions = {}): State => {
       ...t.style,
     },
   }));
-
   return {
     ...state,
     toasts: mergedToasts,
