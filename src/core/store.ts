@@ -53,7 +53,7 @@ const toastTimeouts = new Map<Toast['id'], ReturnType<typeof setTimeout>>();
 
 const addToRemoveQueue = (
   toastId: string,
-  dismissDelay = THOUSAND_MILLISECONDS
+  removeDelay = THOUSAND_MILLISECONDS
 ) => {
   if (toastTimeouts.has(toastId)) {
     return;
@@ -65,7 +65,7 @@ const addToRemoveQueue = (
       type: ActionType.REMOVE_TOAST,
       toastId: toastId,
     });
-  }, dismissDelay);
+  }, removeDelay);
 
   toastTimeouts.set(toastId, timeout);
 };
@@ -111,11 +111,11 @@ export const reducer = (state: State, action: Action): State => {
       if (toastId) {
         addToRemoveQueue(
           toastId,
-          state.toasts.find((t) => t.id === toastId)?.dismissDelay
+          state.toasts.find((t) => t.id === toastId)?.removeDelay
         );
       } else {
         state.toasts.forEach((toast) => {
-          addToRemoveQueue(toast.id, toast.dismissDelay);
+          addToRemoveQueue(toast.id, toast.removeDelay);
         });
       }
 
@@ -199,10 +199,10 @@ export const useStore = (toastOptions: DefaultToastOptions = {}): State => {
     ...toastOptions,
     ...toastOptions[t.type],
     ...t,
-    dismissDelay:
-      t.dismissDelay ||
-      toastOptions[t.type]?.dismissDelay ||
-      toastOptions?.dismissDelay,
+    removeDelay:
+      t.removeDelay ||
+      toastOptions[t.type]?.removeDelay ||
+      toastOptions?.removeDelay,
     duration:
       t.duration ||
       toastOptions[t.type]?.duration ||
