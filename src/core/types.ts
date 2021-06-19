@@ -52,6 +52,7 @@ export interface Toast {
   createdAt: number;
   visible: boolean;
   height?: number;
+  canDismiss?: boolean;
 }
 
 export type ToastOptions = Partial<
@@ -65,6 +66,7 @@ export type ToastOptions = Partial<
     | 'style'
     | 'position'
     | 'iconTheme'
+    | 'canDismiss'
   >
 >;
 
