@@ -1,7 +1,6 @@
 import { styled } from 'goober';
 
 export interface CloseTheme {
-	primary?: string;
 	secondary?: string;
 }
 
