@@ -1,6 +1,7 @@
 import { styled } from 'goober';
 
 export interface CloseTheme {
+	primary?: string;
 	secondary?: string;
 }
 
@@ -9,7 +10,7 @@ export const CloseIcon = styled('div')<CloseTheme>`
   opacity: 1;
   height: 20px;
   border-radius: 10px;
-  background: transparent;
+  background:  ${(p) => p.primary || 'transparent'};;
   position: relative;
   transform: rotate(45deg);
 	transition: background-color 200ms ease-out;
