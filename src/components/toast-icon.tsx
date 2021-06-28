@@ -1,10 +1,11 @@
 import * as React from 'react';
+
 import { styled, keyframes } from 'goober';
 
 import { Toast } from '../core/types';
+import { CheckmarkIcon, CheckmarkTheme } from './checkmark';
 import { ErrorIcon, ErrorTheme } from './error';
 import { LoaderIcon, LoaderTheme } from './loader';
-import { CheckmarkIcon, CheckmarkTheme } from './checkmark';
 
 const StatusWrapper = styled('div')`
   position: absolute;
@@ -51,9 +52,8 @@ export const ToastIcon: React.FC<{
   if (icon !== undefined) {
     if (typeof icon === 'string') {
       return <AnimatedIconWrapper>{icon}</AnimatedIconWrapper>;
-    } else {
-      return icon;
     }
+    return icon;
   }
 
   if (type === 'blank') {
