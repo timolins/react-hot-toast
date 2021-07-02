@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { styled, keyframes } from 'goober';
 
-import { Toast, ToastPosition, resolveValue, Renderable } from '../core/types';
+import { Toast, ToastPosition, Renderable } from '../core/types';
 import { ToastIcon } from './toast-icon';
-import { prefersReducedMotion } from '../core/utils';
+import { prefersReducedMotion, resolveValue } from '../core/utils';
 
 const enterAnimation = (factor: number) => `
 0% {transform: translate3d(0,${factor * -200}%,0) scale(.6); opacity:.5;}
@@ -72,9 +72,9 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
   ({ toast, position, style, children }) => {
     const animationStyle: React.CSSProperties = toast?.height
       ? getAnimationStyle(
-          toast.position || position || 'top-center',
-          toast.visible
-        )
+        toast.position || position || 'top-center',
+        toast.visible
+      )
       : { opacity: 0 };
 
     const icon = <ToastIcon toast={toast} />;

@@ -5,9 +5,8 @@ import {
   ToastType,
   DefaultToastOptions,
   ValueOrFunction,
-  resolveValue,
 } from './types';
-import { genId } from './utils';
+import { genId, resolveValue } from './utils';
 import { dispatch, ActionType } from './store';
 
 type Message = ValueOrFunction<Renderable, Toast>;

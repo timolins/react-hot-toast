@@ -10,7 +10,7 @@ export { ToastBar } from './components/toast-bar';
 export { ToastIcon } from './components/toast-icon';
 export { Toaster } from './components/toaster';
 export { useStore as useToasterStore } from './core/store';
-export { resolveValue } from './core/types';
+export { resolveValue } from './core/utils';
 
 export type ToastOptions = _ToastOptions;
 export type ToastPosition = _ToastPosition;
