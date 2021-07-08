@@ -30,12 +30,7 @@ function MyApp({ Component, pageProps }) {
       <Head>
         <meta />
         {process.browser && (
-          <script
-            async
-            data-no-cookie
-            data-api="/_hive"
-            src="http://192.168.86.28:5000/build/sb.js"
-          />
+          <script async data-no-cookie data-api="/_hive" src="/bee.js" />
         )}
         <link rel="shortcut icon" href="/favicon.png" type="image/x-icon" />
       </Head>
