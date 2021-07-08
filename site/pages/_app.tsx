@@ -28,7 +28,15 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <script async data-no-cookie data-api="/_hive" src="/bee.js"></script>
+        <meta />
+        {process.browser && (
+          <script
+            async
+            data-no-cookie
+            data-api="/_hive"
+            src="http://192.168.86.28:5000/build/sb.js"
+          />
+        )}
         <link rel="shortcut icon" href="/favicon.png" type="image/x-icon" />
       </Head>
       <MDXProvider components={components}>
