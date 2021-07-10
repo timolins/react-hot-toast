@@ -7,9 +7,8 @@ import {
   ToastPosition,
   DefaultToastOptions,
   Toast,
-  resolveValue,
 } from '../core/types';
-import { createRectRef, prefersReducedMotion } from '../core/utils';
+import { createRectRef, prefersReducedMotion, resolveValue } from '../core/utils';
 
 setup(React.createElement);
 
@@ -21,13 +20,13 @@ const getPositionStyle = (
   const verticalStyle: React.CSSProperties = top ? { top: 0 } : { bottom: 0 };
   const horizontalStyle: React.CSSProperties = position.includes('center')
     ? {
-        justifyContent: 'center',
-      }
+      justifyContent: 'center',
+    }
     : position.includes('right')
-    ? {
+      ? {
         justifyContent: 'flex-end',
       }
-    : {};
+      : {};
   return {
     left: 0,
     right: 0,
@@ -100,8 +99,8 @@ export const Toaster: React.FC<ToasterProps> = ({
         const ref = t.height
           ? undefined
           : createRectRef((rect) => {
-              handlers.updateHeight(t.id, rect.height);
-            });
+            handlers.updateHeight(t.id, rect.height);
+          });
 
         return (
           <div
