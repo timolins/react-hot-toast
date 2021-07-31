@@ -4,6 +4,7 @@ import { toast } from './core/toast';
 import {
   ToastOptions as _ToastOptions,
   ToastPosition as _ToastPosition,
+  Toast as _Toast,
 } from './core/types';
 export { useToaster } from './core/use-toaster';
 export { ToastBar } from './components/toast-bar';
@@ -17,6 +18,7 @@ export { resolveValue } from './core/types';
 
 export type ToastOptions = _ToastOptions;
 export type ToastPosition = _ToastPosition;
+export type Toast = _Toast;
 
 export { toast };
 export default toast;
