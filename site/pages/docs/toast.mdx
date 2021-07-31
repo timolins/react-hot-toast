@@ -37,7 +37,7 @@ toast('Hello World', {
     'aria-live': 'polite',
   },
 
-  removeDelay: 500,
+  removeDelay: 1000,
 });
 ```
 
@@ -172,8 +172,7 @@ toast.custom(
 );
 ```
 
-By defualt, the remove operation is delayed by 1000ms, i.e. the delay between dismissing the toast and
-the visual effect of it being removed from the UI. This duration (number in milliseconds) can be configured when calling the toast.
+By default, the remove operation is delayed by 1000ms. This is how long a toast should be kept in the DOM after beeing dismissed. It is used to play the exit animation. This duration (number in milliseconds) can be configured when calling the toast.
 
 Or, for all toasts, using the Toaster like so:
 

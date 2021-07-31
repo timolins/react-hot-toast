@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { DefaultToastOptions, Toast, ToastType } from './types';
 
 const TOAST_LIMIT = 20;
-const THOUSAND_MILLISECONDS = 1000;
+const REMOVE_DELAY = 1000;
 
 export enum ActionType {
   ADD_TOAST,
@@ -51,10 +51,7 @@ interface State {
 
 const toastTimeouts = new Map<Toast['id'], ReturnType<typeof setTimeout>>();
 
-const addToRemoveQueue = (
-  toastId: string,
-  removeDelay = THOUSAND_MILLISECONDS
-) => {
+const addToRemoveQueue = (toastId: string, removeDelay = REMOVE_DELAY) => {
   if (toastTimeouts.has(toastId)) {
     return;
   }
