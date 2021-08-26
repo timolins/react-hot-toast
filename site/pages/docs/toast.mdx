@@ -123,6 +123,38 @@ toast.promise(
 );
 ```
 
+#### Advanced (with dismiss button)
+
+If the `success` and `error` properties are functions, the result is passed to the [`toast.success`](/docs/toast#success) and [`toast.error`](/docs/toast#error) methods. That may then _also_ be a function, accepting a `Toast` object and returning your custom content.
+
+```js
+toast.promise(
+  myPromise,
+  {
+    loading: "Loading",
+    success: (data) => (toast) =>
+      (
+        <div>
+          <span>Successfully saved ${data.name}</span>
+          <button type="button" onClick={() => toast.dismiss(t.id)}>
+            Custom Dismiss Button!
+          </button>
+        </div>
+      ),
+    error: (err) => `This just happened: ${err.toString()}`,
+  },
+  {
+    style: {
+      minWidth: "250px",
+    },
+    success: {
+      duration: 5000,
+      icon: "🔥",
+    },
+  }
+);
+```
+
 ## Default durations
 
 Every type has its own duration. You can overwrite them `duration` with the toast options. This can be done per toast options or globally by the [`<Toaster/>`](/docs/toaster).
