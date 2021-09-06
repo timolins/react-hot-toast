@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+
 import { DefaultToastOptions, Toast, ToastType } from './types';
 
 const TOAST_LIMIT = 20;
@@ -59,7 +60,7 @@ const addToRemoveQueue = (toastId: string) => {
     toastTimeouts.delete(toastId);
     dispatch({
       type: ActionType.REMOVE_TOAST,
-      toastId: toastId,
+      toastId,
     });
   }, 1000);
 

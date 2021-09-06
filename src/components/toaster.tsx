@@ -1,15 +1,16 @@
 import * as React from 'react';
+
 import { setup, css } from 'goober';
 
-import { useToaster } from '../core/use-toaster';
-import { ToastBar } from './toast-bar';
 import {
   ToastPosition,
   DefaultToastOptions,
   Toast,
   resolveValue,
 } from '../core/types';
+import { useToaster } from '../core/use-toaster';
 import { createRectRef, prefersReducedMotion } from '../core/utils';
+import { ToastBar } from './toast-bar';
 
 setup(React.createElement);
 

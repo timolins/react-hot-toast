@@ -1,9 +1,10 @@
 import * as React from 'react';
+
 import { styled, keyframes } from 'goober';
 
 import { Toast, ToastPosition, resolveValue, Renderable } from '../core/types';
-import { ToastIcon } from './toast-icon';
 import { prefersReducedMotion } from '../core/utils';
+import { ToastIcon } from './toast-icon';
 
 const enterAnimation = (factor: number) => `
 0% {transform: translate3d(0,${factor * -200}%,0) scale(.6); opacity:.5;}

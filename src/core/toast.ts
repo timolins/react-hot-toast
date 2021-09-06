@@ -1,3 +1,4 @@
+import { dispatch, ActionType } from './store';
 import {
   Renderable,
   Toast,
@@ -8,7 +9,6 @@ import {
   resolveValue,
 } from './types';
 import { genId } from './utils';
-import { dispatch, ActionType } from './store';
 
 type Message = ValueOrFunction<Renderable, Toast>;
 
