@@ -6,6 +6,7 @@ import {
   DefaultToastOptions,
   ValueOrFunction,
   resolveValue,
+  ValueFunction,
 } from './types';
 import { genId } from './utils';
 import { dispatch, ActionType } from './store';
@@ -13,6 +14,14 @@ import { dispatch, ActionType } from './store';
 type Message = ValueOrFunction<Renderable, Toast>;
 
 type ToastHandler = (message: Message, options?: ToastOptions) => string;
+
+type PromiseToastMessages<TPromiseValue> = {
+  loading: Message;
+  success: PromiseToastMessageHandler<TPromiseValue>;
+  error: PromiseToastMessageHandler<any>;
+}
+
+type PromiseToastMessageHandler<T> = Renderable | ValueFunction<Message, T>;
 
 const createToast = (
   message: Message,
@@ -59,13 +68,9 @@ toast.dismiss = (toastId?: string) => {
 toast.remove = (toastId?: string) =>
   dispatch({ type: ActionType.REMOVE_TOAST, toastId });
 
-toast.promise = <T>(
-  promise: Promise<T>,
-  msgs: {
-    loading: Renderable;
-    success: ValueOrFunction<Renderable, T>;
-    error: ValueOrFunction<Renderable, any>;
-  },
+toast.promise = <TPromiseValue>(
+  promise: Promise<TPromiseValue>,  
+  msgs: PromiseToastMessages<TPromiseValue>,
   opts?: DefaultToastOptions
 ) => {
   const id = toast.loading(msgs.loading, { ...opts, ...opts?.loading });
