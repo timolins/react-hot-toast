@@ -4,6 +4,7 @@ import { styled, keyframes } from 'goober';
 import { Toast, ToastPosition, resolveValue, Renderable } from '../core/types';
 import { ToastIcon } from './toast-icon';
 import { prefersReducedMotion } from '../core/utils';
+import { CloseIcon } from "./close";
 
 const enterAnimation = (factor: number) => `
 0% {transform: translate3d(0,${factor * -200}%,0) scale(.6); opacity:.5;}
@@ -48,6 +49,7 @@ interface ToastBarProps {
     icon: Renderable;
     message: Renderable;
   }) => Renderable;
+  onDismiss: () => void;
 }
 
 const getAnimationStyle = (
@@ -69,7 +71,7 @@ const getAnimationStyle = (
 };
 
 export const ToastBar: React.FC<ToastBarProps> = React.memo(
-  ({ toast, position, style, children }) => {
+  ({ toast, position, style, children, onDismiss }) => {
     const animationStyle: React.CSSProperties = toast?.height
       ? getAnimationStyle(
           toast.position || position || 'top-center',
@@ -83,6 +85,7 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
         {resolveValue(toast.message, toast)}
       </Message>
     );
+    const closeIcon = !!toast.canDismiss ? <CloseIcon onClick={onDismiss} /> : null;
 
     return (
       <ToastBarBase
@@ -102,6 +105,7 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
           <>
             {icon}
             {message}
+            {closeIcon}
           </>
         )}
       </ToastBarBase>

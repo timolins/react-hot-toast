@@ -10,6 +10,7 @@ import {
   resolveValue,
 } from '../core/types';
 import { createRectRef, prefersReducedMotion } from '../core/utils';
+import { toast } from "../core/toast";
 
 setup(React.createElement);
 
@@ -115,7 +116,13 @@ export const Toaster: React.FC<ToasterProps> = ({
             ) : children ? (
               children(t)
             ) : (
-              <ToastBar toast={t} position={toastPosition} />
+              <ToastBar
+                toast={t}
+                position={toastPosition}
+                onDismiss={() => {
+                  toast.dismiss(t.id);
+                }}
+              />
             )}
           </div>
         );
