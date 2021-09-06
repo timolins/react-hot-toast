@@ -1,15 +1,9 @@
+import { css, setup } from 'goober';
 import * as React from 'react';
-import { setup, css } from 'goober';
-
+import { resolveValue, ToasterProps, ToastPosition } from '../core/types';
 import { useToaster } from '../core/use-toaster';
-import { ToastBar } from './toast-bar';
-import {
-  ToastPosition,
-  DefaultToastOptions,
-  Toast,
-  resolveValue,
-} from '../core/types';
 import { createRectRef, prefersReducedMotion } from '../core/utils';
+import { ToastBar } from './toast-bar';
 
 setup(React.createElement);
 
@@ -48,16 +42,6 @@ const activeClass = css`
     pointer-events: auto;
   }
 `;
-
-interface ToasterProps {
-  position?: ToastPosition;
-  toastOptions?: DefaultToastOptions;
-  reverseOrder?: boolean;
-  gutter?: number;
-  containerStyle?: React.CSSProperties;
-  containerClassName?: string;
-  children?: (toast: Toast) => JSX.Element;
-}
 
 const DEFAULT_OFFSET = 16;
 
