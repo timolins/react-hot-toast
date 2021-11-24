@@ -155,7 +155,7 @@ import { Toaster, ToastBar } from 'react-hot-toast';
 const CustomToaster = () => (
   <Toaster>
     {(t) => (
-      <ToastBar>
+      <ToastBar toast={t}>
         {({ icon, message }) => (
           <>
             {icon}
