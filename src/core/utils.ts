@@ -18,7 +18,7 @@ export const createRectRef = (onRect: (rect: DOMRect) => void) => (
 
 export const prefersReducedMotion = (() => {
   // Cache result
-  let shouldReduceMotion: boolean | undefined = undefined;
+  let shouldReduceMotion: boolean | undefined;
 
   return () => {
     if (shouldReduceMotion === undefined && typeof window !== 'undefined') {

@@ -64,7 +64,18 @@
     "@types/react-dom": "^17.0.0",
     "csstype": "^3.0.7",
     "size-limit": "^4.9.1",
-    "tsdx": "^0.14.1"
+    "tsdx": "^0.14.1",
+    "eslint": "^7.29.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-react": "^7.24.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-unused-imports": "^1.1.1",
+    "@typescript-eslint/eslint-plugin": "^4.27.0",
+    "@typescript-eslint/parser": "^4.27.0"
   },
   "dependencies": {
     "goober": "^2.0.35"
