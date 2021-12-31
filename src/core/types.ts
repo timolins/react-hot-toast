@@ -72,3 +72,13 @@ export type DefaultToastOptions = ToastOptions &
   {
     [key in ToastType]?: ToastOptions;
   };
+
+export interface ToasterProps {
+  position?: ToastPosition;
+  toastOptions?: DefaultToastOptions;
+  reverseOrder?: boolean;
+  gutter?: number;
+  containerStyle?: React.CSSProperties;
+  containerClassName?: string;
+  children?: (toast: Toast) => JSX.Element;
+}
