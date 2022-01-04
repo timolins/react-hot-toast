@@ -38,6 +38,7 @@ const Message = styled('div')`
   margin: 4px 10px;
   color: inherit;
   flex: 1 1 auto;
+  white-space: pre-line;
 `;
 
 interface ToastBarProps {
