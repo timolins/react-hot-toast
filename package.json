@@ -67,6 +67,6 @@
     "tsdx": "^0.14.1"
   },
   "dependencies": {
-    "goober": "^2.0.35"
+    "goober": "^2.1.1"
   }
 }
