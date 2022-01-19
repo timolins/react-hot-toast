@@ -4,6 +4,7 @@ import Arrow from '../../assets/arrow.svg';
 import { Code } from '../code';
 
 import { EmojiButton } from '../emoji-button';
+import { SplitbeeCounter } from './splitbee-counter';
 
 export const positions: Array<ToastPosition> = [
   'top-left',
@@ -68,8 +69,6 @@ export const ToasterExample: React.FC<{
           : 'bg-white shadow-small-button'
       )}
       key={p}
-      data-splitbee-event="Change Position"
-      data-splitbee-event-position={p}
       onClick={() => {
         toast.success(
           <span>
@@ -79,6 +78,14 @@ export const ToasterExample: React.FC<{
             id: 'position',
           }
         );
+
+        (window as any).splitbee?.track('Change Position', {
+          position: p,
+        });
+
+        (window as any).splitbee?.track('Trigger Toast', {
+          example: 'position',
+        });
 
         onPosition(p);
       }}
