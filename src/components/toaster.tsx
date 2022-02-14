@@ -1,6 +1,11 @@
 import { css, setup } from 'goober';
 import * as React from 'react';
-import { resolveValue, ToasterProps, ToastPosition } from '../core/types';
+import {
+  resolveValue,
+  ToastMessageProps,
+  ToasterProps,
+  ToastPosition,
+} from '../core/types';
 import { useToaster } from '../core/use-toaster';
 import { createRectRef, prefersReducedMotion } from '../core/utils';
 import { ToastBar } from './toast-bar';
@@ -45,6 +50,30 @@ const activeClass = css`
 
 const DEFAULT_OFFSET = 16;
 
+const ToastMessage: React.FC<ToastMessageProps> = ({
+  id,
+  height,
+  className,
+  style,
+  onUpdateHeight,
+  children,
+}) => {
+  const hasHeight = typeof height === 'number';
+  const ref = React.useMemo(() => {
+    return hasHeight
+      ? undefined
+      : createRectRef((rect) => {
+          onUpdateHeight(id, rect.height);
+        });
+  }, [hasHeight, onUpdateHeight]);
+
+  return (
+    <div ref={ref} className={className} style={style}>
+      {children}
+    </div>
+  );
+};
+
 export const Toaster: React.FC<ToasterProps> = ({
   reverseOrder,
   position = 'top-center',
@@ -81,18 +110,14 @@ export const Toaster: React.FC<ToasterProps> = ({
         });
         const positionStyle = getPositionStyle(toastPosition, offset);
 
-        const ref = t.height
-          ? undefined
-          : createRectRef((rect) => {
-              handlers.updateHeight(t.id, rect.height);
-            });
-
         return (
-          <div
-            ref={ref}
+          <ToastMessage
+            id={t.id}
+            height={t.height}
             className={t.visible ? activeClass : ''}
             key={t.id}
             style={positionStyle}
+            onUpdateHeight={handlers.updateHeight}
           >
             {t.type === 'custom' ? (
               resolveValue(t.message, t)
@@ -101,7 +126,7 @@ export const Toaster: React.FC<ToasterProps> = ({
             ) : (
               <ToastBar toast={t} position={toastPosition} />
             )}
-          </div>
+          </ToastMessage>
         );
       })}
     </div>

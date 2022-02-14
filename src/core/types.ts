@@ -73,6 +73,15 @@ export type DefaultToastOptions = ToastOptions &
     [key in ToastType]?: ToastOptions;
   };
 
+export interface ToastMessageProps {
+  id: string;
+  height: number | undefined;
+  className?: string;
+  style?: React.CSSProperties;
+  onUpdateHeight: (id: string, height: number) => void;
+  children?: React.ReactNode;
+}
+
 export interface ToasterProps {
   position?: ToastPosition;
   toastOptions?: DefaultToastOptions;
