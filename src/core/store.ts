@@ -4,13 +4,13 @@ import { DefaultToastOptions, Toast, ToastType } from './types';
 const TOAST_LIMIT = 20;
 
 export enum ActionType {
-  ADD_TOAST = 'ADD_TOAST',
-  UPDATE_TOAST = 'UPDATE_TOAST',
-  UPSERT_TOAST = 'UPSERT_TOAST',
-  DISMISS_TOAST = 'DISMISS_TOAST',
-  REMOVE_TOAST = 'REMOVE_TOAST',
-  START_PAUSE = 'START_PAUSE',
-  END_PAUSE = 'END_PAUSE',
+  ADD_TOAST,
+  UPDATE_TOAST,
+  UPSERT_TOAST,
+  DISMISS_TOAST,
+  REMOVE_TOAST,
+  START_PAUSE,
+  END_PAUSE,
 }
 
 type Action =
