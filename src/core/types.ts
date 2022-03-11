@@ -52,6 +52,8 @@ export interface Toast {
   createdAt: number;
   visible: boolean;
   height?: number;
+
+  toasterId?: string;
 }
 
 export type ToastOptions = Partial<
@@ -65,6 +67,7 @@ export type ToastOptions = Partial<
     | 'style'
     | 'position'
     | 'iconTheme'
+    | 'toasterId'
   >
 >;
 
@@ -80,5 +83,6 @@ export interface ToasterProps {
   gutter?: number;
   containerStyle?: React.CSSProperties;
   containerClassName?: string;
+  toasterId?: string;
   children?: (toast: Toast) => JSX.Element;
 }
