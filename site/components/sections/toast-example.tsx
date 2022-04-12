@@ -28,6 +28,14 @@ const examples: Array<{
     },
   },
   {
+    title: 'Warning',
+    emoji: '⚠️',
+    snippet: "toast.warn('Roadblocks ahead')",
+    action: () => {
+      toast.warn('Roadblocks ahead');
+    },
+  },
+  {
     title: 'Promise',
     emoji: '⏳',
     snippet: `toast.promise(
