@@ -47,6 +47,7 @@ toast.error = createHandler('error');
 toast.success = createHandler('success');
 toast.loading = createHandler('loading');
 toast.custom = createHandler('custom');
+toast.warn = createHandler('warn');
 
 toast.dismiss = (toastId?: string) => {
   dispatch({
