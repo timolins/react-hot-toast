@@ -81,7 +81,7 @@ export const Toaster: React.FC<ToasterProps> = ({
         });
         const positionStyle = getPositionStyle(toastPosition, offset);
 
-        const ref = t.height
+        const ref = t.height != null
           ? undefined
           : createRectRef((rect) => {
               handlers.updateHeight(t.id, rect.height);
