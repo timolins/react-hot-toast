@@ -63,8 +63,8 @@ toast.promise = <T>(
   promise: Promise<T>,
   msgs: {
     loading: Renderable;
-    success: ValueOrFunction<Renderable, T>;
-    error: ValueOrFunction<Renderable, any>;
+    success?: ValueOrFunction<Renderable, T>;
+    error?: ValueOrFunction<Renderable, any>;
   },
   opts?: DefaultToastOptions
 ) => {
@@ -72,19 +72,23 @@ toast.promise = <T>(
 
   promise
     .then((p) => {
-      toast.success(resolveValue(msgs.success, p), {
-        id,
-        ...opts,
-        ...opts?.success,
-      });
+      if (msgs.success)
+        toast.success(resolveValue(msgs.success, p), {
+          id,
+          ...opts,
+          ...opts?.success,
+        });
+      else toast.remove(id);
       return p;
     })
     .catch((e) => {
-      toast.error(resolveValue(msgs.error, e), {
-        id,
-        ...opts,
-        ...opts?.error,
-      });
+      if (msgs.error)
+        toast.error(resolveValue(msgs.error, e), {
+          id,
+          ...opts,
+          ...opts?.error,
+        });
+      else toast.remove(id);
     });
 
   return promise;
