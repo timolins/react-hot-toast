@@ -71,7 +71,10 @@ toast.promise = <T>(
   const id = toast.loading(msgs.loading, { ...opts, ...opts?.loading });
 
   promise
-    .then((p) => {
+    .then(async (p) => {
+      if (p instanceof Response && !p?.ok) {
+        throw Error(await p.text());
+      }
       toast.success(resolveValue(msgs.success, p), {
         id,
         ...opts,
