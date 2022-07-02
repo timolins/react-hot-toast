@@ -1,7 +1,33 @@
 import { useEffect, useState } from 'react';
 import { DefaultToastOptions, Toast, ToastType } from './types';
 
-const TOAST_LIMIT = 20;
+// const TOAST_LIMIT = 20;
+
+interface ToasterConfig {
+  toastLimit: number;
+  dismissDelay: number;
+}
+
+let baseSettings: ToasterConfig = {
+  toastLimit: 20,
+  dismissDelay: 5000,
+};
+
+export const updateSettings = (
+  settings: keyof ToasterConfig,
+  value: string | number
+) => {
+  baseSettings = {
+    ...baseSettings,
+    [settings]: value,
+  };
+};
+
+interface BaseSettings {
+  toasterId?: string;
+  toastLimit?: number;
+  dismissDelay?: number;
+}
 
 export enum ActionType {
   ADD_TOAST,
@@ -61,7 +87,7 @@ const addToRemoveQueue = (toastId: string) => {
       type: ActionType.REMOVE_TOAST,
       toastId: toastId,
     });
-  }, 1000);
+  }, baseSettings.dismissDelay);
 
   toastTimeouts.set(toastId, timeout);
 };
@@ -78,7 +104,10 @@ export const reducer = (state: State, action: Action): State => {
     case ActionType.ADD_TOAST:
       return {
         ...state,
-        toasts: [action.toast, ...state.toasts].slice(0, TOAST_LIMIT),
+        toasts: [action.toast, ...state.toasts].slice(
+          0,
+          baseSettings.toastLimit
+        ),
       };
 
     case ActionType.UPDATE_TOAST:
@@ -176,7 +205,10 @@ const defaultTimeouts: {
   custom: 4000,
 };
 
-export const useStore = (toastOptions: DefaultToastOptions = {}): State => {
+export const useStore = (
+  toastOptions: DefaultToastOptions = {},
+  toasterId?: string
+): State => {
   const [state, setState] = useState<State>(memoryState);
   useEffect(() => {
     listeners.push(setState);
@@ -188,21 +220,27 @@ export const useStore = (toastOptions: DefaultToastOptions = {}): State => {
     };
   }, [state]);
 
-  const mergedToasts = state.toasts.map((t) => ({
-    ...toastOptions,
-    ...toastOptions[t.type],
-    ...t,
-    duration:
-      t.duration ||
-      toastOptions[t.type]?.duration ||
-      toastOptions?.duration ||
-      defaultTimeouts[t.type],
-    style: {
-      ...toastOptions.style,
-      ...toastOptions[t.type]?.style,
-      ...t.style,
-    },
-  }));
+  const mergedToasts = state.toasts
+    .filter(
+      (t) =>
+        (toasterId === undefined && t.toasterId === undefined) ||
+        t.toasterId === toasterId
+    )
+    .map((t) => ({
+      ...toastOptions,
+      ...toastOptions[t.type],
+      ...t,
+      duration:
+        t.duration ||
+        toastOptions[t.type]?.duration ||
+        toastOptions?.duration ||
+        defaultTimeouts[t.type],
+      style: {
+        ...toastOptions.style,
+        ...toastOptions[t.type]?.style,
+        ...t.style,
+      },
+    }));
 
   return {
     ...state,

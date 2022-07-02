@@ -51,10 +51,11 @@ export const Toaster: React.FC<ToasterProps> = ({
   toastOptions,
   gutter,
   children,
+  toasterId,
   containerStyle,
   containerClassName,
 }) => {
-  const { toasts, handlers } = useToaster(toastOptions);
+  const { toasts, handlers } = useToaster(toastOptions, toasterId);
 
   return (
     <div

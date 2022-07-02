@@ -8,7 +8,7 @@ import {
   resolveValue,
 } from './types';
 import { genId } from './utils';
-import { dispatch, ActionType } from './store';
+import { dispatch, updateSettings, ActionType } from './store';
 
 type Message = ValueOrFunction<Renderable, Toast>;
 
@@ -48,6 +48,7 @@ toast.error = createHandler('error');
 toast.success = createHandler('success');
 toast.loading = createHandler('loading');
 toast.custom = createHandler('custom');
+toast.setSetting = updateSettings as any;
 
 toast.dismiss = (toastId?: string) => {
   dispatch({

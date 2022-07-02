@@ -34,6 +34,7 @@ export const resolveValue = <TValue, TArg>(
 export interface Toast {
   type: ToastType;
   id: string;
+  toasterId?: string;
   message: ValueOrFunction<Renderable, Toast>;
   icon?: Renderable;
   duration?: number;
@@ -65,6 +66,7 @@ export type ToastOptions = Partial<
     | 'style'
     | 'position'
     | 'iconTheme'
+    | 'toasterId'
   >
 >;
 
@@ -80,5 +82,6 @@ export interface ToasterProps {
   gutter?: number;
   containerStyle?: React.CSSProperties;
   containerClassName?: string;
+  toasterId?: string;
   children?: (toast: Toast) => JSX.Element;
 }

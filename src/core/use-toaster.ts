@@ -3,8 +3,11 @@ import { dispatch, ActionType, useStore } from './store';
 import { toast } from './toast';
 import { DefaultToastOptions, Toast, ToastPosition } from './types';
 
-export const useToaster = (toastOptions?: DefaultToastOptions) => {
-  const { toasts, pausedAt } = useStore(toastOptions);
+export const useToaster = (
+  toastOptions?: DefaultToastOptions,
+  toasterId?: string
+) => {
+  const { toasts, pausedAt } = useStore(toastOptions, toasterId);
 
   useEffect(() => {
     if (pausedAt) {
