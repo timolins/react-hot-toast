@@ -31,10 +31,6 @@
     "size": "size-limit",
     "analyze": "size-limit --why"
   },
-  "peerDependencies": {
-    "react": ">=16",
-    "react-dom": ">=16"
-  },
   "husky": {
     "hooks": {
       "pre-commit": "tsdx lint"
