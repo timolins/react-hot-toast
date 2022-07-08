@@ -1,9 +1,4 @@
 import { NextSeo } from 'next-seo';
-import Logo from '../assets/logo.svg';
-import Butter1 from '../assets/butter-1.svg';
-import Butter2 from '../assets/butter-2.svg';
-import GitHub from '../assets/github.svg';
-import Checkmark from '../assets/checkmark.svg';
 import toast, {
   Toaster,
   useToasterStore,
@@ -11,14 +6,21 @@ import toast, {
 } from 'react-hot-toast';
 import React, { useState } from 'react';
 import clsx from 'clsx';
-import packageInfo from '../../package.json';
+import Link from 'next/link';
 
+import test from 'react-hot-toast/headless';
+
+import Logo from '../assets/logo.svg';
+import Butter1 from '../assets/butter-1.svg';
+import Butter2 from '../assets/butter-2.svg';
+import GitHub from '../assets/github.svg';
+import Checkmark from '../assets/checkmark.svg';
 import { ToastExample } from '../components/sections/toast-example';
 import { Footer } from '../components/sections/footer';
 import { ToasterExample } from '../components/sections/toaster-example';
 import { SplitbeeCounter } from '../components/sections/splitbee-counter';
-import Link from 'next/link';
 
+import packageInfo from '../../package.json';
 const version = packageInfo.version;
 
 const Feature: React.FC<{ children?: React.ReactNode }> = ({ children }) => (

@@ -60,8 +60,11 @@ export const useToaster = (toastOptions?: DefaultToastOptions) => {
           defaultPosition?: ToastPosition;
         }
       ) => {
-        const { reverseOrder = false, gutter = 8, defaultPosition } =
-          opts || {};
+        const {
+          reverseOrder = false,
+          gutter = 8,
+          defaultPosition,
+        } = opts || {};
 
         const relevantToasts = toasts.filter(
           (t) =>

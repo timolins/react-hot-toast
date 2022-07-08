@@ -38,7 +38,6 @@
   "scripts": {
     "start": "tsup --watch",
     "build": "tsup",
-    "lint": "tsdx lint",
     "test": "echo \"No test specified\"",
     "setup": "pnpm i && cd site && pnpm i && cd .. && pnpm run link",
     "link": "pnpm link ./site/node_modules/react && pnpm link ./site/node_modules/react-dom",
@@ -48,7 +47,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "tsdx lint"
+      "pre-commit": "prettier src --ignore-unknown --write"
     }
   },
   "prettier": {
@@ -77,12 +76,12 @@
     }
   ],
   "devDependencies": {
-    "@size-limit/preset-small-lib": "^4.9.1",
+    "@size-limit/preset-small-lib": "^7.0.8",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "csstype": "^3.0.7",
-    "size-limit": "^4.9.1",
-    "tsdx": "^0.14.1",
+    "prettier": "^2.7.1",
+    "size-limit": "^7.0.8",
     "tsup": "^6.1.3",
     "typescript": "^4.7.4"
   },
