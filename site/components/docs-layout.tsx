@@ -7,6 +7,7 @@ import Logo from '../assets/logo-small.svg';
 
 const TableItem: React.FC<{
   href: string;
+  children?: React.ReactNode;
 }> = ({ children, href }) => (
   <Link href={href}>
     <a className="rounded px-3 py-1.5 transition-colors duration-200 relative block hover:text-toast-500 text-toast-700">
@@ -15,7 +16,9 @@ const TableItem: React.FC<{
   </Link>
 );
 
-const TableHeader: React.FC = ({ children }) => (
+const TableHeader: React.FC<{
+  children?: React.ReactNode;
+}> = ({ children }) => (
   <span className="px-3 mt-3 mb-1 text-sm font-semibold tracking-wide text-toast-900 uppercase">
     {children}
   </span>

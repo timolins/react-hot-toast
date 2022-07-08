@@ -1,6 +1,6 @@
 module.exports = {
   mode: 'jit',
-  purge: [
+  content: [
     './pages/*.tsx',
     './pages/**/*.tsx',
     './pages/*.mdx',
@@ -8,7 +8,6 @@ module.exports = {
     './components/*.tsx',
     './components/**/*.tsx',
   ],
-  darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
       boxShadow: {

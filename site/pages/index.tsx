@@ -21,7 +21,7 @@ import Link from 'next/link';
 
 const version = packageInfo.version;
 
-const Feature: React.FC = ({ children }) => (
+const Feature: React.FC<{ children?: React.ReactNode }> = ({ children }) => (
   <div className="flex gap-1 items-center">
     <Checkmark />
     <span className="font-bold">{children}</span>
