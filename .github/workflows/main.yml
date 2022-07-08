@@ -4,24 +4,17 @@ jobs:
   build:
     name: Build, lint, and test
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
-
-      - name: Use Node ${{ matrix.node }}
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@v2
+      - uses: pnpm/action-setup@v2.2.2
         with:
-          node-version: ${{ matrix.node }}
-
-      - name: Install deps and build (with cache)
-        uses: bahmutov/npm-install@v1
-
-      - name: Lint
-        run: yarn lint
-
-      # - name: Test
-      #   run: yarn test --ci --coverage --maxWorkers=2
-
-      - name: Build
-        run: yarn build
+          version: 7
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
+      - name: Build package
+        run: pnpm build

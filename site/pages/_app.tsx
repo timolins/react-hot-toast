@@ -13,22 +13,21 @@ const components = {
       <a {...props} />
     </Link>
   ),
-  inlineCode: (props) => (
-    <code
-      className="bg-toast-300 py-1 my-0.5 px-1 rounded bg-opacity-40"
-      {...props}
-    />
-  ),
-  code: (props) => (
-    <Code className={props.className} snippet={props.children} />
-  ),
+  code: (props) =>
+    props.className ? (
+      <Code className={props.className} snippet={props.children} />
+    ) : (
+      <code
+        className="bg-toast-300 py-1 my-0.5 px-1 rounded bg-opacity-40"
+        {...props}
+      />
+    ),
 };
 
 function MyApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <meta />
         {process.browser && (
           <script async data-no-cookie data-api="/_hive" src="/bee.js" />
         )}

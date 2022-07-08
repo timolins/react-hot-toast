@@ -4,7 +4,6 @@ import Arrow from '../../assets/arrow.svg';
 import { Code } from '../code';
 
 import { EmojiButton } from '../emoji-button';
-import { SplitbeeCounter } from './splitbee-counter';
 
 export const positions: Array<ToastPosition> = [
   'top-left',
