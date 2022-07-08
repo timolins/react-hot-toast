@@ -24,7 +24,7 @@ const TableHeader: React.FC<{
   </span>
 );
 
-export default function DocsLayout({ children, meta }) {
+export default function DocsLayout({ meta, children }) {
   return (
     <div className="bg-toast-50 bg-opacity-50 min-h-screen flex flex-col">
       <NextSeo

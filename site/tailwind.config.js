@@ -41,7 +41,6 @@ module.exports = {
         toast: {
           '50': '#FFF6DF',
           '100': '#fdf7f1',
-          // '200': '#FFE092',
           '200': '#F8EEDB',
           '300': '#ebbf99',
           '400': '#dea373',
@@ -67,6 +66,9 @@ module.exports = {
             },
             h4: {
               color: theme('colors.toast.900'),
+            },
+            a: {
+              color: theme('colors.toast.600'),
             },
             strong: {
               color: theme('colors.toast.900'),
