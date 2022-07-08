@@ -1,5 +1,4 @@
-const withTM = require('next-transpile-modules')(['react-hot-toast']);
-const remarkSlugs = require('rehype-slug');
+const remarkSlugs = import('rehype-slug');
 
 const withMDX = require('@next/mdx')({
   extension: /.mdx?$/,
@@ -31,7 +30,6 @@ module.exports = withPlugins(
     withMDX({
       pageExtensions: ['ts', 'tsx', 'md', 'mdx'],
     }),
-    withTM,
     withSvgr,
   ],
   {

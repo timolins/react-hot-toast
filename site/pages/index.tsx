@@ -11,13 +11,15 @@ import toast, {
 } from 'react-hot-toast';
 import React, { useState } from 'react';
 import clsx from 'clsx';
-import { version } from '../../package.json';
+import packageInfo from '../../package.json';
 
 import { ToastExample } from '../components/sections/toast-example';
 import { Footer } from '../components/sections/footer';
 import { ToasterExample } from '../components/sections/toaster-example';
 import { SplitbeeCounter } from '../components/sections/splitbee-counter';
 import Link from 'next/link';
+
+const version = packageInfo.version;
 
 const Feature: React.FC = ({ children }) => (
   <div className="flex gap-1 items-center">
