@@ -12,6 +12,7 @@
     "snackbar"
   ],
   "module": "dist/index.esm.js",
+  "typings": "dist/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
@@ -41,7 +42,7 @@
     "test": "echo \"No test specified\"",
     "setup": "pnpm i && cd site && pnpm i && cd .. && pnpm run link",
     "link": "pnpm link ./site/node_modules/react && pnpm link ./site/node_modules/react-dom",
-    "prepare": "tsdx build",
+    "prepare": "tsup",
     "size": "size-limit",
     "analyze": "size-limit --why"
   },
