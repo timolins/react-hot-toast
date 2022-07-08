@@ -54,6 +54,8 @@ module.exports = {
       typography: (theme) => ({
         DEFAULT: {
           css: {
+            '--tw-prose-bullets': theme('colors.toast[400]'),
+            '--tw-prose-links': theme('colors.toast[600]'),
             color: theme('colors.toast.900'),
             h1: {
               color: theme('colors.toast.900'),

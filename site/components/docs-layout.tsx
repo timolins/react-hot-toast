@@ -41,8 +41,8 @@ export default function DocsLayout({ meta, children }) {
         }}
       />
 
-      <div className="md:grid gap-8 flex-1 grid-cols-5 mx-auto px-2 max-w-4xl w-full">
-        <header className=" col-start-1 col-end-6 my-12 flex justify-between items-center">
+      <div className="flex-1 mx-auto px-2 max-w-4xl w-full">
+        <header className=" col-start-1 col-end-6 mt-12 mb-16 px-2 flex justify-between items-center">
           <Link href="/">
             <Logo
               className="cursor-pointer"
@@ -56,31 +56,34 @@ export default function DocsLayout({ meta, children }) {
             GitHub
           </a>
         </header>
-        <nav className="font-medium rounded-lg ">
-          <div className="flex flex-col mb-8 sticky top-0">
-            <TableHeader>Overview</TableHeader>
 
-            <TableItem href="/docs">Get Started</TableItem>
+        <div className="md:flex md:space-x-4">
+          <nav className="font-medium rounded-lg ">
+            <div className="flex flex-col mb-8 sticky top-0">
+              <TableHeader>Overview</TableHeader>
 
-            <TableHeader>API</TableHeader>
+              <TableItem href="/docs">Get Started</TableItem>
 
-            <TableItem href="/docs/toast">toast()</TableItem>
-            <TableItem href="/docs/toaster">{`Toaster`}</TableItem>
-            <TableItem href="/docs/toast-bar">{`ToastBar`}</TableItem>
-            <TableItem href="/docs/use-toaster">useToaster()</TableItem>
-            <TableItem href="/docs/use-toaster-store">
-              useToasterStore()
-            </TableItem>
-            <TableHeader>Guides</TableHeader>
-            <TableItem href="/docs/styling">Styling</TableItem>
-            <TableHeader>Releases</TableHeader>
-            <TableItem href="/docs/version-2">New in 2.0</TableItem>
-          </div>
-        </nav>
+              <TableHeader>API</TableHeader>
 
-        <main className="col-span-4 w-full prose prose-toast text-toast-900 flex-1">
-          {children}
-        </main>
+              <TableItem href="/docs/toast">toast()</TableItem>
+              <TableItem href="/docs/toaster">{`Toaster`}</TableItem>
+              <TableItem href="/docs/toast-bar">{`ToastBar`}</TableItem>
+              <TableItem href="/docs/use-toaster">useToaster()</TableItem>
+              <TableItem href="/docs/use-toaster-store">
+                useToasterStore()
+              </TableItem>
+              <TableHeader>Guides</TableHeader>
+              <TableItem href="/docs/styling">Styling</TableItem>
+              <TableHeader>Releases</TableHeader>
+              <TableItem href="/docs/version-2">New in 2.0</TableItem>
+            </div>
+          </nav>
+
+          <main className="col-span-4 w-full prose prose-toast text-toast-900 flex-1">
+            {children}
+          </main>
+        </div>
       </div>
       <Footer />
       <Toaster />
