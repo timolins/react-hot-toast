@@ -10,7 +10,7 @@ const commonConfig: Options = {
 export default defineConfig([
   {
     ...commonConfig,
-    entry: ['src/index.tsx'],
+    entry: ['src/index.ts'],
     outDir: 'dist',
   },
   {
