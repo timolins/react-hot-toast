@@ -11,7 +11,7 @@
     "toast",
     "snackbar"
   ],
-  "module": "dist/index.esm.js",
+  "main": "dist/index.esm.js",
   "typings": "dist/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
