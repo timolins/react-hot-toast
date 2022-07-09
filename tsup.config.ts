@@ -6,11 +6,6 @@ const commonConfig: Options = {
   format: ['esm', 'cjs'],
   sourcemap: true,
   clean: true,
-  outExtension({ format }) {
-    return {
-      js: format === 'cjs' ? '.js' : `.${format}.js`,
-    };
-  },
 };
 export default defineConfig([
   {
