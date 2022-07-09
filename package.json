@@ -29,8 +29,7 @@
   "files": [
     "headless",
     "dist",
-    "src",
-    "types"
+    "src"
   ],
   "engines": {
     "node": ">=10"
