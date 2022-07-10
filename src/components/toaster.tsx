@@ -22,7 +22,6 @@ const ToastWrapper = ({
   const ref = React.useCallback(
     (el: HTMLElement | null) => {
       if (el) {
-        console.log('Updating');
         onHeightGetter(id, () => el.getBoundingClientRect().height);
       }
     },
