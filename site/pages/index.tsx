@@ -8,8 +8,6 @@ import React, { useState } from 'react';
 import clsx from 'clsx';
 import Link from 'next/link';
 
-import test from 'react-hot-toast/headless';
-
 import Logo from '../assets/logo.svg';
 import Butter1 from '../assets/butter-1.svg';
 import Butter2 from '../assets/butter-2.svg';
