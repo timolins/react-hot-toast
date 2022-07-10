@@ -1,4 +1,5 @@
 import rehypeSlug from 'rehype-slug';
+import remarkGfm from 'remark-gfm';
 import nextMdx from '@next/mdx';
 import withPlugins from 'next-compose-plugins';
 
@@ -6,6 +7,7 @@ const withMDX = nextMdx({
   extension: /.mdx?$/,
   options: {
     rehypePlugins: [rehypeSlug],
+    remarkPlugins: [remarkGfm],
     providerImportSource: '@mdx-js/react',
   },
 });
