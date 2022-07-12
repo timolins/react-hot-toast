@@ -71,7 +71,7 @@ const getAnimationStyle = (
 
 export const ToastBar: React.FC<ToastBarProps> = React.memo(
   ({ toast, position, style, children }) => {
-    const animationStyle: React.CSSProperties = toast?.height
+    const animationStyle: React.CSSProperties = toast.height
       ? getAnimationStyle(
           toast.position || position || 'top-center',
           toast.visible
