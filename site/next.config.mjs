@@ -1,13 +1,16 @@
-const remarkSlugs = import('rehype-slug');
+import rehypeSlug from 'rehype-slug';
+import remarkGfm from 'remark-gfm';
+import nextMdx from '@next/mdx';
+import withPlugins from 'next-compose-plugins';
 
-const withMDX = require('@next/mdx')({
+const withMDX = nextMdx({
   extension: /.mdx?$/,
   options: {
-    rehypePlugins: [remarkSlugs],
+    rehypePlugins: [rehypeSlug],
+    remarkPlugins: [remarkGfm],
     providerImportSource: '@mdx-js/react',
   },
 });
-const withPlugins = require('next-compose-plugins');
 
 const withSvgr = (nextConfig = {}, nextComposePlugins = {}) => {
   return Object.assign({}, nextConfig, {
@@ -26,7 +29,7 @@ const withSvgr = (nextConfig = {}, nextComposePlugins = {}) => {
   });
 };
 
-module.exports = withPlugins(
+export default withPlugins(
   [
     withMDX({
       pageExtensions: ['ts', 'tsx', 'md', 'mdx'],
