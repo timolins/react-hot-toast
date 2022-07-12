@@ -2,7 +2,7 @@ name: CI
 on: [push]
 jobs:
   build:
-    name: Build, lint, and test
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

@@ -9,11 +9,24 @@ export default ({ children }) => <Layout meta={meta}>{children}</Layout>;
 
 # `useToaster()` API
 
-The `useToaster()` hook provides you a **headless system that will manage the notification state** for you. This includes keeping track of all toast created with [`toast()`](/docs/toast), auto-dimiss, pause on hover, and an unmount delay for exit animations.
+The `useToaster()` hook provides you a **headless system that will manage the notification state** for you. This makes building your own notification system much easier.
+
+It solves the following problems for you:
+
+- Built-in dispatch system with [`toast()`](/docs/toast)
+- Handlers to pause toasts on hover
+- Automatically remove expired toasts
+- Support for unmount animations. Removal is delayed by 1s, but sets `visible` on the toast to `false`.
+
+### Importing from headless
+
+You can import only the core of the library with `react-hot-toast/headless`. It won't include any styles, dependencies or custom components.
+
+```jsx
+import { useToaster } from 'react-hot-toast/headless';
+```
 
 Be aware: [react-hot-toast 2.0](/docs/version-2) adds support for **custom render functions**, an easier method to render custom notification components.
-
-Tree shaking is supported so that you won't ship any unused styles from the library.
 
 It's recommended to only have one `<Toaster/>` or `useToaster()` in your app at a time. If you need the current state without the handlers, you should use [`useToasterStore()`](/docs/use-toaster-store) instead.
 
@@ -26,6 +39,8 @@ Headless mode is perfectly suited to add notifications to your React Native app.
 ### Basic Example
 
 ```jsx
+import toast, { useToaster } from 'react-hot-toast/headless';
+
 const Notifications = () => {
   const { toasts, handlers } = useToaster();
   const { startPause, endPause } = handlers;
@@ -54,7 +69,7 @@ Instead of mapping over `visibleToasts` we'll use `toasts`, which includes all h
 You can play with the demo on [CodeSandbox](https://codesandbox.io/s/react-hot-toast-usetoaster-headless-example-zw7op?file=/src/App.js).
 
 ```jsx
-import { useToaster } from 'react-hot-toast';
+import { useToaster } from 'react-hot-toast/headless';
 
 const Notifications = () => {
   const { toasts, handlers } = useToaster();

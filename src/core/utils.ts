@@ -5,7 +5,6 @@ export const genId = (() => {
   };
 })();
 
-
 export const prefersReducedMotion = (() => {
   // Cache result
   let shouldReduceMotion: boolean | undefined = undefined;
