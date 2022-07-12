@@ -3,7 +3,7 @@
   "include": ["src", "types", "test"],
   "compilerOptions": {
     "module": "esnext",
-    "types": ["node", "jest"],
+    "types": ["jest"],
     "lib": ["dom", "esnext"],
     // output .d.ts declaration files for consumers
     "declaration": true,
