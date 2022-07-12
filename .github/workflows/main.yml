@@ -2,7 +2,7 @@ name: CI
 on: [push]
 jobs:
   build:
-    name: Build
+    name: Build & test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -19,4 +19,4 @@ jobs:
       - name: Build package
         run: pnpm build
       - name: Test
-        run: pnpm test --ci --coverage --maxWorkers=2
+        run: pnpm run test --ci --coverage --maxWorkers=2
