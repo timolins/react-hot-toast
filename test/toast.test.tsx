@@ -6,34 +6,15 @@ import {
   waitFor,
   fireEvent,
 } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
-import MatchMediaMock from 'jest-matchmedia-mock';
 
 import toast, { Toaster } from '../src';
 import { TOAST_EXPIRE_DISMISS_DELAY } from '../src/core/store';
 
-let matchMedia: MatchMediaMock;
-
-beforeAll(() => {
-  matchMedia = new MatchMediaMock();
-  // matchMedia.useMediaQuery('(prefers-reduced-motion: no-preference)');
-});
-
 beforeEach(() => {
+  // Tests should run in serial for improved isolation
+  // To prevent collision with global state, reset all toasts for each test
+  toast.remove();
   jest.useFakeTimers();
-  Element.prototype.getBoundingClientRect = jest.fn(() => {
-    return {
-      width: 120,
-      height: 120,
-      x: 0,
-      y: 0,
-      top: 0,
-      left: 0,
-      bottom: 0,
-      right: 0,
-      toJSON: () => '{}',
-    };
-  });
 });
 
 afterEach((done) => {
@@ -44,9 +25,7 @@ afterEach((done) => {
   });
 });
 
-afterAll(() => {
-  matchMedia.destroy();
-});
+const TOAST_DURATION = 1000;
 
 test('close notification', async () => {
   render(
@@ -129,21 +108,19 @@ test('promise toast', async () => {
     jest.advanceTimersByTime(WAIT_DELAY);
   });
 
-  expect(screen.queryByText(/Success/i)).not.toBeInTheDocument();
+  await waitFor(() => {
+    expect(screen.queryByText(/success/i)).toBeInTheDocument();
+  });
 });
 
 test('error toast', async () => {
-  // matchMedia.useMediaQuery('(prefers-reduced-motion: no-preference)');
-
-  const DURATION = 1000;
-
   render(
     <>
       <button
         type="button"
         onClick={() => {
           toast.error('An error happened', {
-            duration: DURATION,
+            duration: TOAST_DURATION,
           });
         }}
       >
@@ -162,7 +139,7 @@ test('error toast', async () => {
   expect(screen.queryByText(/error/i)).toBeInTheDocument();
 
   act(() => {
-    jest.advanceTimersByTime(DURATION + TOAST_EXPIRE_DISMISS_DELAY);
+    jest.advanceTimersByTime(TOAST_DURATION + TOAST_EXPIRE_DISMISS_DELAY);
   });
 
   expect(screen.queryByText(/error/i)).not.toBeInTheDocument();
