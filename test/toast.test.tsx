@@ -7,8 +7,8 @@ import {
   fireEvent,
 } from '@testing-library/react';
 
-import toast, { Toaster } from '../src';
-import { TOAST_EXPIRE_DISMISS_DELAY } from '../src/core/store';
+import toast, { resolveValue, Toaster, ToastIcon } from '../src';
+import { TOAST_EXPIRE_DISMISS_DELAY, defaultTimeouts } from '../src/core/store';
 
 beforeEach(() => {
   // Tests should run in serial for improved isolation
@@ -24,6 +24,12 @@ afterEach((done) => {
     done();
   });
 });
+
+const waitTime = (time: number) => {
+  act(() => {
+    jest.advanceTimersByTime(time);
+  });
+};
 
 const TOAST_DURATION = 1000;
 
@@ -64,9 +70,7 @@ test('close notification', async () => {
 
   fireEvent.click(await screen.findByRole('button', { name: /close/i }));
 
-  act(() => {
-    jest.advanceTimersByTime(TOAST_EXPIRE_DISMISS_DELAY);
-  });
+  waitTime(TOAST_EXPIRE_DISMISS_DELAY);
 
   expect(screen.queryByText(/example/i)).not.toBeInTheDocument();
 });
@@ -113,7 +117,7 @@ test('promise toast', async () => {
   });
 });
 
-test('error toast', async () => {
+test('error toast with custom duration', async () => {
   render(
     <>
       <button
@@ -138,9 +142,94 @@ test('error toast', async () => {
 
   expect(screen.queryByText(/error/i)).toBeInTheDocument();
 
-  act(() => {
-    jest.advanceTimersByTime(TOAST_DURATION + TOAST_EXPIRE_DISMISS_DELAY);
-  });
+  waitTime(TOAST_DURATION + TOAST_EXPIRE_DISMISS_DELAY);
 
   expect(screen.queryByText(/error/i)).not.toBeInTheDocument();
+});
+
+test('different toasts types with dismiss', async () => {
+  render(
+    <>
+      <Toaster />
+    </>
+  );
+
+  act(() => {
+    toast.success('Success!');
+  });
+
+  act(() => {
+    toast.error('Error!');
+  });
+
+  act(() => {
+    toast('Emoji Icon', {
+      icon: '✅',
+    });
+  });
+
+  let loadingToastId: string;
+  act(() => {
+    loadingToastId = toast.loading('Loading!');
+  });
+
+  expect(screen.queryByText(/error/i)).toBeInTheDocument();
+  expect(screen.queryByText(/success/i)).toBeInTheDocument();
+  expect(screen.queryByText(/loading/i)).toBeInTheDocument();
+  expect(screen.queryByText('✅')).toBeInTheDocument();
+
+  const successDismissTime =
+    defaultTimeouts.success + TOAST_EXPIRE_DISMISS_DELAY;
+
+  waitTime(successDismissTime);
+
+  expect(screen.queryByText(/success/i)).not.toBeInTheDocument();
+  expect(screen.queryByText(/error/i)).toBeInTheDocument();
+
+  waitTime(
+    defaultTimeouts.error + TOAST_EXPIRE_DISMISS_DELAY - successDismissTime
+  );
+
+  expect(screen.queryByText(/error/i)).not.toBeInTheDocument();
+
+  act(() => {
+    toast.dismiss(loadingToastId);
+  });
+
+  waitTime(TOAST_EXPIRE_DISMISS_DELAY);
+
+  expect(screen.queryByText(/loading/i)).not.toBeInTheDocument();
+});
+
+test('custom toaster renderer', async () => {
+  render(
+    <>
+      <Toaster>
+        {(t) => (
+          <div className="custom-toast">
+            <ToastIcon toast={t} />
+            {resolveValue(t.message, t)}
+          </div>
+        )}
+      </Toaster>
+    </>
+  );
+
+  act(() => {
+    toast.success('Success!');
+  });
+
+  expect(screen.queryByText(/success/i)).toHaveClass('custom-toast');
+
+  act(() => {
+    toast(<b>Bold</b>);
+  });
+
+  expect(screen.queryByText(/bold/i)).toBeInTheDocument();
+
+  act(() => {
+    toast.custom('Custom');
+  });
+
+  expect(screen.queryByText(/custom/i)).not.toHaveClass('custom-toast');
 });
