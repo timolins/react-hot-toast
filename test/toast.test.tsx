@@ -108,12 +108,50 @@ test('promise toast', async () => {
 
   expect(screen.queryByText(/loading/i)).toBeInTheDocument();
 
-  act(() => {
-    jest.advanceTimersByTime(WAIT_DELAY);
-  });
+  waitTime(WAIT_DELAY);
 
   await waitFor(() => {
     expect(screen.queryByText(/success/i)).toBeInTheDocument();
+  });
+});
+
+test('promise toast error', async () => {
+  const WAIT_DELAY = 1000;
+
+  render(
+    <>
+      <button
+        type="button"
+        onClick={() => {
+          const sleep = new Promise((_, rej) => {
+            setTimeout(rej, WAIT_DELAY);
+          });
+
+          toast.promise(sleep, {
+            loading: 'Loading...',
+            success: 'Success!',
+            error: 'Error!',
+          });
+        }}
+      >
+        Notify!
+      </button>
+      <Toaster />
+    </>
+  );
+
+  act(() => {
+    fireEvent.click(screen.getByRole('button', { name: /Notify/i }));
+  });
+
+  await screen.findByText(/loading/i);
+
+  expect(screen.queryByText(/loading/i)).toBeInTheDocument();
+
+  waitTime(WAIT_DELAY);
+
+  await waitFor(() => {
+    expect(screen.queryByText(/error/i)).toBeInTheDocument();
   });
 });
 
@@ -168,6 +206,12 @@ test('different toasts types with dismiss', async () => {
     });
   });
 
+  act(() => {
+    toast('Custom Icon', {
+      icon: <span>ICON</span>,
+    });
+  });
+
   let loadingToastId: string;
   act(() => {
     loadingToastId = toast.loading('Loading!');
@@ -177,6 +221,7 @@ test('different toasts types with dismiss', async () => {
   expect(screen.queryByText(/success/i)).toBeInTheDocument();
   expect(screen.queryByText(/loading/i)).toBeInTheDocument();
   expect(screen.queryByText('✅')).toBeInTheDocument();
+  expect(screen.queryByText('ICON')).toBeInTheDocument();
 
   const successDismissTime =
     defaultTimeouts.success + TOAST_EXPIRE_DISMISS_DELAY;
@@ -232,4 +277,43 @@ test('custom toaster renderer', async () => {
   });
 
   expect(screen.queryByText(/custom/i)).not.toHaveClass('custom-toast');
+});
+
+test('pause toast', async () => {
+  render(
+    <>
+      <Toaster>
+        {(t) => (
+          <div className="custom-toast">
+            <ToastIcon toast={t} />
+            {resolveValue(t.message, t)}
+          </div>
+        )}
+      </Toaster>
+    </>
+  );
+
+  act(() => {
+    toast.success('Hover me!', {
+      duration: 1000,
+    });
+  });
+
+  waitTime(500);
+
+  const toastElement = screen.getByText(/hover me/i);
+
+  expect(toastElement).toBeInTheDocument();
+
+  fireEvent.mouseEnter(toastElement);
+
+  waitTime(10000);
+
+  expect(toastElement).toBeInTheDocument();
+
+  fireEvent.mouseLeave(toastElement);
+
+  waitTime(2000);
+
+  expect(toastElement).not.toBeInTheDocument();
 });
