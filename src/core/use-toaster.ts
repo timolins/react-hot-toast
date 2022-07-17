@@ -3,14 +3,10 @@ import { dispatch, ActionType, useStore } from './store';
 import { toast } from './toast';
 import { DefaultToastOptions, Toast, ToastPosition } from './types';
 
-// Prevent useLayoutEffect warning from being used on the the server
-const useIsomorphicLayoutEffect =
-  typeof window !== 'undefined' ? useLayoutEffect : useEffect;
-
-export const setHeightGetter = (toastId: string, getHeight: () => number) => {
+export const updateHeight = (toastId: string, height: number) => {
   dispatch({
     type: ActionType.UPDATE_TOAST,
-    toast: { id: toastId, getHeight },
+    toast: { id: toastId, height },
   });
 };
 const startPause = () => {
@@ -88,27 +84,10 @@ export const useToaster = (toastOptions?: DefaultToastOptions) => {
     [toasts]
   );
 
-  useIsomorphicLayoutEffect(() => {
-    for (const t of toasts) {
-      if (!t.visible || !t.getHeight) {
-        return;
-      }
-
-      const height = t.getHeight();
-
-      if (height !== t.height) {
-        dispatch({
-          type: ActionType.UPDATE_TOAST,
-          toast: { id: t.id, height },
-        });
-      }
-    }
-  }, [toasts]);
-
   return {
     toasts,
     handlers: {
-      setHeightGetter,
+      updateHeight,
       startPause,
       endPause,
       calculateOffset,

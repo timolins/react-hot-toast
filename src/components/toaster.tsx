@@ -16,16 +16,25 @@ const ToastWrapper = ({
   id,
   className,
   style,
-  onHeightGetter,
+  onHeightUpdate,
   children,
 }: ToastWrapperProps) => {
   const ref = React.useCallback(
     (el: HTMLElement | null) => {
       if (el) {
-        onHeightGetter(id, () => el.getBoundingClientRect().height);
+        const updateHeight = () => {
+          const height = el.getBoundingClientRect().height;
+          onHeightUpdate(id, height);
+        };
+        updateHeight();
+        new MutationObserver(updateHeight).observe(el, {
+          subtree: true,
+          childList: true,
+          characterData: true,
+        });
       }
     },
-    [onHeightGetter]
+    [id, onHeightUpdate]
   );
 
   return (
@@ -113,7 +122,7 @@ export const Toaster: React.FC<ToasterProps> = ({
           <ToastWrapper
             id={t.id}
             key={t.id}
-            onHeightGetter={handlers.setHeightGetter}
+            onHeightUpdate={handlers.updateHeight}
             className={t.visible ? activeClass : ''}
             style={positionStyle}
           >

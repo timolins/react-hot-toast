@@ -52,7 +52,6 @@ export interface Toast {
   createdAt: number;
   visible: boolean;
   height?: number;
-  getHeight?: () => number;
 }
 
 export type ToastOptions = Partial<
@@ -87,6 +86,6 @@ export interface ToastWrapperProps {
   id: string;
   className?: string;
   style?: React.CSSProperties;
-  onHeightGetter: (id: string, getHeight: () => number) => void;
+  onHeightUpdate: (id: string, height: number) => void;
   children?: React.ReactNode;
 }
