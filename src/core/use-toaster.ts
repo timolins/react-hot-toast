@@ -1,9 +1,9 @@
-import { useEffect, useLayoutEffect, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 import { dispatch, ActionType, useStore } from './store';
 import { toast } from './toast';
 import { DefaultToastOptions, Toast, ToastPosition } from './types';
 
-export const updateHeight = (toastId: string, height: number) => {
+const updateHeight = (toastId: string, height: number) => {
   dispatch({
     type: ActionType.UPDATE_TOAST,
     toast: { id: toastId, height },
