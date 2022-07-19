@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { styled, keyframes } from 'goober';
+import { css, styled, keyframes, CSSAttribute } from 'goober';
 
 import { Toast, ToastPosition, resolveValue, Renderable } from '../core/types';
 import { ToastIcon } from './toast-icon';
@@ -53,8 +53,13 @@ interface ToastBarProps {
 
 const getAnimationStyle = (
   position: ToastPosition,
-  visible: boolean
+  visible: boolean,
+  height?: number
 ): React.CSSProperties => {
+  if (!height) {
+    return { opacity: 0 };
+  }
+
   const top = position.includes('top');
   const factor = top ? 1 : -1;
 
@@ -71,12 +76,17 @@ const getAnimationStyle = (
 
 export const ToastBar: React.FC<ToastBarProps> = React.memo(
   ({ toast, position, style, children }) => {
-    const animationStyle: React.CSSProperties = toast?.height
-      ? getAnimationStyle(
-          toast.position || position || 'top-center',
-          toast.visible
-        )
-      : { opacity: 0 };
+    const animationStyle = getAnimationStyle(
+      toast.position || position || 'top-center',
+      toast.visible,
+      toast.height
+    );
+
+    const toasterClass = css({
+      ...animationStyle as CSSAttribute,
+      ...style as CSSAttribute,
+      ...toast.style as CSSAttribute,
+    });
 
     const icon = <ToastIcon toast={toast} />;
     const message = (
@@ -87,12 +97,7 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
 
     return (
       <ToastBarBase
-        className={toast.className}
-        style={{
-          ...animationStyle,
-          ...style,
-          ...toast.style,
-        }}
+        className={toast.className ? `${toast.className} ${toasterClass}` : toasterClass}
       >
         {typeof children === 'function' ? (
           children({
