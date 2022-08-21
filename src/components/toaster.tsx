@@ -1,13 +1,49 @@
 import goober, { css, CSSAttribute, setup } from 'goober';
 import * as React from 'react';
-import { resolveValue, ToasterProps, ToastPosition } from '../core/types';
+import {
+  resolveValue,
+  ToasterProps,
+  ToastPosition,
+  ToastWrapperProps,
+} from '../core/types';
 import { useToaster } from '../core/use-toaster';
-import { createRectRef, prefersReducedMotion } from '../core/utils';
+import { classNames, prefersReducedMotion } from '../core/utils';
 import { ToastBar } from './toast-bar';
 
 setup(React.createElement);
 
-const getPositionStyle = (
+const ToastWrapper = ({
+  id,
+  className,
+  onHeightUpdate,
+  children,
+}: ToastWrapperProps) => {
+  const ref = React.useCallback(
+    (el: HTMLElement | null) => {
+      if (el) {
+        const updateHeight = () => {
+          const height = el.getBoundingClientRect().height;
+          onHeightUpdate(id, height);
+        };
+        updateHeight();
+        new MutationObserver(updateHeight).observe(el, {
+          subtree: true,
+          childList: true,
+          characterData: true,
+        });
+      }
+    },
+    [id, onHeightUpdate]
+  );
+
+  return (
+    <div ref={ref} className={className}>
+      {children}
+    </div>
+  );
+};
+
+const getPositionClassName = (
   position: ToastPosition,
   offset: number
 ): string => {
@@ -23,7 +59,7 @@ const getPositionStyle = (
       }
     : {};
 
-  const ovenRack = css({
+  return css({
     left: 0,
     right: 0,
     display: 'flex',
@@ -35,8 +71,6 @@ const getPositionStyle = (
     ...verticalStyle,
     ...horizontalStyle,
   });
-
-  return ovenRack;
 };
 
 const activeClass = css`
@@ -46,7 +80,7 @@ const activeClass = css`
   }
 `;
 
-const DEFAULT_OFFSET = '16';
+const DEFAULT_OFFSET = '16px';
 
 export const Toaster: React.FC<ToasterProps> = ({
   reverseOrder,
@@ -59,7 +93,7 @@ export const Toaster: React.FC<ToasterProps> = ({
 }) => {
   const { toasts, handlers } = useToaster(toastOptions);
 
-  const toasterOven = css({
+  const toasterClassName = css({
     position: 'fixed',
     zIndex: 9999,
     top: DEFAULT_OFFSET,
@@ -67,12 +101,12 @@ export const Toaster: React.FC<ToasterProps> = ({
     right: DEFAULT_OFFSET,
     bottom: DEFAULT_OFFSET,
     pointerEvents: 'none',
-    ...(containerStyle as goober.CSSAttribute)
+    ...(containerStyle as goober.CSSAttribute),
   });
 
   return (
     <div
-      className={containerClassName ? `${containerClassName} ${toasterOven}` : toasterOven}
+      className={classNames(containerClassName, toasterClassName)}
       onMouseEnter={handlers.startPause}
       onMouseLeave={handlers.endPause}
     >
@@ -83,19 +117,14 @@ export const Toaster: React.FC<ToasterProps> = ({
           gutter,
           defaultPosition: position,
         });
-        const toasterClass = getPositionStyle(toastPosition, offset);
-
-        const ref = t.height
-          ? undefined
-          : createRectRef((rect) => {
-              handlers.updateHeight(t.id, rect.height);
-            });
+        const positionClassName = getPositionClassName(toastPosition, offset);
 
         return (
-          <div
-            ref={ref}
-            className={t.visible ? `${activeClass} ${toasterClass}` : toasterClass}
+          <ToastWrapper
+            id={t.id}
             key={t.id}
+            onHeightUpdate={handlers.updateHeight}
+            className={classNames(t.visible && activeClass, positionClassName)}
           >
             {t.type === 'custom' ? (
               resolveValue(t.message, t)
@@ -104,7 +133,7 @@ export const Toaster: React.FC<ToasterProps> = ({
             ) : (
               <ToastBar toast={t} position={toastPosition} />
             )}
-          </div>
+          </ToastWrapper>
         );
       })}
     </div>

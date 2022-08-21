@@ -18,7 +18,7 @@ const exitAnimation = (factor: number) => `
 const fadeInAnimation = `0%{opacity:0;} 100%{opacity:1;}`;
 const fadeOutAnimation = `0%{opacity:1;} 100%{opacity:0;}`;
 
-const ToastBarBase = styled('div', React.forwardRef)`
+const ToastBarBase = styled('div')`
   display: flex;
   align-items: center;
   background: #fff;
@@ -83,9 +83,9 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
     );
 
     const toasterClass = css({
-      ...animationStyle as CSSAttribute,
-      ...style as CSSAttribute,
-      ...toast.style as CSSAttribute,
+      ...(animationStyle as CSSAttribute),
+      ...(style as CSSAttribute),
+      ...(toast.style as CSSAttribute),
     });
 
     const icon = <ToastIcon toast={toast} />;
@@ -97,7 +97,9 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
 
     return (
       <ToastBarBase
-        className={toast.className ? `${toast.className} ${toasterClass}` : toasterClass}
+        className={
+          toast.className ? `${toast.className} ${toasterClass}` : toasterClass
+        }
       >
         {typeof children === 'function' ? (
           children({
