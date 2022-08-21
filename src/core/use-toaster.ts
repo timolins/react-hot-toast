@@ -1,7 +1,20 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useCallback } from 'react';
 import { dispatch, ActionType, useStore } from './store';
 import { toast } from './toast';
 import { DefaultToastOptions, Toast, ToastPosition } from './types';
+
+const updateHeight = (toastId: string, height: number) => {
+  dispatch({
+    type: ActionType.UPDATE_TOAST,
+    toast: { id: toastId, height },
+  });
+};
+const startPause = () => {
+  dispatch({
+    type: ActionType.START_PAUSE,
+    time: Date.now(),
+  });
+};
 
 export const useToaster = (toastOptions?: DefaultToastOptions) => {
   const { toasts, pausedAt } = useStore(toastOptions);
@@ -34,61 +47,50 @@ export const useToaster = (toastOptions?: DefaultToastOptions) => {
     };
   }, [toasts, pausedAt]);
 
-  const handlers = useMemo(
-    () => ({
-      startPause: () => {
-        dispatch({
-          type: ActionType.START_PAUSE,
-          time: Date.now(),
-        });
-      },
-      endPause: () => {
-        if (pausedAt) {
-          dispatch({ type: ActionType.END_PAUSE, time: Date.now() });
-        }
-      },
-      updateHeight: (toastId: string, height: number) =>
-        dispatch({
-          type: ActionType.UPDATE_TOAST,
-          toast: { id: toastId, height },
-        }),
-      calculateOffset: (
-        toast: Toast,
-        opts?: {
-          reverseOrder?: boolean;
-          gutter?: number;
-          defaultPosition?: ToastPosition;
-        }
-      ) => {
-        const {
-          reverseOrder = false,
-          gutter = 8,
-          defaultPosition,
-        } = opts || {};
+  const endPause = useCallback(() => {
+    if (pausedAt) {
+      dispatch({ type: ActionType.END_PAUSE, time: Date.now() });
+    }
+  }, [pausedAt]);
 
-        const relevantToasts = toasts.filter(
-          (t) =>
-            (t.position || defaultPosition) ===
-              (toast.position || defaultPosition) && t.height
-        );
-        const toastIndex = relevantToasts.findIndex((t) => t.id === toast.id);
-        const toastsBefore = relevantToasts.filter(
-          (toast, i) => i < toastIndex && toast.visible
-        ).length;
+  const calculateOffset = useCallback(
+    (
+      toast: Toast,
+      opts?: {
+        reverseOrder?: boolean;
+        gutter?: number;
+        defaultPosition?: ToastPosition;
+      }
+    ) => {
+      const { reverseOrder = false, gutter = 8, defaultPosition } = opts || {};
 
-        const offset = relevantToasts
-          .filter((t) => t.visible)
-          .slice(...(reverseOrder ? [toastsBefore + 1] : [0, toastsBefore]))
-          .reduce((acc, t) => acc + (t.height || 0) + gutter, 0);
+      const relevantToasts = toasts.filter(
+        (t) =>
+          (t.position || defaultPosition) ===
+            (toast.position || defaultPosition) && t.height
+      );
+      const toastIndex = relevantToasts.findIndex((t) => t.id === toast.id);
+      const toastsBefore = relevantToasts.filter(
+        (toast, i) => i < toastIndex && toast.visible
+      ).length;
 
-        return offset;
-      },
-    }),
-    [toasts, pausedAt]
+      const offset = relevantToasts
+        .filter((t) => t.visible)
+        .slice(...(reverseOrder ? [toastsBefore + 1] : [0, toastsBefore]))
+        .reduce((acc, t) => acc + (t.height || 0) + gutter, 0);
+
+      return offset;
+    },
+    [toasts]
   );
 
   return {
     toasts,
-    handlers,
+    handlers: {
+      updateHeight,
+      startPause,
+      endPause,
+      calculateOffset,
+    },
   };
 };
