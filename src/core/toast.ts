@@ -33,14 +33,13 @@ const createToast = (
   canDismiss: opts?.canDismiss,
 });
 
-const createHandler = (type?: ToastType): ToastHandler => (
-  message,
-  options
-) => {
-  const toast = createToast(message, type, options);
-  dispatch({ type: ActionType.UPSERT_TOAST, toast });
-  return toast.id;
-};
+const createHandler =
+  (type?: ToastType): ToastHandler =>
+  (message, options) => {
+    const toast = createToast(message, type, options);
+    dispatch({ type: ActionType.UPSERT_TOAST, toast });
+    return toast.id;
+  };
 
 const toast = (message: Message, opts?: ToastOptions) =>
   createHandler('blank')(message, opts);

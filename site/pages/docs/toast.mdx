@@ -151,7 +151,7 @@ toast.dismiss(toastId);
 
 You can dismiss all toasts at once, by leaving out the `toastId`.
 
-#### Dismiss all toasts at one
+#### Dismiss all toasts at once
 
 ```js
 toast.dismiss();
@@ -159,7 +159,7 @@ toast.dismiss();
 
 To remove toasts instantly without any animations, use `toast.remove`.
 
-#### Remove toasts instanstly
+#### Remove toasts instantly
 
 ```js
 toast.remove(toastId);
@@ -224,4 +224,4 @@ toast(
 );
 ```
 
-export default ({ children, meta }) => <Layout meta={meta}>{children}</Layout>;
+export default ({ children }) => <Layout meta={meta}>{children}</Layout>;

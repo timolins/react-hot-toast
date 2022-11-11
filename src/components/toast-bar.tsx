@@ -19,7 +19,7 @@ const exitAnimation = (factor: number) => `
 const fadeInAnimation = `0%{opacity:0;} 100%{opacity:1;}`;
 const fadeOutAnimation = `0%{opacity:1;} 100%{opacity:0;}`;
 
-const ToastBarBase = styled('div', React.forwardRef)`
+const ToastBarBase = styled('div')`
   display: flex;
   align-items: center;
   background: #fff;
@@ -39,6 +39,7 @@ const Message = styled('div')`
   margin: 4px 10px;
   color: inherit;
   flex: 1 1 auto;
+  white-space: pre-line;
 `;
 
 interface ToastBarProps {
@@ -72,7 +73,8 @@ const getAnimationStyle = (
 
 export const ToastBar: React.FC<ToastBarProps> = React.memo(
   ({ toast, position, style, children, onDismiss }) => {
-    const animationStyle: React.CSSProperties = toast?.height
+    const animationStyle: React.CSSProperties = toast.height
+
       ? getAnimationStyle(
           toast.position || position || 'top-center',
           toast.visible
