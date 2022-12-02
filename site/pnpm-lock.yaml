@@ -1,4 +1,4 @@
-lockfileVersion: 5.4
+lockfileVersion: 5.3
 
 specifiers:
   '@mdx-js/loader': ^2.1.2
@@ -10,6 +10,7 @@ specifiers:
   '@types/prismjs': ^1.26.0
   '@types/react': ^18.0.14
   '@types/react-dom': ^18.0.5
+  '@vercel/analytics': ^0.1.5
   autoprefixer: ^10.4.7
   clsx: ^1.1.1
   next: ^12.2.1
@@ -28,12 +29,13 @@ specifiers:
 dependencies:
   '@mdx-js/loader': 2.1.2
   '@mdx-js/react': 2.1.2_react@18.2.0
-  '@next/mdx': 12.2.1_todqhrvd7cvbb36hzi2r6xttgq
+  '@next/mdx': 12.2.1_9b8703c6a3f8aa10efc7ca351f5e7334
   '@svgr/webpack': 6.2.1
   '@types/prismjs': 1.26.0
+  '@vercel/analytics': 0.1.5_react@18.2.0
   clsx: 1.2.1
-  next: 12.2.1_biqbaboplfbrettd7655fr4n2y
-  next-seo: 5.4.0_mhihrgpmhoktude7gn4rdcr2ka
+  next: 12.2.1_react-dom@18.2.0+react@18.2.0
+  next-seo: 5.4.0_61d07899ec3b953a0c9f3379118a3a50
   postcss: 8.4.14
   prism-react-renderer: 1.3.5_react@18.2.0
   react: 18.2.0
@@ -1402,7 +1404,7 @@ packages:
     resolution: {integrity: sha512-lz3TJKIvbdGRUsUr/+h3vy7XvBNGTGzHwhurk5AtqrABj4Zyo70xbshcI7YQTNUK4x9OA/E+SOcXvVx0DHmFRw==}
     dev: false
 
-  /@next/mdx/12.2.1_todqhrvd7cvbb36hzi2r6xttgq:
+  /@next/mdx/12.2.1_9b8703c6a3f8aa10efc7ca351f5e7334:
     resolution: {integrity: sha512-2T/EZbyX/r9vhrgDnvjybW1xbdIgOcXaiaVughkjP77HUueMSQJpvrgrJrGudcBsPoU15obX3hDMVhejSPRrcg==}
     peerDependencies:
       '@mdx-js/loader': '>=0.15.0'
@@ -1803,6 +1805,14 @@ packages:
 
   /@types/unist/2.0.6:
     resolution: {integrity: sha512-PBjIUxZHOuj0R15/xuwJYjFi+KZdNFrehocChv4g5hu6aFroHue8m0lBP0POdK2nKzbw0cgV1mws8+V/JAcEkQ==}
+
+  /@vercel/analytics/0.1.5_react@18.2.0:
+    resolution: {integrity: sha512-/k9N8Ea3Yc5A52GlkjzUEbi2vE/izClrOf++ryBkxEfrZM/OZwtHkdNw/QExZ1h/B67RCZLK7bCOnKKrhG7gTg==}
+    peerDependencies:
+      react: ^16.8||^17||^18
+    dependencies:
+      react: 18.2.0
+    dev: false
 
   /acorn-jsx/5.3.2_acorn@8.7.1:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
@@ -3070,19 +3080,19 @@ packages:
     resolution: {integrity: sha512-OjJ+fV15FXO2uQXQagLD4C0abYErBjyjE0I0FHpOEIB8upw0hg1ldFP6cqHTJBH1cZqy96OeR3u1dJ+Ez2D4Bg==}
     dev: true
 
-  /next-seo/5.4.0_mhihrgpmhoktude7gn4rdcr2ka:
+  /next-seo/5.4.0_61d07899ec3b953a0c9f3379118a3a50:
     resolution: {integrity: sha512-R9DhajPwJnR/lsF2hZ8cN8uqr5CVITsRrCG1AF5+ufcaybKYOvnH8sH9MaH4/hpkps3PQ9H71S7J7SPYixAYzQ==}
     peerDependencies:
       next: ^8.1.1-canary.54 || >=9.0.0
       react: '>=16.0.0'
       react-dom: '>=16.0.0'
     dependencies:
-      next: 12.2.1_biqbaboplfbrettd7655fr4n2y
+      next: 12.2.1_react-dom@18.2.0+react@18.2.0
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     dev: false
 
-  /next/12.2.1_biqbaboplfbrettd7655fr4n2y:
+  /next/12.2.1_react-dom@18.2.0+react@18.2.0:
     resolution: {integrity: sha512-090KB5CZRlLG/GWxb8tA1ZFwqL8OfpUtH4mXA7POuisa6NL5ihiAZhfk5nRBdPHvkXuSt0n7zQaVym6SrT3Wiw==}
     engines: {node: '>=12.22.0'}
     hasBin: true

@@ -3,6 +3,8 @@ import '../styles/main.css';
 import * as React from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
+import { Analytics } from '@vercel/analytics/react';
+
 
 import { MDXProvider } from '@mdx-js/react';
 import { Code } from '../components/code';
@@ -35,6 +37,7 @@ function MyApp({ Component, pageProps }) {
       </Head>
       <MDXProvider components={components}>
         <Component {...pageProps} />
+        <Analytics />
       </MDXProvider>
     </>
   );
