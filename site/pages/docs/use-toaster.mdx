@@ -92,7 +92,7 @@ const Notifications = () => {
         });
 
         const ref = (el) => {
-          if (el && !toast.height) {
+          if (el && typeof toast.height !== "number") {
             const height = el.getBoundingClientRect().height;
             updateHeight(toast.id, height);
           }
