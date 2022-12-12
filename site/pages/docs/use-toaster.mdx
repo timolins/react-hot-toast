@@ -52,7 +52,7 @@ const Notifications = () => {
         .map((toast) => (
           <div key={toast.id} {...toast.ariaProps}>
             {toast.message}
-            <button onClick={() => dismiss(toast.id)}x</button>
+            <button onClick={() => dismiss(toast.id)}>x</button>
           </div>
         ))}
     </div>
