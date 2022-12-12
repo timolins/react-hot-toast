@@ -16,6 +16,8 @@ const startPause = () => {
   });
 };
 
+const dismiss = (toastId: string) => toast.dismiss(toastId);
+
 export const useToaster = (toastOptions?: DefaultToastOptions) => {
   const { toasts, pausedAt } = useStore(toastOptions);
 
@@ -91,6 +93,7 @@ export const useToaster = (toastOptions?: DefaultToastOptions) => {
       startPause,
       endPause,
       calculateOffset,
+      dismiss,
     },
   };
 };

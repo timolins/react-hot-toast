@@ -14,7 +14,7 @@ The `useToaster()` hook provides you a **headless system that will manage the no
 It solves the following problems for you:
 
 - Built-in dispatch system with [`toast()`](/docs/toast)
-- Handlers to pause toasts on hover
+- Handlers to pause toasts on hover and dismiss them
 - Automatically remove expired toasts
 - Support for unmount animations. Removal is delayed by 1s, but sets `visible` on the toast to `false`.
 
@@ -43,7 +43,7 @@ import toast, { useToaster } from 'react-hot-toast/headless';
 
 const Notifications = () => {
   const { toasts, handlers } = useToaster();
-  const { startPause, endPause } = handlers;
+  const { startPause, endPause, dismiss } = handlers;
 
   return (
     <div onMouseEnter={startPause} onMouseLeave={endPause}>
@@ -52,6 +52,7 @@ const Notifications = () => {
         .map((toast) => (
           <div key={toast.id} {...toast.ariaProps}>
             {toast.message}
+            <button onClick={() => dismiss(toast.id)}x</button>
           </div>
         ))}
     </div>
