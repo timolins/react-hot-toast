@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   render,
   screen,
@@ -113,6 +113,30 @@ test('promise toast', async () => {
   await waitFor(() => {
     expect(screen.queryByText(/success/i)).toBeInTheDocument();
   });
+});
+
+test('"toast" can be called from useEffect hook', async () => {
+  const WAIT_DELAY = 1000;
+
+  const MyComponent = () => {
+    const [success, setSuccess] = useState(false);
+    useEffect(() => {
+      toast.success("Success toast")
+      setSuccess(true);
+    }, []);
+
+    return success ? <div>MyComponent finished</div> : null;
+  }
+
+  render(
+    <>
+      <MyComponent />
+      <Toaster />
+    </>
+  );
+
+  await screen.findByText(/MyComponent finished/i);
+  expect(screen.queryByText(/Success toast/i)).toBeInTheDocument();
 });
 
 test('promise toast error', async () => {
