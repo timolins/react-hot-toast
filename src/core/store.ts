@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
+import { useSyncExternalStore } from 'use-sync-external-store/shim/index.js';
 import { DefaultToastOptions, Toast, ToastType } from './types';
 
 const TOAST_LIMIT = 20;
@@ -157,14 +158,15 @@ export const reducer = (state: State, action: Action): State => {
   }
 };
 
-const listeners: Array<(state: State) => void> = [];
+const listeners: Array<() => void> = [];
 
 let memoryState: State = { toasts: [], pausedAt: undefined };
 
 export const dispatch = (action: Action) => {
+  const oldState = memoryState;
   memoryState = reducer(memoryState, action);
   listeners.forEach((listener) => {
-    listener(memoryState);
+    listener();
   });
 };
 
@@ -179,16 +181,16 @@ export const defaultTimeouts: {
 };
 
 export const useStore = (toastOptions: DefaultToastOptions = {}): State => {
-  const [state, setState] = useState<State>(memoryState);
-  useLayoutEffect(() => {
-    listeners.push(setState);
+  const state = useSyncExternalStore((onStoreChange) => {
+    listeners.push(onStoreChange);
+
     return () => {
-      const index = listeners.indexOf(setState);
+      const index = listeners.indexOf(onStoreChange);
       if (index > -1) {
         listeners.splice(index, 1);
       }
-    };
-  }, [state]);
+    }
+  }, () => memoryState);
 
   const mergedToasts = state.toasts.map((t) => ({
     ...toastOptions,
