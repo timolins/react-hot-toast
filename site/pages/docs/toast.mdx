@@ -91,7 +91,7 @@ This shorthand is useful for mapping a promise to a toast. It will update automa
 const myPromise = fetchData();
 
 toast.promise(myPromise, {
-  loading: 'Loading',
+  pending: 'Loading',
   success: 'Got the data',
   error: 'Error when fetching',
 });
@@ -107,7 +107,7 @@ You can provide a function to the success/error messages to incorporate the resu
 toast.promise(
   myPromise,
   {
-    loading: 'Loading',
+    pending: 'Loading',
     success: (data) => `Successfully saved ${data.name}`,
     error: (err) => `This just happened: ${err.toString()}`,
   },
@@ -133,7 +133,7 @@ Every type has its own duration. You can overwrite them `duration` with the toas
 | `error`   | 4000     |
 | `success` | 2000     |
 | `custom`  | 4000     |
-| `loading` | Infinity |
+| `pending` | Infinity |
 
 ### Dismiss toast programmatically
 
