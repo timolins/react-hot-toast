@@ -1,4 +1,3 @@
-import { useEffect, useLayoutEffect, useState } from 'react';
 import { useSyncExternalStore } from 'use-sync-external-store/shim/index.js';
 import { DefaultToastOptions, Toast, ToastType } from './types';
 
