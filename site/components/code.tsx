@@ -24,7 +24,7 @@ const theme: PrismTheme = {
       },
     },
     {
-      types: ['tag', 'operator', 'number'],
+      types: ['tag', 'operator', 'number', 'module'],
       style: {
         color: '#e09142',
       },

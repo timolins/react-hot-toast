@@ -5,17 +5,6 @@ export const genId = (() => {
   };
 })();
 
-export const createRectRef = (onRect: (rect: DOMRect) => void) => (
-  el: HTMLElement | null
-) => {
-  if (el) {
-    setTimeout(() => {
-      const boundingRect = el.getBoundingClientRect();
-      onRect(boundingRect);
-    });
-  }
-};
-
 export const prefersReducedMotion = (() => {
   // Cache result
   let shouldReduceMotion: boolean | undefined = undefined;

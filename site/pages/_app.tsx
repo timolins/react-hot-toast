@@ -3,6 +3,8 @@ import '../styles/main.css';
 import * as React from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
+import { Analytics } from '@vercel/analytics/react';
+
 
 import { MDXProvider } from '@mdx-js/react';
 import { Code } from '../components/code';
@@ -13,22 +15,21 @@ const components = {
       <a {...props} />
     </Link>
   ),
-  inlineCode: (props) => (
-    <code
-      className="bg-toast-300 py-1 my-0.5 px-1 rounded bg-opacity-40"
-      {...props}
-    />
-  ),
-  code: (props) => (
-    <Code className={props.className} snippet={props.children} />
-  ),
+  code: (props) =>
+    props.className ? (
+      <Code className={props.className} snippet={props.children} />
+    ) : (
+      <code
+        className="bg-toast-300 py-1 my-0.5 px-1 rounded bg-opacity-40"
+        {...props}
+      />
+    ),
 };
 
 function MyApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <meta />
         {process.browser && (
           <script async data-no-cookie data-api="/_hive" src="/bee.js" />
         )}
@@ -36,6 +37,7 @@ function MyApp({ Component, pageProps }) {
       </Head>
       <MDXProvider components={components}>
         <Component {...pageProps} />
+        <Analytics />
       </MDXProvider>
     </>
   );
