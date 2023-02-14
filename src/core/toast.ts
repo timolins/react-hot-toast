@@ -62,8 +62,8 @@ toast.promise = <T>(
   promise: Promise<T>,
   msgs: {
     loading: Renderable;
-    success: ValueOrFunction<Renderable, T>;
-    error: ValueOrFunction<Renderable, any>;
+    success?: ValueOrFunction<Renderable, T>;
+    error?: ValueOrFunction<Renderable, any>;
   },
   opts?: DefaultToastOptions
 ) => {
@@ -71,7 +71,7 @@ toast.promise = <T>(
 
   promise
     .then((p) => {
-      toast.success(resolveValue(msgs.success, p), {
+      msgs.success && toast.success(resolveValue(msgs.success, p), {
         id,
         ...opts,
         ...opts?.success,
@@ -79,7 +79,7 @@ toast.promise = <T>(
       return p;
     })
     .catch((e) => {
-      toast.error(resolveValue(msgs.error, e), {
+      msgs.error && toast.error(resolveValue(msgs.error, e), {
         id,
         ...opts,
         ...opts?.error,
