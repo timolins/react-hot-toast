@@ -84,7 +84,10 @@ toast.promise = <T>(
         ...opts,
         ...opts?.error,
       });
-    });
+    })
+    .finally(() => {
+      toast.remove(id);
+    })
 
   return promise;
 };
