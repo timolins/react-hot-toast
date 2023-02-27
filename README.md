@@ -34,6 +34,9 @@
 - ✅ **Accessible**
 - 🤯 **Headless Hooks** - _Create your own with [`useToaster()`](https://react-hot-toast.com/docs/use-toaster)_
 
+## Change logs
+* Added ability to toast promises with optional success and error message
+
 ## Installation
 
 #### With yarn
