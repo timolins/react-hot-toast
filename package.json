@@ -1,10 +1,10 @@
 {
-  "name": "react-hot-toast",
+  "name": "@manojadams/react-hot-toast",
   "description": "Smoking hot React Notifications. Lightweight, customizable and beautiful by default.",
-  "version": "2.4.0",
+  "version": "2.4.6",
   "author": "Timo Lins",
   "license": "MIT",
-  "repository": "timolins/react-hot-toast",
+  "repository": "manojgetwealthy/react-hot-toast",
   "keywords": [
     "react",
     "notifications",
@@ -36,7 +36,7 @@
   },
   "scripts": {
     "start": "tsup --watch",
-    "build": "tsup",
+    "build": "tsup --sourcemap inline",
     "test": "jest --runInBand",
     "setup": "pnpm i && cd site && pnpm i && cd .. && pnpm run link",
     "link": "pnpm link ./site/node_modules/react && pnpm link ./site/node_modules/react-dom",
@@ -53,6 +53,12 @@
     "singleQuote": true,
     "arrowParens": "always",
     "trailingComma": "es5"
+  },
+  "tsup": {
+    "entry": ["src/index.ts"],
+    "splitting": false,
+    "sourcemap": true,
+    "clean": true
   },
   "size-limit": [
     {
