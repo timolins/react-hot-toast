@@ -143,7 +143,7 @@ const examples: Array<{
   {
     title: 'Themed',
     emoji: '🎨',
-    snippet: `toast.success('Look at me, I have brand styles.', {
+    snippet: `toast.success('Look at my styles.', {
   style: {
     border: '1px solid #713200',
     padding: '16px',
