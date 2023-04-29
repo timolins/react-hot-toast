@@ -1,24 +1,11 @@
 import { useEffect, useCallback } from 'react';
-import { dispatch, ActionType, useStore } from './store';
+import { createDispatch, ActionType, useStore } from './store';
 import { toast } from './toast';
 import { DefaultToastOptions, Toast, ToastPosition } from './types';
 
-const updateHeight = (toastId: string, height: number) => {
-  dispatch({
-    type: ActionType.UPDATE_TOAST,
-    toast: { id: toastId, height },
-  });
-};
-const startPause = () => {
-  dispatch({
-    type: ActionType.START_PAUSE,
-    time: Date.now(),
-  });
-};
-
 export const useToaster = (
   toastOptions?: DefaultToastOptions,
-  toasterId?: string
+  toasterId: string = 'default'
 ) => {
   const { toasts, pausedAt } = useStore(toastOptions, toasterId);
 
@@ -42,13 +29,28 @@ export const useToaster = (
         }
         return;
       }
-      return setTimeout(() => toast.dismiss(t.id), durationLeft);
+      return setTimeout(() => toast.dismiss(t.id, toasterId), durationLeft);
     });
 
     return () => {
       timeouts.forEach((timeout) => timeout && clearTimeout(timeout));
     };
-  }, [toasts, pausedAt]);
+  }, [toasts, pausedAt, toasterId]);
+
+  const dispatch = createDispatch(toasterId);
+  const startPause = useCallback(() => {
+    dispatch({
+      type: ActionType.START_PAUSE,
+      time: Date.now(),
+    });
+  }, []);
+
+  const updateHeight = useCallback((toastId: string, height: number) => {
+    dispatch({
+      type: ActionType.UPDATE_TOAST,
+      toast: { id: toastId, height },
+    });
+  }, []);
 
   const endPause = useCallback(() => {
     if (pausedAt) {

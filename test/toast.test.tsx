@@ -317,3 +317,32 @@ test('pause toast', async () => {
 
   expect(toastElement).not.toBeInTheDocument();
 });
+
+// Test Multiple Toaster
+
+test('multiple toasters', async () => {
+  render(
+    <>
+      <Toaster position="top-left" />
+      <Toaster position="top-right" toasterId="second-toaster" />
+    </>
+  );
+
+  act(() => {
+    toast.success('Success!');
+  });
+
+  act(() => {
+    toast.success('Success!', {
+      toasterId: 'second-toaster',
+    });
+  });
+
+  expect(screen.queryAllByText(/success/i)).toHaveLength(2);
+
+  act(() => {
+    toast.dismiss();
+  });
+
+  expect(screen.queryAllByText(/success/i)).toHaveLength(3);
+});

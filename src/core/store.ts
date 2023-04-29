@@ -8,9 +8,12 @@ interface ToasterConfig {
   dismissDelay: number;
 }
 
+export const TOAST_EXPIRE_DISMISS_DELAY = 1000;
+export const TOAST_LIMIT = 20;
+
 let baseSettings: ToasterConfig = {
-  toastLimit: 20,
-  dismissDelay: 5000,
+  toastLimit: TOAST_LIMIT,
+  dismissDelay: TOAST_EXPIRE_DISMISS_DELAY,
 };
 
 export const updateSettings = (
@@ -69,39 +72,46 @@ type Action =
       time: number;
     };
 
-interface State {
+interface ToasterState {
   toasts: Toast[];
+  settings: BaseSettings;
   pausedAt: number | undefined;
 }
 
+interface State {
+  [toasterId: string]: ToasterState;
+}
 const toastTimeouts = new Map<Toast['id'], ReturnType<typeof setTimeout>>();
 
-export const TOAST_EXPIRE_DISMISS_DELAY = 1000;
-
-const addToRemoveQueue = (toastId: string) => {
+const addToRemoveQueue = (
+  toastId: string,
+  toasterId: string,
+  dismissDelay = TOAST_EXPIRE_DISMISS_DELAY
+) => {
   if (toastTimeouts.has(toastId)) {
     return;
   }
 
   const timeout = setTimeout(() => {
     toastTimeouts.delete(toastId);
-    dispatch({
+    createDispatch(toasterId)({
       type: ActionType.REMOVE_TOAST,
       toastId: toastId,
     });
-  }, baseSettings.dismissDelay);
+  }, dismissDelay);
 
   toastTimeouts.set(toastId, timeout);
 };
 
 const clearFromRemoveQueue = (toastId: string) => {
-  const timeout = toastTimeouts.get(toastId);
+  const taskId = `${toastId}`;
+  const timeout = toastTimeouts.get(taskId);
   if (timeout) {
     clearTimeout(timeout);
   }
 };
 
-export const reducer = (state: State, action: Action): State => {
+export const reducer = (state: ToasterState, action: Action): ToasterState => {
   switch (action.type) {
     case ActionType.ADD_TOAST:
       return {
@@ -115,7 +125,7 @@ export const reducer = (state: State, action: Action): State => {
     case ActionType.UPDATE_TOAST:
       //  ! Side effects !
       if (action.toast.id) {
-        clearFromRemoveQueue(action.toast.id);
+        clearFromRemoveQueue(action.toast.id, action.toast.toasterId);
       }
 
       return {
@@ -132,14 +142,18 @@ export const reducer = (state: State, action: Action): State => {
         : reducer(state, { type: ActionType.ADD_TOAST, toast });
 
     case ActionType.DISMISS_TOAST:
-      const { toastId } = action;
+      const { toastId, toasterId } = action;
 
       // ! Side effects ! - This could be execrated into a dismissToast() action, but I'll keep it here for simplicity
       if (toastId) {
-        addToRemoveQueue(toastId);
+        addToRemoveQueue(toastId, toastId, state.settings.dismissDelay);
       } else {
         state.toasts.forEach((toast) => {
-          addToRemoveQueue(toast.id);
+          addToRemoveQueue(
+            toast.id,
+            toast.toasterId,
+            state.settings.dismissDelay
+          );
         });
       }
 
@@ -186,16 +200,31 @@ export const reducer = (state: State, action: Action): State => {
   }
 };
 
-const listeners: Array<(state: State) => void> = [];
+const listeners: Array<
+  [toasterId: string, reducer: (state: ToasterState) => void]
+> = [];
 
-let memoryState: State = { toasts: [], pausedAt: undefined };
-
-export const dispatch = (action: Action) => {
-  memoryState = reducer(memoryState, action);
-  listeners.forEach((listener) => {
-    listener(memoryState);
-  });
+const defaultToasterId = 'default';
+const defaultToasterState: ToasterState = {
+  toasts: [],
+  pausedAt: undefined,
+  settings: {},
 };
+let memoryState: State = {};
+
+export const createDispatch =
+  (toasterId = defaultToasterId) =>
+  (action: Action) => {
+    memoryState[toasterId] = reducer(
+      memoryState[toasterId] || defaultToasterState,
+      action
+    );
+    listeners.forEach(([id, listener]) => {
+      if (id === toasterId) {
+        listener(memoryState[toasterId]);
+      }
+    });
+  };
 
 export const defaultTimeouts: {
   [key in ToastType]: number;
@@ -209,40 +238,36 @@ export const defaultTimeouts: {
 
 export const useStore = (
   toastOptions: DefaultToastOptions = {},
-  toasterId?: string
-): State => {
-  const [state, setState] = useState<State>(memoryState);
+  toasterId: string = defaultToasterId
+): ToasterState => {
+  const [state, setState] = useState<ToasterState>(
+    memoryState[toasterId] || defaultToasterState
+  );
   useEffect(() => {
-    listeners.push(setState);
+    listeners.push([toasterId, setState]);
     return () => {
-      const index = listeners.indexOf(setState);
+      const index = listeners.findIndex(([id]) => id === toasterId);
       if (index > -1) {
         listeners.splice(index, 1);
       }
     };
   }, [state]);
 
-  const mergedToasts = state.toasts
-    .filter(
-      (t) =>
-        (toasterId === undefined && t.toasterId === undefined) ||
-        t.toasterId === toasterId
-    )
-    .map((t) => ({
-      ...toastOptions,
-      ...toastOptions[t.type],
-      ...t,
-      duration:
-        t.duration ||
-        toastOptions[t.type]?.duration ||
-        toastOptions?.duration ||
-        defaultTimeouts[t.type],
-      style: {
-        ...toastOptions.style,
-        ...toastOptions[t.type]?.style,
-        ...t.style,
-      },
-    }));
+  const mergedToasts = state.toasts.map((t) => ({
+    ...toastOptions,
+    ...toastOptions[t.type],
+    ...t,
+    duration:
+      t.duration ||
+      toastOptions[t.type]?.duration ||
+      toastOptions?.duration ||
+      defaultTimeouts[t.type],
+    style: {
+      ...toastOptions.style,
+      ...toastOptions[t.type]?.style,
+      ...t.style,
+    },
+  }));
 
   return {
     ...state,

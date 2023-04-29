@@ -35,7 +35,7 @@
     "node": ">=10"
   },
   "scripts": {
-    "start": "tsup --watch",
+    "dev": "tsup --watch",
     "build": "tsup",
     "test": "jest --runInBand",
     "setup": "pnpm i && cd site && pnpm i && cd .. && pnpm run link",

@@ -8,7 +8,7 @@ import {
   resolveValue,
 } from './types';
 import { genId } from './utils';
-import { dispatch, updateSettings, ActionType } from './store';
+import { createDispatch, ActionType } from './store';
 
 type Message = ValueOrFunction<Renderable, Toast>;
 
@@ -36,6 +36,7 @@ const createHandler =
   (type?: ToastType): ToastHandler =>
   (message, options) => {
     const toast = createToast(message, type, options);
+    const dispatch = createDispatch(toast.toasterId);
     dispatch({ type: ActionType.UPSERT_TOAST, toast });
     return toast.id;
   };
@@ -47,17 +48,21 @@ toast.error = createHandler('error');
 toast.success = createHandler('success');
 toast.loading = createHandler('loading');
 toast.custom = createHandler('custom');
-toast.setSetting = updateSettings as any;
 
-toast.dismiss = (toastId?: string) => {
+toast.dismiss = (toastId?: string, toasterId?: string) => {
+  const dispatch = createDispatch(toasterId);
   dispatch({
     type: ActionType.DISMISS_TOAST,
     toastId,
   });
 };
 
-toast.remove = (toastId?: string) =>
+toast.dismiss();
+
+toast.remove = (toastId?: string, toasterId?: string) => {
+  const dispatch = createDispatch(toasterId);
   dispatch({ type: ActionType.REMOVE_TOAST, toastId });
+};
 
 toast.promise = <T>(
   promise: Promise<T>,
