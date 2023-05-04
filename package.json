@@ -1,7 +1,7 @@
 {
   "name": "react-hot-toast",
   "description": "Smoking hot React Notifications. Lightweight, customizable and beautiful by default.",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "author": "Timo Lins",
   "license": "MIT",
   "repository": "timolins/react-hot-toast",
@@ -91,8 +91,8 @@
     "size-limit": "^7.0.8",
     "ts-jest": "^28.0.6",
     "tslib": "^2.4.0",
-    "tsup": "^6.1.3",
-    "typescript": "^4.7.4"
+    "tsup": "^6.7.0",
+    "typescript": "^5.0.4"
   },
   "dependencies": {
     "goober": "^2.1.10",
