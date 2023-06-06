@@ -101,6 +101,11 @@ const theme: PrismTheme = {
   ],
 };
 
+function copyToClipboard(text):void {
+  navigator.clipboard.writeText(text)
+}
+
+
 export const Code: React.FC<{
   snippet: string;
   language?: Language;
@@ -120,10 +125,15 @@ export const Code: React.FC<{
           className={clsx(
             props.className,
             className,
-            'h-full w-full rounded-lg p-4 overflow-x-auto flex flex-col items justify-center'
+            'relative h-full w-full rounded-lg p-4 overflow-x-auto flex flex-col items justify-center'
           )}
           style={style}
         >
+          <h1 
+            className='text-xs absolute top-2 right-4 opacity-70 hover:opacity-100 cursor-pointer text-gray-400' 
+            onClick={() => copyToClipboard(props.snippet)}>
+            copy
+          </h1>
           {tokens.map((line, i) => {
             if (tokens.length - 1 === i && line[0].empty) {
               return null;
