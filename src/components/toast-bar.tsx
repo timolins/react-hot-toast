@@ -30,6 +30,12 @@ const ToastBarBase = styled('div')`
   pointer-events: auto;
   padding: 8px 10px;
   border-radius: 8px;
+  min-height:fit-content;
+  line-break:anywhere;
+  overflow:hidden;
+  @media screen and (min-width: 380px) {
+    max-width:max-content;
+  }
 `;
 
 const Message = styled('div')`
