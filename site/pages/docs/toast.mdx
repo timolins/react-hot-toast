@@ -123,6 +123,22 @@ toast.promise(
 );
 ```
 
+#### Use Async Function
+
+```js
+toast.promise(
+  async () => {
+    const { id } = await fetchData1();
+    await fetchData2(id);
+  },
+  {
+    loading: 'Loading',
+    success: 'Got the data',
+    error: 'Error when fetching',
+  }
+);
+```
+
 ## Default durations
 
 Every type has its own duration. You can overwrite them `duration` with the toast options. This can be done per toast options or globally by the [`<Toaster/>`](/docs/toaster).
