@@ -16,6 +16,8 @@
 <a href="https://react-hot-toast.com/docs">Documentation</a> 
 <span> · </span>
 <a href="https://twitter.com/timolins">Twitter</a>
+<span> · </span>
+<a href="https://instagram.com/timolins">Instagram</a>
 </div>
 
 <br />
