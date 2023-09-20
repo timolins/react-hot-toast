@@ -16,8 +16,11 @@
 <a href="https://react-hot-toast.com/docs">Documentation</a> 
 <span> · </span>
 <a href="https://twitter.com/timolins">Twitter</a>
+<span> · </span>
+<a href="https://instagram.com/timolins">Instagram</a>
 </div>
-
+<p>commit 1</p>
+<p>commit 2</p>
 <br />
 <div align="center">
   <sub>Cooked by <a href="https://twitter.com/timolins">Timo Lins</a> 👨‍🍳</sub>
