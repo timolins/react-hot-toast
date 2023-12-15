@@ -7,3 +7,5 @@ dist
 /headless
 .vscode
 .vercel
+package/headless
+package/dist

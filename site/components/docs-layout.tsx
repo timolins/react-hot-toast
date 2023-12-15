@@ -9,10 +9,11 @@ const TableItem: React.FC<{
   href: string;
   children?: React.ReactNode;
 }> = ({ children, href }) => (
-  <Link href={href}>
-    <a className="rounded px-3 py-1.5 transition-colors duration-200 relative block hover:text-toast-500 text-toast-700">
-      {children}
-    </a>
+  <Link
+    className="rounded px-3 py-1.5 transition-colors duration-200 relative block hover:text-toast-500 text-toast-700"
+    href={href}
+  >
+    {children}
   </Link>
 );
 

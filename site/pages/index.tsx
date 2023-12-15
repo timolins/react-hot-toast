@@ -210,8 +210,8 @@ export default function Home() {
             </a>
           </div>
           <div className="text-toast-600 my-2">
-            <Link href="/docs">
-              <a className="underline">Documentation</a>
+            <Link href="/docs" className="underline">
+              Documentation
             </Link>
             {' · '}
             <span>v{version}</span>
