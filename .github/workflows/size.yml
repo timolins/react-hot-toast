@@ -13,5 +13,5 @@ jobs:
       - uses: andresz1/size-limit-action@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          directory: package/
+          install_command: pnpm install
           script: pnpm --filter react-hot-toast size --json
