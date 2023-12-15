@@ -90,7 +90,7 @@
     "size-limit": "^7.0.8",
     "ts-jest": "^28.0.6",
     "tslib": "^2.4.0",
-    "tsup": "^6.7.0",
+    "tsup": "^8.0.1",
     "typescript": "^5.0.4"
   },
   "dependencies": {
