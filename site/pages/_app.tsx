@@ -32,7 +32,7 @@ function MyApp({ Component, pageProps }) {
       <MDXProvider components={components}>
         <Component {...pageProps} />
         <Analytics />
-        {/* <SpeedInsights /> */}
+        <SpeedInsights />
       </MDXProvider>
     </>
   );

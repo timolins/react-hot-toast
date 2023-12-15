@@ -18,6 +18,7 @@ export default defineConfig([
     },
     entry: ['src/index.ts'],
     outDir: 'dist',
+    external: ['react', 'react-dom'],
   },
   {
     ...commonConfig,

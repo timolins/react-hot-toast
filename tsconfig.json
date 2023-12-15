@@ -28,6 +28,6 @@
     "skipLibCheck": true,
     // error out if import and file system have a casing mismatch. Recommended by TS
     "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
+    "noEmit": true
   }
 }
