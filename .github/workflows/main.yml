@@ -17,6 +17,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Build package
-        run: pnpm build
+        run: pnpm --filter react-hot-toast build
       - name: Test
-        run: pnpm run test --ci --coverage
+        run: pnpm --filter react-hot-toast run test --ci --coverage
