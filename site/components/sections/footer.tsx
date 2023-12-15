@@ -11,8 +11,8 @@ export function Footer({ noBadge }: { noBadge?: boolean }) {
         >
           GitHub
         </a>
-        <Link href="/docs">
-          <a className="underline">Docs</a>
+        <Link href="/docs" className="underline">
+          Docs
         </Link>
         <a className="underline" href="https://twitter.com/timolins">
           Twitter

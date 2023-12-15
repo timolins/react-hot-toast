@@ -4,17 +4,13 @@ import * as React from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
 import { Analytics } from '@vercel/analytics/react';
-
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 import { MDXProvider } from '@mdx-js/react';
 import { Code } from '../components/code';
 
 const components = {
-  a: (props) => (
-    <Link href={props.href}>
-      <a {...props} />
-    </Link>
-  ),
+  a: (props) => <Link href={props.href} {...props} />,
   code: (props) =>
     props.className ? (
       <Code className={props.className} snippet={props.children} />
@@ -38,6 +34,7 @@ function MyApp({ Component, pageProps }) {
       <MDXProvider components={components}>
         <Component {...pageProps} />
         <Analytics />
+        <SpeedInsights />
       </MDXProvider>
     </>
   );
