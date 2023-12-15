@@ -26,15 +26,13 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        {process.browser && (
-          <script async data-no-cookie data-api="/_hive" src="/bee.js" />
-        )}
+        <script async data-no-cookie data-api="/_hive" src="/bee.js" />
         <link rel="shortcut icon" href="/favicon.png" type="image/x-icon" />
       </Head>
       <MDXProvider components={components}>
         <Component {...pageProps} />
         <Analytics />
-        <SpeedInsights />
+        {/* <SpeedInsights /> */}
       </MDXProvider>
     </>
   );
