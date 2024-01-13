@@ -51,6 +51,7 @@ interface State {
 
 const toastTimeouts = new Map<Toast['id'], ReturnType<typeof setTimeout>>();
 
+
 const addToRemoveQueue = (toastId: string, removeDelay = REMOVE_DELAY) => {
   if (toastTimeouts.has(toastId)) {
     return;
@@ -62,6 +63,7 @@ const addToRemoveQueue = (toastId: string, removeDelay = REMOVE_DELAY) => {
       type: ActionType.REMOVE_TOAST,
       toastId: toastId,
     });
+
   }, removeDelay);
 
   toastTimeouts.set(toastId, timeout);
@@ -170,7 +172,7 @@ export const dispatch = (action: Action) => {
   });
 };
 
-const defaultTimeouts: {
+export const defaultTimeouts: {
   [key in ToastType]: number;
 } = {
   blank: 4000,
