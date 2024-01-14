@@ -40,7 +40,7 @@ export interface Toast {
   pauseDuration: number;
   position?: ToastPosition;
 
-  ariaProps: {
+  ariaProps?: {
     role: 'status' | 'alert';
     'aria-live': 'assertive' | 'off' | 'polite';
   };
