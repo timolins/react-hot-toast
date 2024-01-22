@@ -178,6 +178,11 @@ export const defaultTimeouts: {
   custom: 4000,
 };
 
+const defaultAriaProps = {
+  role: 'status',
+  'aria-live': 'polite',
+} as const;
+
 export const useStore = (toastOptions: DefaultToastOptions = {}): State => {
   const [state, setState] = useState<State>(memoryState);
   useEffect(() => {
@@ -191,6 +196,7 @@ export const useStore = (toastOptions: DefaultToastOptions = {}): State => {
   }, [state]);
 
   const mergedToasts = state.toasts.map((t) => ({
+    ariaProps: defaultAriaProps,
     ...toastOptions,
     ...toastOptions[t.type],
     ...t,
