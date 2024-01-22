@@ -30,6 +30,7 @@ const createToast = (
   pauseDuration: 0,
   ...opts,
   id: opts?.id || genId(),
+  canDismiss: opts?.canDismiss,
 });
 
 const createHandler =

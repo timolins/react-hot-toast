@@ -6,6 +6,7 @@ import {
   ToastPosition,
   ToastWrapperProps,
 } from '../core/types';
+import { toast } from "../core/toast";
 import { useToaster } from '../core/use-toaster';
 import { prefersReducedMotion } from '../core/utils';
 import { ToastBar } from './toast-bar';
@@ -131,7 +132,13 @@ export const Toaster: React.FC<ToasterProps> = ({
             ) : children ? (
               children(t)
             ) : (
-              <ToastBar toast={t} position={toastPosition} />
+              <ToastBar
+                toast={t}
+                position={toastPosition}
+                onDismiss={() => {
+                  toast.dismiss(t.id);
+                }}
+              />
             )}
           </ToastWrapper>
         );
