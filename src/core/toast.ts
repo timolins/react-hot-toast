@@ -74,7 +74,7 @@ toast.promise = <T>(
       toast.success(resolveValue(msgs.success, p), {
         id,
         ...opts,
-        ...opts?.success,
+        ...opts.success?.success,
       });
       return p;
     })
@@ -82,7 +82,7 @@ toast.promise = <T>(
       toast.error(resolveValue(msgs.error, e), {
         id,
         ...opts,
-        ...opts?.error,
+        ...opts.error?.error,
       });
     });
 
