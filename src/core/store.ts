@@ -188,7 +188,7 @@ export const useStore = (toastOptions: DefaultToastOptions = {}): State => {
         listeners.splice(index, 1);
       }
     };
-  }, [state]);
+  }, []);
 
   const mergedToasts = state.toasts.map((t) => ({
     ...toastOptions,
