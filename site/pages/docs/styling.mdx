@@ -26,6 +26,8 @@ You can style your notifications globally with the `toastOptions` inside the Toa
 />
 ```
 
+Note that toasts have a default maximum width. If your message is cut off (e.g., when printing a large error message), you can set the `maxWidth` property in `style`, or, alternatively, add `wordBreak: 'break-all'`, to display more content.
+
 ### Set default for specific types
 
 ```jsx
