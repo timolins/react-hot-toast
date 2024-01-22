@@ -46,8 +46,8 @@
     "node": ">=10"
   },
   "scripts": {
-    "start": "tsup --watch",
-    "build": "tsup",
+    "start": "bunchee --watch",
+    "build": "bunchee",
     "test": "jest --runInBand",
     "setup": "pnpm i && cd site && pnpm i && cd .. && pnpm run link",
     "link": "pnpm link ./site/node_modules/react && pnpm link ./site/node_modules/react-dom",
