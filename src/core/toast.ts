@@ -34,11 +34,11 @@ const createToast = (
 
 const createHandler =
   (type?: ToastType): ToastHandler =>
-  (message, options) => {
-    const toast = createToast(message, type, options);
-    dispatch({ type: ActionType.UPSERT_TOAST, toast });
-    return toast.id;
-  };
+    (message, options) => {
+      const toast = createToast(message, type, options);
+      dispatch({ type: ActionType.UPSERT_TOAST, toast });
+      return toast.id;
+    };
 
 const toast = (message: Message, opts?: ToastOptions) =>
   createHandler('blank')(message, opts);
@@ -64,6 +64,7 @@ toast.promise = <T>(
     loading: Renderable;
     success: ValueOrFunction<Renderable, T>;
     error: ValueOrFunction<Renderable, any>;
+    finally?: () => void;
   },
   opts?: DefaultToastOptions
 ) => {
@@ -84,7 +85,8 @@ toast.promise = <T>(
         ...opts,
         ...opts?.error,
       });
-    });
+    })
+    .finally(msgs.finally);
 
   return promise;
 };

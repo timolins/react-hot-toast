@@ -155,6 +155,67 @@ test('promise toast error', async () => {
   });
 });
 
+test('promise toast finally', async () => {
+  const WAIT_DELAY = 1000;
+  const finallyCallback = jest.fn();
+  const originalPromise = jest.spyOn(toast, 'promise');
+
+
+  render(
+    <>
+      <button
+        type="button"
+        onClick={() => {
+          const sleep = new Promise((resolve) => {
+            setTimeout(resolve, WAIT_DELAY);
+          });
+
+          toast.promise(sleep, {
+            loading: 'Loading...',
+            success: 'Success!',
+            error: 'Error!',
+            finally: finallyCallback
+          });
+        }}
+      >
+        Notify!
+      </button>
+      <Toaster />
+    </>
+  );
+
+  act(() => {
+    fireEvent.click(screen.getByRole('button', { name: /Notify/i }));
+  });
+
+  await screen.findByText(/loading/i);
+
+  expect(screen.queryByText(/loading/i)).toBeInTheDocument();
+
+  waitTime(WAIT_DELAY);
+
+  await waitFor(() => {
+    expect(screen.queryByText(/success/i)).toBeInTheDocument();
+  });
+
+  // Assert that the original `toast.promise` was called with the expected arguments
+  expect(originalPromise).toHaveBeenCalledWith(expect.any(Promise), {
+    loading: 'Loading...',
+    success: 'Success!',
+    error: 'Error!',
+    finally: finallyCallback,
+  });
+
+  // Access the arguments passed to the original `toast.promise` call
+  const [promiseArg, optionsArg] = originalPromise.mock.calls[0];
+
+  // Resolve the promise to trigger the finally callback
+  await promiseArg;
+
+  // Assert that finallyCallback was called
+  expect(finallyCallback).toHaveBeenCalled();
+});
+
 test('error toast with custom duration', async () => {
   render(
     <>
