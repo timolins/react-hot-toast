@@ -92,7 +92,7 @@
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "@types/testing-library__jest-dom": "^5.14.5",
-    "bunchee": "^4.4.3",
+    "bunchee": "^4.4.8",
     "csstype": "^3.1.0",
     "jest": "^28.1.3",
     "jest-environment-jsdom": "^28.1.3",
