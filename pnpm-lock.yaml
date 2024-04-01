@@ -35,8 +35,8 @@ devDependencies:
     specifier: ^5.14.5
     version: 5.14.5
   bunchee:
-    specifier: ^5.1.0
-    version: 5.1.0(typescript@5.3.3)
+    specifier: ^5.1.1
+    version: 5.1.1(typescript@5.3.3)
   csstype:
     specifier: ^3.1.0
     version: 3.1.0
@@ -1547,8 +1547,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /bunchee@5.1.0(typescript@5.3.3):
-    resolution: {integrity: sha512-jmjPROOa8WOW341xmT0XnvqQOt/QNNbt7iIaesDhxeD5wUZBPKwgOPpcxDt/2FcOIKXKlh7EJQQDxgxps1WBzw==}
+  /bunchee@5.1.1(typescript@5.3.3):
+    resolution: {integrity: sha512-g5BHJYw2jdCi47OQaYa4QIL4Eo7JgYkgfISQyDPpOBAcKle/nBdzO6zLXu0kFi4ScjZcwH5WCWDan+U603LhxA==}
     engines: {node: '>= 18.0.0'}
     hasBin: true
     peerDependencies:
