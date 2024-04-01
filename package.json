@@ -11,19 +11,30 @@
     "toast",
     "snackbar"
   ],
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/es/index.mjs",
+  "types": "./dist/cjs/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "import": {
+        "types": "./dist/es/index.d.mts",
+        "default": "./dist/es/index.mjs"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
     },
     "./headless": {
-      "types": "./headless/index.d.ts",
-      "import": "./headless/index.mjs",
-      "require": "./headless/index.js"
+      "import": {
+        "types": "./headless/es/index.d.mts",
+        "default": "./headless/es/index.mjs"
+      },
+      "require": {
+        "types": "./headless/cjs/index.d.ts",
+        "default": "./headless/cjs/index.js"
+      }
     }
   },
   "files": [
@@ -35,8 +46,8 @@
     "node": ">=10"
   },
   "scripts": {
-    "start": "tsup --watch",
-    "build": "tsup",
+    "start": "bunchee --watch",
+    "build": "bunchee",
     "test": "jest --runInBand",
     "setup": "pnpm i && cd site && pnpm i && cd .. && pnpm run link",
     "link": "pnpm link ./site/node_modules/react && pnpm link ./site/node_modules/react-dom",
@@ -81,6 +92,7 @@
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "@types/testing-library__jest-dom": "^5.14.5",
+    "bunchee": "^5.1.1",
     "csstype": "^3.1.0",
     "jest": "^28.1.3",
     "jest-environment-jsdom": "^28.1.3",
@@ -90,8 +102,7 @@
     "size-limit": "^7.0.8",
     "ts-jest": "^28.0.6",
     "tslib": "^2.4.0",
-    "tsup": "^6.7.0",
-    "typescript": "^5.0.4"
+    "typescript": "^5.2.2"
   },
   "dependencies": {
     "goober": "^2.1.10"
