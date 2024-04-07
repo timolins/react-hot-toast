@@ -8,7 +8,7 @@ import {
   resolveValue,
 } from './types';
 import { genId } from './utils';
-import { createDispatch, ActionType } from './store';
+import { createDispatch, Action, ActionType, dispatchAll } from './store';
 
 type Message = ValueOrFunction<Renderable, Toast>;
 
@@ -49,21 +49,43 @@ toast.success = createHandler('success');
 toast.loading = createHandler('loading');
 toast.custom = createHandler('custom');
 
+/**
+ * Dismisses the toast with the given id. If no id is given, dismisses all toasts.
+ * The toast will transition out and then be removed from the DOM.
+ * Applies to all toasters, except when a `toasterId` is given.
+ */
 toast.dismiss = (toastId?: string, toasterId?: string) => {
-  const dispatch = createDispatch(toasterId);
-  dispatch({
+  const action: Action = {
     type: ActionType.DISMISS_TOAST,
     toastId,
-  });
+  };
+
+  if (toasterId) {
+    createDispatch(toasterId)(action);
+  } else {
+    dispatchAll(action);
+  }
 };
 
-toast.dismiss();
-
+/**
+ * Removes the toast with the given id. If no id is given, removes all toasts.
+ * The toast will be removed from the DOM without any transition.
+ */
 toast.remove = (toastId?: string, toasterId?: string) => {
-  const dispatch = createDispatch(toasterId);
-  dispatch({ type: ActionType.REMOVE_TOAST, toastId });
+  const action: Action = {
+    type: ActionType.REMOVE_TOAST,
+    toastId,
+  };
+  if (toasterId) {
+    createDispatch(toasterId)(action);
+  } else {
+    dispatchAll(action);
+  }
 };
 
+/**
+ * Create a loading toast that will automatically updates with the promise.
+ */
 toast.promise = <T>(
   promise: Promise<T>,
   msgs: {

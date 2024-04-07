@@ -1,35 +1,12 @@
 import { useEffect, useState } from 'react';
 import { DefaultToastOptions, Toast, ToastType } from './types';
 
-// const TOAST_LIMIT = 20;
-
-interface ToasterConfig {
-  toastLimit: number;
-  dismissDelay: number;
-}
-
 export const TOAST_EXPIRE_DISMISS_DELAY = 1000;
 export const TOAST_LIMIT = 20;
+export const DEFAULT_TOASTER_ID = 'default';
 
-let baseSettings: ToasterConfig = {
-  toastLimit: TOAST_LIMIT,
-  dismissDelay: TOAST_EXPIRE_DISMISS_DELAY,
-};
-
-export const updateSettings = (
-  settings: keyof ToasterConfig,
-  value: string | number
-) => {
-  baseSettings = {
-    ...baseSettings,
-    [settings]: value,
-  };
-};
-
-interface BaseSettings {
-  toasterId?: string;
-  toastLimit?: number;
-  dismissDelay?: number;
+interface ToasterSettings {
+  toastLimit: number;
 }
 
 export enum ActionType {
@@ -42,7 +19,7 @@ export enum ActionType {
   END_PAUSE,
 }
 
-type Action =
+export type Action =
   | {
       type: ActionType.ADD_TOAST;
       toast: Toast;
@@ -74,7 +51,7 @@ type Action =
 
 interface ToasterState {
   toasts: Toast[];
-  settings: BaseSettings;
+  settings: ToasterSettings;
   pausedAt: number | undefined;
 }
 
@@ -85,7 +62,6 @@ const toastTimeouts = new Map<Toast['id'], ReturnType<typeof setTimeout>>();
 
 const addToRemoveQueue = (
   toastId: string,
-  toasterId: string,
   dismissDelay = TOAST_EXPIRE_DISMISS_DELAY
 ) => {
   if (toastTimeouts.has(toastId)) {
@@ -94,7 +70,7 @@ const addToRemoveQueue = (
 
   const timeout = setTimeout(() => {
     toastTimeouts.delete(toastId);
-    createDispatch(toasterId)({
+    dispatchAll({
       type: ActionType.REMOVE_TOAST,
       toastId: toastId,
     });
@@ -104,28 +80,26 @@ const addToRemoveQueue = (
 };
 
 const clearFromRemoveQueue = (toastId: string) => {
-  const taskId = `${toastId}`;
-  const timeout = toastTimeouts.get(taskId);
+  const timeout = toastTimeouts.get(toastId);
   if (timeout) {
     clearTimeout(timeout);
   }
 };
 
 export const reducer = (state: ToasterState, action: Action): ToasterState => {
+  const { toastLimit } = state.settings;
+
   switch (action.type) {
     case ActionType.ADD_TOAST:
       return {
         ...state,
-        toasts: [action.toast, ...state.toasts].slice(
-          0,
-          baseSettings.toastLimit
-        ),
+        toasts: [action.toast, ...state.toasts].slice(0, toastLimit),
       };
 
     case ActionType.UPDATE_TOAST:
       //  ! Side effects !
       if (action.toast.id) {
-        clearFromRemoveQueue(action.toast.id, action.toast.toasterId);
+        clearFromRemoveQueue(action.toast.id);
       }
 
       return {
@@ -142,18 +116,14 @@ export const reducer = (state: ToasterState, action: Action): ToasterState => {
         : reducer(state, { type: ActionType.ADD_TOAST, toast });
 
     case ActionType.DISMISS_TOAST:
-      const { toastId, toasterId } = action;
+      const { toastId } = action;
 
       // ! Side effects ! - This could be execrated into a dismissToast() action, but I'll keep it here for simplicity
       if (toastId) {
-        addToRemoveQueue(toastId, toastId, state.settings.dismissDelay);
+        addToRemoveQueue(toastId, TOAST_EXPIRE_DISMISS_DELAY);
       } else {
         state.toasts.forEach((toast) => {
-          addToRemoveQueue(
-            toast.id,
-            toast.toasterId,
-            state.settings.dismissDelay
-          );
+          addToRemoveQueue(toast.id, TOAST_EXPIRE_DISMISS_DELAY);
         });
       }
 
@@ -204,26 +174,37 @@ const listeners: Array<
   [toasterId: string, reducer: (state: ToasterState) => void]
 > = [];
 
-const defaultToasterId = 'default';
 const defaultToasterState: ToasterState = {
   toasts: [],
   pausedAt: undefined,
-  settings: {},
+  settings: {
+    toastLimit: TOAST_LIMIT,
+  },
 };
 let memoryState: State = {};
 
+export const dispatch = (action: Action, toasterId = DEFAULT_TOASTER_ID) => {
+  memoryState[toasterId] = reducer(
+    memoryState[toasterId] || defaultToasterState,
+    action
+  );
+  listeners.forEach(([id, listener]) => {
+    if (id === toasterId) {
+      listener(memoryState[toasterId]);
+    }
+  });
+};
+
+export const dispatchAll = (action: Action) => {
+  Object.keys(memoryState).forEach((toasterId) => {
+    dispatch(action, toasterId);
+  });
+};
+
 export const createDispatch =
-  (toasterId = defaultToasterId) =>
+  (toasterId = DEFAULT_TOASTER_ID) =>
   (action: Action) => {
-    memoryState[toasterId] = reducer(
-      memoryState[toasterId] || defaultToasterState,
-      action
-    );
-    listeners.forEach(([id, listener]) => {
-      if (id === toasterId) {
-        listener(memoryState[toasterId]);
-      }
-    });
+    dispatch(action, toasterId);
   };
 
 export const defaultTimeouts: {
@@ -238,7 +219,7 @@ export const defaultTimeouts: {
 
 export const useStore = (
   toastOptions: DefaultToastOptions = {},
-  toasterId: string = defaultToasterId
+  toasterId: string = DEFAULT_TOASTER_ID
 ): ToasterState => {
   const [state, setState] = useState<ToasterState>(
     memoryState[toasterId] || defaultToasterState
@@ -251,7 +232,7 @@ export const useStore = (
         listeners.splice(index, 1);
       }
     };
-  }, [state]);
+  }, [toasterId]);
 
   const mergedToasts = state.toasts.map((t) => ({
     ...toastOptions,
