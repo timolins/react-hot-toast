@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
 import { DefaultToastOptions, Toast, ToastType } from './types';
 
 const TOAST_LIMIT = 20;
@@ -157,16 +157,28 @@ export const reducer = (state: State, action: Action): State => {
   }
 };
 
-const listeners: Array<(state: State) => void> = [];
+const store = (() => {
+  let memoryState: State;
+  const initialState = (memoryState = { toasts: [], pausedAt: undefined });
+  const listeners: Set<(state: State) => void> = new Set();
 
-let memoryState: State = { toasts: [], pausedAt: undefined };
+  const dispatch = (action: Action) => {
+    memoryState = reducer(memoryState, action);
+    listeners.forEach((listener) => {
+      listener(memoryState);
+    });
+  };
 
-export const dispatch = (action: Action) => {
-  memoryState = reducer(memoryState, action);
-  listeners.forEach((listener) => {
-    listener(memoryState);
-  });
-};
+  const getState = () => memoryState;
+
+  const subscribe = (listener: () => void) => {
+    listeners.add(listener);
+    return () => listeners.delete(listener);
+  };
+  const getInitialState = () => initialState;
+
+  return { dispatch, getState, subscribe, getInitialState };
+})();
 
 export const defaultTimeouts: {
   [key in ToastType]: number;
@@ -178,17 +190,14 @@ export const defaultTimeouts: {
   custom: 4000,
 };
 
+export const dispatch = store.dispatch;
+
 export const useStore = (toastOptions: DefaultToastOptions = {}): State => {
-  const [state, setState] = useState<State>(memoryState);
-  useEffect(() => {
-    listeners.push(setState);
-    return () => {
-      const index = listeners.indexOf(setState);
-      if (index > -1) {
-        listeners.splice(index, 1);
-      }
-    };
-  }, [state]);
+  const state = useSyncExternalStore(
+    store.subscribe,
+    store.getState,
+    store.getInitialState
+  );
 
   const mergedToasts = state.toasts.map((t) => ({
     ...toastOptions,
