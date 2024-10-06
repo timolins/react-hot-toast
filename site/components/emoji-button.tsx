@@ -1,6 +1,6 @@
 export const EmojiButton: React.FC<{
   onClick: () => void;
-  emoji: string | JSX.Element;
+  emoji: string | React.JSX.Element;
   children?: React.ReactNode;
 }> = ({ onClick, children, emoji }) => (
   <button
