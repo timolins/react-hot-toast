@@ -59,7 +59,7 @@ toast.remove = (toastId?: string) =>
   dispatch({ type: ActionType.REMOVE_TOAST, toastId });
 
 toast.promise = <T>(
-  promise: Promise<T>,
+  promise: Promise<T> | (() => Promise<T>),
   msgs: {
     loading: Renderable;
     success?: ValueOrFunction<Renderable, T>;
@@ -68,6 +68,10 @@ toast.promise = <T>(
   opts?: DefaultToastOptions
 ) => {
   const id = toast.loading(msgs.loading, { ...opts, ...opts?.loading });
+
+  if (typeof promise === 'function') {
+    promise = promise();
+  }
 
   promise
     .then((p) => {
