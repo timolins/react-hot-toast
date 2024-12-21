@@ -71,8 +71,12 @@ toast.promise = <T>(
 
   promise
     .then((p) => {
-      if (msgs.success) {
-        toast.success(resolveValue(msgs.success, p), {
+      const successMessage = msgs.success
+        ? resolveValue(msgs.success, p)
+        : undefined;
+
+      if (successMessage) {
+        toast.success(successMessage, {
           id,
           ...opts,
           ...opts?.success,
@@ -83,8 +87,10 @@ toast.promise = <T>(
       return p;
     })
     .catch((e) => {
-      if (msgs.error) {
-        toast.error(resolveValue(msgs.error, e), {
+      const errorMessage = msgs.error ? resolveValue(msgs.error, e) : undefined;
+
+      if (errorMessage) {
+        toast.error(errorMessage, {
           id,
           ...opts,
           ...opts?.error,
