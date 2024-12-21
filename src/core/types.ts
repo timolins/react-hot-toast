@@ -68,10 +68,9 @@ export type ToastOptions = Partial<
   >
 >;
 
-export type DefaultToastOptions = ToastOptions &
-  {
-    [key in ToastType]?: ToastOptions;
-  };
+export type DefaultToastOptions = ToastOptions & {
+  [key in ToastType]?: ToastOptions;
+};
 
 export interface ToasterProps {
   position?: ToastPosition;
@@ -81,4 +80,12 @@ export interface ToasterProps {
   containerStyle?: React.CSSProperties;
   containerClassName?: string;
   children?: (toast: Toast) => JSX.Element;
+}
+
+export interface ToastWrapperProps {
+  id: string;
+  className?: string;
+  style?: React.CSSProperties;
+  onHeightUpdate: (id: string, height: number) => void;
+  children?: React.ReactNode;
 }
