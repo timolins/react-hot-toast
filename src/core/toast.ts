@@ -71,23 +71,27 @@ toast.promise = <T>(
 
   promise
     .then((p) => {
-      if (msgs.success)
+      if (msgs.success) {
         toast.success(resolveValue(msgs.success, p), {
           id,
           ...opts,
           ...opts?.success,
         });
-      else toast.remove(id);
+      } else {
+        toast.dismiss(id);
+      }
       return p;
     })
     .catch((e) => {
-      if (msgs.error)
+      if (msgs.error) {
         toast.error(resolveValue(msgs.error, e), {
           id,
           ...opts,
           ...opts?.error,
         });
-      else toast.remove(id);
+      } else {
+        toast.dismiss(id);
+      }
     });
 
   return promise;
