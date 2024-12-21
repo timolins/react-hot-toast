@@ -36,10 +36,10 @@
 
 ## Installation
 
-#### With yarn
+#### With pnpm
 
 ```sh
-yarn add react-hot-toast
+pnpm add react-hot-toast
 ```
 
 #### With NPM
