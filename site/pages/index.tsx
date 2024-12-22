@@ -32,7 +32,7 @@ const Step: React.FC<{
   count: number;
   title: string;
   subTitle: string;
-  code: JSX.Element;
+  code: React.JSX.Element;
 }> = (props) => (
   <div className="flex flex-col gap-1 items-center">
     <div className="h-6 w-6 mb-2 text-sm rounded-full bg-toast-900 text-toast-50 flex items-center justify-center">
