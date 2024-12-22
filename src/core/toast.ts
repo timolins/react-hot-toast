@@ -68,7 +68,12 @@ toast.dismiss = (toastId?: string, toasterId?: string) => {
 };
 
 /**
- * Removes the toast with the given id. If no id is given, removes all toasts.
+ * Dismisses all toasts.
+ */
+toast.dismissAll = (toasterId?: string) => toast.dismiss(undefined, toasterId);
+
+/**
+ * Removes the toast with the given id.
  * The toast will be removed from the DOM without any transition.
  */
 toast.remove = (toastId?: string, toasterId?: string) => {
@@ -82,6 +87,11 @@ toast.remove = (toastId?: string, toasterId?: string) => {
     dispatchAll(action);
   }
 };
+
+/**
+ * Removes all toasts.
+ */
+toast.removeAll = (toasterId?: string) => toast.remove(undefined, toasterId);
 
 /**
  * Create a loading toast that will automatically updates with the promise.
