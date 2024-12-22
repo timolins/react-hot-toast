@@ -75,6 +75,8 @@ export default function DocsLayout({ meta, children }) {
               </TableItem>
               <TableHeader>Guides</TableHeader>
               <TableItem href="/docs/styling">Styling</TableItem>
+              <TableItem href="/docs/multi-toaster">Multi Toaster</TableItem>
+
               <TableHeader>Releases</TableHeader>
               <TableItem href="/docs/version-2">New in 2.0</TableItem>
             </div>
