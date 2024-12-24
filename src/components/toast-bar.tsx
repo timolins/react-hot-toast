@@ -4,6 +4,7 @@ import { styled, keyframes } from 'goober';
 import { Toast, ToastPosition, resolveValue, Renderable } from '../core/types';
 import { ToastIcon } from './toast-icon';
 import { prefersReducedMotion } from '../core/utils';
+import { toast as toastCore } from '../core/toast';
 
 const enterAnimation = (factor: number) => `
 0% {transform: translate3d(0,${factor * -200}%,0) scale(.6); opacity:.5;}
@@ -41,10 +42,20 @@ const Message = styled('div')`
   white-space: pre-line;
 `;
 
+const Close = styled('span')`
+  cursor: pointer;
+  top: 0;
+  right: 0.5rem;
+  position: absolute;
+  font-size: 1rem;
+`;
+
 interface ToastBarProps {
   toast: Toast;
   position?: ToastPosition;
   style?: React.CSSProperties;
+  closeBtn?: boolean;
+  closeBtnColor?: string;
   children?: (components: {
     icon: Renderable;
     message: Renderable;
@@ -70,7 +81,7 @@ const getAnimationStyle = (
 };
 
 export const ToastBar: React.FC<ToastBarProps> = React.memo(
-  ({ toast, position, style, children }) => {
+  ({ toast, position, style, closeBtn, closeBtnColor, children }) => {
     const animationStyle: React.CSSProperties = toast.height
       ? getAnimationStyle(
           toast.position || position || 'top-center',
@@ -81,7 +92,15 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
     const icon = <ToastIcon toast={toast} />;
     const message = (
       <Message {...toast.ariaProps}>
-        {resolveValue(toast.message, toast)}
+        {resolveValue(toast.message, toast)}{' '}
+        {closeBtn && (
+          <Close
+            style={{ color: closeBtnColor }}
+            onClick={() => toastCore.remove(toast.id)}
+          >
+            x
+          </Close>
+        )}
       </Message>
     );
 
