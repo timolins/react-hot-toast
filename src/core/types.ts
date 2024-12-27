@@ -89,3 +89,7 @@ export interface ToastWrapperProps {
   onHeightUpdate: (id: string, height: number) => void;
   children?: React.ReactNode;
 }
+
+export type Message = ValueOrFunction<Renderable, Toast>;
+
+export type ToastHandler = (message: Message, options?: ToastOptions) => string;
