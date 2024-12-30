@@ -179,18 +179,13 @@ toast.dismiss();
 
 To remove toasts instantly without any animations, use `toast.remove`.
 
-#### Configure toasts' remove delay
+#### Configure remove delay
 
 ```js
-toast.custom(
-    (t) => (
-      // custom jsx here.
-    ),
-    { removeDelay: 500 }
-);
+toast.success('Successfully created!', { removeDelay: 500 });
 ```
 
-By default, the remove operation is delayed by 1000ms. This is how long a toast should be kept in the DOM after beeing dismissed. It is used to play the exit animation. This duration (number in milliseconds) can be configured when calling the toast.
+By default, the remove operation is delayed by 1000ms. This is how long a toast should be kept in the DOM after being dismissed. It is used to play the exit animation. This duration (number in milliseconds) can be configured when calling the toast.
 
 Or, for all toasts, using the Toaster like so:
 
