@@ -110,7 +110,9 @@ import { Toaster, ToastBar } from 'react-hot-toast';
       toast={t}
       style={{
         ...t.style,
-        animation: t.visible ? 'custom-enter 1s ease' : 'custom-exit 1s ease',
+        animation: t.visible
+          ? 'custom-enter 1s ease'
+          : 'custom-exit 1s ease forwards',
       }}
     />
   )}
