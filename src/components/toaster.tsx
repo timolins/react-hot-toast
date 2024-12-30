@@ -90,6 +90,7 @@ export const Toaster: React.FC<ToasterProps> = ({
   children,
   containerStyle,
   containerClassName,
+  pauseOnFocus = false,
 }) => {
   const { toasts, handlers } = useToaster(toastOptions);
 
@@ -109,6 +110,8 @@ export const Toaster: React.FC<ToasterProps> = ({
       className={containerClassName}
       onMouseEnter={handlers.startPause}
       onMouseLeave={handlers.endPause}
+      onFocus={pauseOnFocus ? handlers.startPause : undefined}
+      onBlur={pauseOnFocus ? handlers.endPause : undefined}
     >
       {toasts.map((t) => {
         const toastPosition = t.position || position;

@@ -280,7 +280,7 @@ test('custom toaster renderer', async () => {
   expect(screen.queryByText(/custom/i)).not.toHaveClass('custom-toast');
 });
 
-test('pause toast', async () => {
+test('pause toast on hover', async () => {
   render(
     <>
       <Toaster>
@@ -316,6 +316,46 @@ test('pause toast', async () => {
 
   waitTime(1000);
   waitTime(1000);
+
+  expect(toastElement).not.toBeInTheDocument();
+});
+
+test('pause toast on focus', async () => {
+  render(
+    <>
+      <Toaster pauseOnFocus>
+        {(t) => (
+          <div className="custom-toast">
+            <ToastIcon toast={t} />
+            {resolveValue(t.message, t)}
+            <button>Focus Me</button>
+          </div>
+        )}
+      </Toaster>
+    </>
+  );
+
+  act(() => {
+    toast.success('Title', {
+      duration: 1000,
+    });
+  });
+
+  waitTime(500);
+
+  const toastElement = screen.getByText(/focus me/i);
+
+  expect(toastElement).toBeInTheDocument();
+
+  fireEvent.focus(toastElement);
+
+  waitTime(10000);
+
+  expect(toastElement).toBeInTheDocument();
+
+  fireEvent.blur(toastElement);
+
+  waitTime(2000);
 
   expect(toastElement).not.toBeInTheDocument();
 });
