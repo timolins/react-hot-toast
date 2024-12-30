@@ -16,6 +16,26 @@ const startPause = () => {
   });
 };
 
+const toastTimeouts = new Map<Toast['id'], ReturnType<typeof setTimeout>>();
+
+export const REMOVE_DELAY = 1000;
+
+const addToRemoveQueue = (toastId: string, removeDelay = REMOVE_DELAY) => {
+  if (toastTimeouts.has(toastId)) {
+    return;
+  }
+
+  const timeout = setTimeout(() => {
+    toastTimeouts.delete(toastId);
+    dispatch({
+      type: ActionType.REMOVE_TOAST,
+      toastId: toastId,
+    });
+  }, removeDelay);
+
+  toastTimeouts.set(toastId, timeout);
+};
+
 export const useToaster = (toastOptions?: DefaultToastOptions) => {
   const { toasts, pausedAt } = useStore(toastOptions);
 
@@ -83,6 +103,22 @@ export const useToaster = (toastOptions?: DefaultToastOptions) => {
     },
     [toasts]
   );
+
+  useEffect(() => {
+    // Add dismissed toasts to remove queue
+    toasts.forEach((toast) => {
+      if (toast.dismissed) {
+        addToRemoveQueue(toast.id, toast.removeDelay);
+      } else {
+        // If toast becomes visible again, remove it from the queue
+        const timeout = toastTimeouts.get(toast.id);
+        if (timeout) {
+          clearTimeout(timeout);
+          toastTimeouts.delete(toast.id);
+        }
+      }
+    });
+  }, [toasts]);
 
   return {
     toasts,
