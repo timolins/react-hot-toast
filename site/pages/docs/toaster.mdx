@@ -5,7 +5,7 @@ export const meta = {
   title: '<Toaster/> API',
 };
 
-export default ({ children, meta }) => <Layout meta={meta}>{children}</Layout>;
+export default ({ children }) => <Layout meta={meta}>{children}</Layout>;
 
 # `<Toaster />` API
 
@@ -33,7 +33,7 @@ This component will render all toasts. Alternatively you can create own renderer
     // Default options for specific types
     success: {
       duration: 3000,
-      theme: {
+      iconTheme: {
         primary: 'green',
         secondary: 'black',
       },
@@ -100,7 +100,7 @@ import { Toaster, resolveValue } from 'react-hot-toast';
 
 ### Adapting the default [`<ToastBar/>`](/docs/toast-bar)
 
-You can use this API to modify the defualt ToastBar as well. In this example we overwrite the animation style based on the current state.
+You can use this API to modify the default ToastBar as well. In this example we overwrite the animation style based on the current state.
 
 ```jsx
 import { Toaster, ToastBar } from 'react-hot-toast';
@@ -111,7 +111,9 @@ import { Toaster, ToastBar } from 'react-hot-toast';
       toast={t}
       style={{
         ...t.style,
-        animation: t.visible ? 'custom-enter 1s ease' : 'custom-exit 1s ease',
+        animation: t.visible
+          ? 'custom-enter 1s ease'
+          : 'custom-exit 1s ease forwards',
       }}
     />
   )}

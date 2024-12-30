@@ -63,14 +63,14 @@ const examples: Array<{
     title: 'Multi Line',
     emoji: '↕️',
     snippet: `toast(
-  "This toast is super big. I don't think anyone could eat it in one bite. It's larger than you expected. You eat it but it does not seem to get smaller.",
+  "This toast is super big. I don't think anyone could eat it in one bite.\\n\\nIt's larger than you expected. You eat it but it does not seem to get smaller.",
   {
     duration: 6000,
   }
 );`,
     action: () => {
       toast(
-        "This toast is super big. I don't think anyone could eat it in one bite. It's larger than you expected. You eat it but it does not seem to get smaller.",
+        "This toast is super big. I don't think anyone could eat it in one bite.\n\n It's larger than you expected. You eat it but it does not seem to get smaller.",
         {
           duration: 6000,
         }
@@ -143,7 +143,7 @@ const examples: Array<{
   {
     title: 'Themed',
     emoji: '🎨',
-    snippet: `toast.success('Look at me, I have brand styles.', {
+    snippet: `toast.success('Look at my styles.', {
   style: {
     border: '1px solid #713200',
     padding: '16px',

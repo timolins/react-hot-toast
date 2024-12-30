@@ -68,8 +68,6 @@ export const ToasterExample: React.FC<{
           : 'bg-white shadow-small-button'
       )}
       key={p}
-      data-splitbee-event="Change Position"
-      data-splitbee-event-position={p}
       onClick={() => {
         toast.success(
           <span>
@@ -79,6 +77,14 @@ export const ToasterExample: React.FC<{
             id: 'position',
           }
         );
+
+        (window as any).splitbee?.track('Change Position', {
+          position: p,
+        });
+
+        (window as any).splitbee?.track('Trigger Toast', {
+          example: 'position',
+        });
 
         onPosition(p);
       }}

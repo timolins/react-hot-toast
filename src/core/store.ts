@@ -170,7 +170,7 @@ export const dispatch = (action: Action) => {
   });
 };
 
-const defaultTimeouts: {
+export const defaultTimeouts: {
   [key in ToastType]: number;
 } = {
   blank: 4000,

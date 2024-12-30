@@ -32,14 +32,13 @@ const createToast = (
   id: opts?.id || genId(),
 });
 
-const createHandler = (type?: ToastType): ToastHandler => (
-  message,
-  options
-) => {
-  const toast = createToast(message, type, options);
-  dispatch({ type: ActionType.UPSERT_TOAST, toast });
-  return toast.id;
-};
+const createHandler =
+  (type?: ToastType): ToastHandler =>
+  (message, options) => {
+    const toast = createToast(message, type, options);
+    dispatch({ type: ActionType.UPSERT_TOAST, toast });
+    return toast.id;
+  };
 
 const toast = (message: Message, opts?: ToastOptions) =>
   createHandler('blank')(message, opts);
@@ -60,31 +59,49 @@ toast.remove = (toastId?: string) =>
   dispatch({ type: ActionType.REMOVE_TOAST, toastId });
 
 toast.promise = <T>(
-  promise: Promise<T>,
+  promise: Promise<T> | (() => Promise<T>),
   msgs: {
     loading: Renderable;
-    success: ValueOrFunction<Renderable, T>;
-    error: ValueOrFunction<Renderable, any>;
+    success?: ValueOrFunction<Renderable, T>;
+    error?: ValueOrFunction<Renderable, any>;
   },
   opts?: DefaultToastOptions
 ) => {
   const id = toast.loading(msgs.loading, { ...opts, ...opts?.loading });
 
+  if (typeof promise === 'function') {
+    promise = promise();
+  }
+
   promise
     .then((p) => {
-      toast.success(resolveValue(msgs.success, p), {
-        id,
-        ...opts,
-        ...opts?.success,
-      });
+      const successMessage = msgs.success
+        ? resolveValue(msgs.success, p)
+        : undefined;
+
+      if (successMessage) {
+        toast.success(successMessage, {
+          id,
+          ...opts,
+          ...opts?.success,
+        });
+      } else {
+        toast.dismiss(id);
+      }
       return p;
     })
     .catch((e) => {
-      toast.error(resolveValue(msgs.error, e), {
-        id,
-        ...opts,
-        ...opts?.error,
-      });
+      const errorMessage = msgs.error ? resolveValue(msgs.error, e) : undefined;
+
+      if (errorMessage) {
+        toast.error(errorMessage, {
+          id,
+          ...opts,
+          ...opts?.error,
+        });
+      } else {
+        toast.dismiss(id);
+      }
     });
 
   return promise;
