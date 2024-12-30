@@ -1,3 +1,5 @@
+'use client';
+
 import { toast } from './core/toast';
 
 export * from './headless/index';
