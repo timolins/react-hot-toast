@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { DefaultToastOptions, Toast, ToastType } from './types';
 
 const TOAST_LIMIT = 20;
-const REMOVE_DELAY = 1000;
 
 export enum ActionType {
   ADD_TOAST,
@@ -49,31 +48,6 @@ interface State {
   pausedAt: number | undefined;
 }
 
-const toastTimeouts = new Map<Toast['id'], ReturnType<typeof setTimeout>>();
-
-const addToRemoveQueue = (toastId: string, removeDelay = REMOVE_DELAY) => {
-  if (toastTimeouts.has(toastId)) {
-    return;
-  }
-
-  const timeout = setTimeout(() => {
-    toastTimeouts.delete(toastId);
-    dispatch({
-      type: ActionType.REMOVE_TOAST,
-      toastId: toastId,
-    });
-  }, removeDelay);
-
-  toastTimeouts.set(toastId, timeout);
-};
-
-const clearFromRemoveQueue = (toastId: string) => {
-  const timeout = toastTimeouts.get(toastId);
-  if (timeout) {
-    clearTimeout(timeout);
-  }
-};
-
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case ActionType.ADD_TOAST:
@@ -83,15 +57,12 @@ export const reducer = (state: State, action: Action): State => {
       };
 
     case ActionType.UPDATE_TOAST:
-      //  ! Side effects !
-      if (action.toast.id) {
-        clearFromRemoveQueue(action.toast.id);
-      }
-
       return {
         ...state,
         toasts: state.toasts.map((t) =>
-          t.id === action.toast.id ? { ...t, ...action.toast } : t
+          t.id === action.toast.id
+            ? { ...t, ...action.toast, dismissed: false, visible: true }
+            : t
         ),
       };
 
@@ -104,24 +75,13 @@ export const reducer = (state: State, action: Action): State => {
     case ActionType.DISMISS_TOAST:
       const { toastId } = action;
 
-      // ! Side effects ! - This could be execrated into a dismissToast() action, but I'll keep it here for simplicity
-      if (toastId) {
-        addToRemoveQueue(
-          toastId,
-          state.toasts.find((t) => t.id === toastId)?.removeDelay
-        );
-      } else {
-        state.toasts.forEach((toast) => {
-          addToRemoveQueue(toast.id, toast.removeDelay);
-        });
-      }
-
       return {
         ...state,
         toasts: state.toasts.map((t) =>
           t.id === toastId || toastId === undefined
             ? {
                 ...t,
+                dismissed: true,
                 visible: false,
               }
             : t
@@ -211,6 +171,7 @@ export const useStore = (toastOptions: DefaultToastOptions = {}): State => {
       ...t.style,
     },
   }));
+
   return {
     ...state,
     toasts: mergedToasts,

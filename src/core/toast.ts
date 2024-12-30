@@ -21,6 +21,7 @@ const createToast = (
 ): Toast => ({
   createdAt: Date.now(),
   visible: true,
+  dismissed: false,
   type,
   ariaProps: {
     role: 'status',

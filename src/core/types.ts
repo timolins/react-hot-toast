@@ -52,6 +52,7 @@ export interface Toast {
 
   createdAt: number;
   visible: boolean;
+  dismissed: boolean;
   height?: number;
 }
 
