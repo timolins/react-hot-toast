@@ -102,9 +102,7 @@ const Features = () => (
 export default function Home() {
   const [position, setPosition] = useState<ToastPosition>('top-center');
   const [reverse, setReverse] = useState(false);
-  const { toasts: allToasts } = useToasterStore({
-    removeDelay: 2,
-  });
+  const { toasts: allToasts } = useToasterStore();
 
   const shouldFade =
     allToasts.filter((t) => t.visible).length && position.includes('top');
@@ -242,11 +240,7 @@ export default function Home() {
         </div>
       </header>
       <SplitbeeCounter />
-      <Toaster
-        position={position}
-        reverseOrder={reverse}
-        toastOptions={{ removeDelay: 10, style: { padding: 0 } }}
-      />
+      <Toaster position={position} reverseOrder={reverse} toastOptions={{}} />
       <div className="container flex justify-end -mt-10 pointer-events-none">
         <Butter2 className="transform translate-x-20" />
       </div>
