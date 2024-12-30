@@ -61,7 +61,7 @@ export const reducer = (state: State, action: Action): State => {
         ...state,
         toasts: state.toasts.map((t) =>
           t.id === action.toast.id
-            ? { ...t, ...action.toast, dismissed: false, visible: true }
+            ? { ...t, dismissed: false, visible: true, ...action.toast }
             : t
         ),
       };
