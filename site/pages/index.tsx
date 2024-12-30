@@ -54,7 +54,7 @@ const Steps = () => (
       subTitle="It weighs less than 5kb"
       code={
         <code>
-          <span className="text-toast-600">yarn add</span>{' '}
+          <span className="text-toast-600">pnpm add</span>{' '}
           <span className="text-toast-800">react-hot-toast</span>
         </code>
       }
