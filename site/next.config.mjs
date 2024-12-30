@@ -4,7 +4,7 @@ import nextMdx from '@next/mdx';
 import withPlugins from 'next-compose-plugins';
 
 const withMDX = nextMdx({
-  extension: /.mdx?$/,
+  extension: /\.mdx?$/,
   options: {
     rehypePlugins: [rehypeSlug],
     remarkPlugins: [remarkGfm],
@@ -37,7 +37,7 @@ export default withPlugins(
     withSvgr,
   ],
   {
-    async rewrites() {
+    rewrites() {
       return [
         {
           source: '/bee.js',
