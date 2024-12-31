@@ -1,5 +1,3 @@
-import { CSSProperties } from 'react';
-
 export type ToastType = 'success' | 'error' | 'loading' | 'blank' | 'custom';
 export type ToastPosition =
   | 'top-left'
@@ -9,7 +7,7 @@ export type ToastPosition =
   | 'bottom-center'
   | 'bottom-right';
 
-export type Renderable = JSX.Element | string | null;
+export type Renderable = React.ReactElement | string | null;
 
 export interface IconTheme {
   primary: string;
@@ -46,7 +44,7 @@ export interface Toast {
     'aria-live': 'assertive' | 'off' | 'polite';
   };
 
-  style?: CSSProperties;
+  style?: React.CSSProperties;
   className?: string;
   iconTheme?: IconTheme;
 
@@ -82,7 +80,7 @@ export interface ToasterProps {
   gutter?: number;
   containerStyle?: React.CSSProperties;
   containerClassName?: string;
-  children?: (toast: Toast) => JSX.Element;
+  children?: (toast: Toast) => React.ReactElement;
 }
 
 export interface ToastWrapperProps {
