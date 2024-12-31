@@ -60,17 +60,18 @@ export const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         toasts: state.toasts.map((t) =>
-          t.id === action.toast.id
-            ? { ...t, dismissed: false, visible: true, ...action.toast }
-            : t
+          t.id === action.toast.id ? { ...t, ...action.toast } : t
         ),
       };
 
     case ActionType.UPSERT_TOAST:
       const { toast } = action;
-      return state.toasts.find((t) => t.id === toast.id)
-        ? reducer(state, { type: ActionType.UPDATE_TOAST, toast })
-        : reducer(state, { type: ActionType.ADD_TOAST, toast });
+      return reducer(state, {
+        type: state.toasts.find((t) => t.id === toast.id)
+          ? ActionType.UPDATE_TOAST
+          : ActionType.ADD_TOAST,
+        toast,
+      });
 
     case ActionType.DISMISS_TOAST:
       const { toastId } = action;
