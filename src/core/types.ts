@@ -82,6 +82,8 @@ export interface ToasterProps {
   gutter?: number;
   containerStyle?: React.CSSProperties;
   containerClassName?: string;
+  closeBtn?: boolean;
+  closeBtnColor?: string;
   children?: (toast: Toast) => JSX.Element;
 }
 

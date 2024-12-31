@@ -89,6 +89,8 @@ export const Toaster: React.FC<ToasterProps> = ({
   gutter,
   children,
   containerStyle,
+  closeBtn,
+  closeBtnColor,
   containerClassName,
 }) => {
   const { toasts, handlers } = useToaster(toastOptions);
@@ -132,7 +134,7 @@ export const Toaster: React.FC<ToasterProps> = ({
             ) : children ? (
               children(t)
             ) : (
-              <ToastBar toast={t} position={toastPosition} />
+              <ToastBar toast={t} position={toastPosition} closeBtn={closeBtn} closeBtnColor={closeBtnColor}/>
             )}
           </ToastWrapper>
         );
