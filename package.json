@@ -11,19 +11,30 @@
     "toast",
     "snackbar"
   ],
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
     },
     "./headless": {
-      "types": "./headless/index.d.ts",
-      "import": "./headless/index.mjs",
-      "require": "./headless/index.js"
+      "import": {
+        "types": "./headless/index.d.mts",
+        "default": "./headless/index.mjs"
+      },
+      "require": {
+        "types": "./headless/index.d.ts",
+        "default": "./headless/index.js"
+      }
     }
   },
   "files": [
@@ -35,8 +46,8 @@
     "node": ">=10"
   },
   "scripts": {
-    "start": "tsup --watch",
-    "build": "tsup",
+    "start": "bunchee --watch",
+    "build": "bunchee",
     "test": "jest --runInBand",
     "setup": "pnpm i && cd site && pnpm i && cd .. && pnpm run link",
     "link": "pnpm link ./site/node_modules/react && pnpm link ./site/node_modules/react-dom",
@@ -80,6 +91,7 @@
     "@types/jest": "^29.5.14",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
+    "bunchee": "^6.2.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "prettier": "^2.8.8",
@@ -88,7 +100,6 @@
     "size-limit": "^7.0.8",
     "ts-jest": "^29.2.5",
     "tslib": "^2.8.1",
-    "tsup": "^6.7.0",
     "typescript": "^5.7.2"
   },
   "dependencies": {
@@ -98,5 +109,6 @@
   "peerDependencies": {
     "react": ">=16",
     "react-dom": ">=16"
-  }
+  },
+  "packageManager": "pnpm@9.14.2+sha512.6e2baf77d06b9362294152c851c4f278ede37ab1eba3a55fda317a4a17b209f4dbb973fb250a77abc463a341fcb1f17f17cfa24091c4eb319cda0d9b84278387"
 }
