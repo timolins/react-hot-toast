@@ -11,29 +11,29 @@
     "toast",
     "snackbar"
   ],
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/es/index.mjs",
-  "types": "./dist/cjs/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
       "import": {
-        "types": "./dist/es/index.d.mts",
-        "default": "./dist/es/index.mjs"
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
       },
       "require": {
-        "types": "./dist/cjs/index.d.ts",
-        "default": "./dist/cjs/index.js"
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
       }
     },
     "./headless": {
       "import": {
-        "types": "./headless/es/index.d.mts",
-        "default": "./headless/es/index.mjs"
+        "types": "./headless/index.d.mts",
+        "default": "./headless/index.mjs"
       },
       "require": {
-        "types": "./headless/cjs/index.d.ts",
-        "default": "./headless/cjs/index.js"
+        "types": "./headless/index.d.ts",
+        "default": "./headless/index.js"
       }
     }
   },
