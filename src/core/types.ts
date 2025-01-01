@@ -39,6 +39,7 @@ export interface Toast {
   duration?: number;
   pauseDuration: number;
   position?: ToastPosition;
+  removeDelay?: number;
 
   ariaProps: {
     role: 'status' | 'alert';
@@ -51,6 +52,7 @@ export interface Toast {
 
   createdAt: number;
   visible: boolean;
+  dismissed: boolean;
   height?: number;
 }
 
@@ -65,6 +67,7 @@ export type ToastOptions = Partial<
     | 'style'
     | 'position'
     | 'iconTheme'
+    | 'removeDelay'
   >
 >;
 

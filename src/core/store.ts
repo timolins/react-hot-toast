@@ -48,33 +48,6 @@ interface State {
   pausedAt: number | undefined;
 }
 
-const toastTimeouts = new Map<Toast['id'], ReturnType<typeof setTimeout>>();
-
-export const TOAST_EXPIRE_DISMISS_DELAY = 1000;
-
-const addToRemoveQueue = (toastId: string) => {
-  if (toastTimeouts.has(toastId)) {
-    return;
-  }
-
-  const timeout = setTimeout(() => {
-    toastTimeouts.delete(toastId);
-    dispatch({
-      type: ActionType.REMOVE_TOAST,
-      toastId: toastId,
-    });
-  }, TOAST_EXPIRE_DISMISS_DELAY);
-
-  toastTimeouts.set(toastId, timeout);
-};
-
-const clearFromRemoveQueue = (toastId: string) => {
-  const timeout = toastTimeouts.get(toastId);
-  if (timeout) {
-    clearTimeout(timeout);
-  }
-};
-
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case ActionType.ADD_TOAST:
@@ -84,11 +57,6 @@ export const reducer = (state: State, action: Action): State => {
       };
 
     case ActionType.UPDATE_TOAST:
-      //  ! Side effects !
-      if (action.toast.id) {
-        clearFromRemoveQueue(action.toast.id);
-      }
-
       return {
         ...state,
         toasts: state.toasts.map((t) =>
@@ -98,21 +66,15 @@ export const reducer = (state: State, action: Action): State => {
 
     case ActionType.UPSERT_TOAST:
       const { toast } = action;
-      return state.toasts.find((t) => t.id === toast.id)
-        ? reducer(state, { type: ActionType.UPDATE_TOAST, toast })
-        : reducer(state, { type: ActionType.ADD_TOAST, toast });
+      return reducer(state, {
+        type: state.toasts.find((t) => t.id === toast.id)
+          ? ActionType.UPDATE_TOAST
+          : ActionType.ADD_TOAST,
+        toast,
+      });
 
     case ActionType.DISMISS_TOAST:
       const { toastId } = action;
-
-      // ! Side effects ! - This could be execrated into a dismissToast() action, but I'll keep it here for simplicity
-      if (toastId) {
-        addToRemoveQueue(toastId);
-      } else {
-        state.toasts.forEach((toast) => {
-          addToRemoveQueue(toast.id);
-        });
-      }
 
       return {
         ...state,
@@ -120,6 +82,7 @@ export const reducer = (state: State, action: Action): State => {
           t.id === toastId || toastId === undefined
             ? {
                 ...t,
+                dismissed: true,
                 visible: false,
               }
             : t
@@ -194,6 +157,10 @@ export const useStore = (toastOptions: DefaultToastOptions = {}): State => {
     ...toastOptions,
     ...toastOptions[t.type],
     ...t,
+    removeDelay:
+      t.removeDelay ||
+      toastOptions[t.type]?.removeDelay ||
+      toastOptions?.removeDelay,
     duration:
       t.duration ||
       toastOptions[t.type]?.duration ||
