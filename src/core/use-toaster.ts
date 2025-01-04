@@ -1,7 +1,40 @@
 import { useEffect, useCallback } from 'react';
-import { createDispatch, ActionType, useStore } from './store';
+import { createDispatch, ActionType, useStore, dispatch } from './store';
 import { toast } from './toast';
 import { DefaultToastOptions, Toast, ToastPosition } from './types';
+
+const updateHeight = (toastId: string, height: number) => {
+  dispatch({
+    type: ActionType.UPDATE_TOAST,
+    toast: { id: toastId, height },
+  });
+};
+const startPause = () => {
+  dispatch({
+    type: ActionType.START_PAUSE,
+    time: Date.now(),
+  });
+};
+
+const toastTimeouts = new Map<Toast['id'], ReturnType<typeof setTimeout>>();
+
+export const REMOVE_DELAY = 1000;
+
+const addToRemoveQueue = (toastId: string, removeDelay = REMOVE_DELAY) => {
+  if (toastTimeouts.has(toastId)) {
+    return;
+  }
+
+  const timeout = setTimeout(() => {
+    toastTimeouts.delete(toastId);
+    dispatch({
+      type: ActionType.REMOVE_TOAST,
+      toastId: toastId,
+    });
+  }, removeDelay);
+
+  toastTimeouts.set(toastId, timeout);
+};
 
 export const useToaster = (
   toastOptions?: DefaultToastOptions,
@@ -38,19 +71,6 @@ export const useToaster = (
   }, [toasts, pausedAt, toasterId]);
 
   const dispatch = createDispatch(toasterId);
-  const startPause = useCallback(() => {
-    dispatch({
-      type: ActionType.START_PAUSE,
-      time: Date.now(),
-    });
-  }, []);
-
-  const updateHeight = useCallback((toastId: string, height: number) => {
-    dispatch({
-      type: ActionType.UPDATE_TOAST,
-      toast: { id: toastId, height },
-    });
-  }, []);
 
   const endPause = useCallback(() => {
     if (pausedAt) {
@@ -88,6 +108,22 @@ export const useToaster = (
     },
     [toasts]
   );
+
+  useEffect(() => {
+    // Add dismissed toasts to remove queue
+    toasts.forEach((toast) => {
+      if (toast.dismissed) {
+        addToRemoveQueue(toast.id, toast.removeDelay);
+      } else {
+        // If toast becomes visible again, remove it from the queue
+        const timeout = toastTimeouts.get(toast.id);
+        if (timeout) {
+          clearTimeout(timeout);
+          toastTimeouts.delete(toast.id);
+        }
+      }
+    });
+  }, [toasts]);
 
   return {
     toasts,

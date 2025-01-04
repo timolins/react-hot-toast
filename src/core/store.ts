@@ -58,33 +58,6 @@ interface ToasterState {
 interface State {
   [toasterId: string]: ToasterState;
 }
-const toastTimeouts = new Map<Toast['id'], ReturnType<typeof setTimeout>>();
-
-const addToRemoveQueue = (
-  toastId: string,
-  dismissDelay = TOAST_EXPIRE_DISMISS_DELAY
-) => {
-  if (toastTimeouts.has(toastId)) {
-    return;
-  }
-
-  const timeout = setTimeout(() => {
-    toastTimeouts.delete(toastId);
-    dispatchAll({
-      type: ActionType.REMOVE_TOAST,
-      toastId: toastId,
-    });
-  }, dismissDelay);
-
-  toastTimeouts.set(toastId, timeout);
-};
-
-const clearFromRemoveQueue = (toastId: string) => {
-  const timeout = toastTimeouts.get(toastId);
-  if (timeout) {
-    clearTimeout(timeout);
-  }
-};
 
 export const reducer = (state: ToasterState, action: Action): ToasterState => {
   const { toastLimit } = state.settings;
@@ -97,11 +70,6 @@ export const reducer = (state: ToasterState, action: Action): ToasterState => {
       };
 
     case ActionType.UPDATE_TOAST:
-      //  ! Side effects !
-      if (action.toast.id) {
-        clearFromRemoveQueue(action.toast.id);
-      }
-
       return {
         ...state,
         toasts: state.toasts.map((t) =>
@@ -111,21 +79,15 @@ export const reducer = (state: ToasterState, action: Action): ToasterState => {
 
     case ActionType.UPSERT_TOAST:
       const { toast } = action;
-      return state.toasts.find((t) => t.id === toast.id)
-        ? reducer(state, { type: ActionType.UPDATE_TOAST, toast })
-        : reducer(state, { type: ActionType.ADD_TOAST, toast });
+      return reducer(state, {
+        type: state.toasts.find((t) => t.id === toast.id)
+          ? ActionType.UPDATE_TOAST
+          : ActionType.ADD_TOAST,
+        toast,
+      });
 
     case ActionType.DISMISS_TOAST:
       const { toastId } = action;
-
-      // ! Side effects ! - This could be execrated into a dismissToast() action, but I'll keep it here for simplicity
-      if (toastId) {
-        addToRemoveQueue(toastId, TOAST_EXPIRE_DISMISS_DELAY);
-      } else {
-        state.toasts.forEach((toast) => {
-          addToRemoveQueue(toast.id, TOAST_EXPIRE_DISMISS_DELAY);
-        });
-      }
 
       return {
         ...state,
@@ -133,6 +95,7 @@ export const reducer = (state: ToasterState, action: Action): ToasterState => {
           t.id === toastId || toastId === undefined
             ? {
                 ...t,
+                dismissed: true,
                 visible: false,
               }
             : t
@@ -238,6 +201,10 @@ export const useStore = (
     ...toastOptions,
     ...toastOptions[t.type],
     ...t,
+    removeDelay:
+      t.removeDelay ||
+      toastOptions[t.type]?.removeDelay ||
+      toastOptions?.removeDelay,
     duration:
       t.duration ||
       toastOptions[t.type]?.duration ||

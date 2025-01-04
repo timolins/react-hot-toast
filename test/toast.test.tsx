@@ -8,7 +8,8 @@ import {
 } from '@testing-library/react';
 
 import toast, { resolveValue, Toaster, ToastIcon } from '../src';
-import { TOAST_EXPIRE_DISMISS_DELAY, defaultTimeouts } from '../src/core/store';
+import { defaultTimeouts } from '../src/core/store';
+import { REMOVE_DELAY } from '../src/core/use-toaster';
 
 beforeEach(() => {
   // Tests should run in serial for improved isolation
@@ -70,7 +71,7 @@ test('close notification', async () => {
 
   fireEvent.click(await screen.findByRole('button', { name: /close/i }));
 
-  waitTime(TOAST_EXPIRE_DISMISS_DELAY);
+  waitTime(REMOVE_DELAY);
 
   expect(screen.queryByText(/example/i)).not.toBeInTheDocument();
 });
@@ -180,7 +181,9 @@ test('error toast with custom duration', async () => {
 
   expect(screen.queryByText(/error/i)).toBeInTheDocument();
 
-  waitTime(TOAST_DURATION + TOAST_EXPIRE_DISMISS_DELAY);
+  waitTime(TOAST_DURATION);
+
+  waitTime(REMOVE_DELAY);
 
   expect(screen.queryByText(/error/i)).not.toBeInTheDocument();
 });
@@ -211,7 +214,6 @@ test('different toasts types with dismiss', async () => {
       icon: <span>ICON</span>,
     });
   });
-
   let loadingToastId: string;
   act(() => {
     loadingToastId = toast.loading('Loading!');
@@ -223,17 +225,16 @@ test('different toasts types with dismiss', async () => {
   expect(screen.queryByText('✅')).toBeInTheDocument();
   expect(screen.queryByText('ICON')).toBeInTheDocument();
 
-  const successDismissTime =
-    defaultTimeouts.success + TOAST_EXPIRE_DISMISS_DELAY;
+  waitTime(defaultTimeouts.success);
 
-  waitTime(successDismissTime);
+  waitTime(REMOVE_DELAY);
 
   expect(screen.queryByText(/success/i)).not.toBeInTheDocument();
   expect(screen.queryByText(/error/i)).toBeInTheDocument();
 
-  waitTime(
-    defaultTimeouts.error + TOAST_EXPIRE_DISMISS_DELAY - successDismissTime
-  );
+  waitTime(defaultTimeouts.error);
+
+  waitTime(REMOVE_DELAY);
 
   expect(screen.queryByText(/error/i)).not.toBeInTheDocument();
 
@@ -241,7 +242,7 @@ test('different toasts types with dismiss', async () => {
     toast.dismiss(loadingToastId);
   });
 
-  waitTime(TOAST_EXPIRE_DISMISS_DELAY);
+  waitTime(REMOVE_DELAY);
 
   expect(screen.queryByText(/loading/i)).not.toBeInTheDocument();
 });
@@ -313,7 +314,8 @@ test('pause toast', async () => {
 
   fireEvent.mouseLeave(toastElement);
 
-  waitTime(2000);
+  waitTime(1000);
+  waitTime(1000);
 
   expect(toastElement).not.toBeInTheDocument();
 });
