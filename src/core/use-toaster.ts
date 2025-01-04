@@ -3,19 +3,6 @@ import { createDispatch, ActionType, useStore, dispatch } from './store';
 import { toast } from './toast';
 import { DefaultToastOptions, Toast, ToastPosition } from './types';
 
-const updateHeight = (toastId: string, height: number) => {
-  dispatch({
-    type: ActionType.UPDATE_TOAST,
-    toast: { id: toastId, height },
-  });
-};
-const startPause = () => {
-  dispatch({
-    type: ActionType.START_PAUSE,
-    time: Date.now(),
-  });
-};
-
 const toastTimeouts = new Map<Toast['id'], ReturnType<typeof setTimeout>>();
 
 export const REMOVE_DELAY = 1000;
@@ -71,6 +58,20 @@ export const useToaster = (
   }, [toasts, pausedAt, toasterId]);
 
   const dispatch = createDispatch(toasterId);
+
+  const startPause = useCallback(() => {
+    dispatch({
+      type: ActionType.START_PAUSE,
+      time: Date.now(),
+    });
+  }, []);
+
+  const updateHeight = useCallback((toastId: string, height: number) => {
+    dispatch({
+      type: ActionType.UPDATE_TOAST,
+      toast: { id: toastId, height },
+    });
+  }, []);
 
   const endPause = useCallback(() => {
     if (pausedAt) {

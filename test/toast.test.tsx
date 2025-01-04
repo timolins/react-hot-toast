@@ -368,7 +368,7 @@ describe('Multi-Toaster behavior', () => {
       toast.dismiss('second-toast');
     });
 
-    waitTime(TOAST_EXPIRE_DISMISS_DELAY);
+    waitTime(REMOVE_DELAY);
 
     expect(
       screen.queryByText('Second toaster message')
@@ -381,7 +381,7 @@ describe('Multi-Toaster behavior', () => {
       toast.dismissAll();
     });
 
-    waitTime(TOAST_EXPIRE_DISMISS_DELAY);
+    waitTime(REMOVE_DELAY);
 
     expect(
       screen.queryByText('Default toaster message')
@@ -451,7 +451,7 @@ describe('Multi-Toaster behavior', () => {
     act(() => {
       toast.dismissAll('other-toaster');
     });
-    waitTime(TOAST_EXPIRE_DISMISS_DELAY);
+    waitTime(REMOVE_DELAY);
 
     // The other toaster's toast should be gone, default remains
     expect(screen.queryByText('Other toaster toast')).not.toBeInTheDocument();
@@ -476,7 +476,7 @@ describe('Multi-Toaster behavior', () => {
     act(() => {
       toast.dismissAll();
     });
-    waitTime(TOAST_EXPIRE_DISMISS_DELAY);
+    waitTime(REMOVE_DELAY);
 
     // Both should be removed
     expect(screen.queryByText('Default toaster toast')).not.toBeInTheDocument();
