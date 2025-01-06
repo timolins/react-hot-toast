@@ -158,11 +158,13 @@ export const dispatch = (action: Action, toasterId = DEFAULT_TOASTER_ID) => {
   });
 };
 
-export const dispatchAll = (action: Action) => {
-  Object.keys(memoryState).forEach((toasterId) => {
-    dispatch(action, toasterId);
-  });
-};
+export const dispatchAll = (action: Action) =>
+  Object.keys(memoryState).forEach((toasterId) => dispatch(action, toasterId));
+
+export const getToasterIdFromToastId = (toastId: string) =>
+  Object.keys(memoryState).find((toasterId) =>
+    memoryState[toasterId].toasts.some((t) => t.id === toastId)
+  );
 
 export const createDispatch =
   (toasterId = DEFAULT_TOASTER_ID) =>

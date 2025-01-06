@@ -8,7 +8,13 @@ import {
   resolveValue,
 } from './types';
 import { genId } from './utils';
-import { createDispatch, Action, ActionType, dispatchAll } from './store';
+import {
+  createDispatch,
+  Action,
+  ActionType,
+  dispatchAll,
+  getToasterIdFromToastId,
+} from './store';
 
 type Message = ValueOrFunction<Renderable, Toast>;
 
@@ -37,7 +43,11 @@ const createHandler =
   (type?: ToastType): ToastHandler =>
   (message, options) => {
     const toast = createToast(message, type, options);
-    const dispatch = createDispatch(toast.toasterId);
+
+    const dispatch = createDispatch(
+      toast.toasterId || getToasterIdFromToastId(toast.id)
+    );
+
     dispatch({ type: ActionType.UPSERT_TOAST, toast });
     return toast.id;
   };
@@ -84,7 +94,9 @@ toast.remove = (toastId?: string, toasterId?: string) => {
   };
   if (toasterId) {
     createDispatch(toasterId)(action);
+    console.log('dispatch', action, toasterId);
   } else {
+    console.log('dispatchAll', action);
     dispatchAll(action);
   }
 };

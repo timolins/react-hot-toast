@@ -419,6 +419,7 @@ describe('Multi-Toaster behavior', () => {
 
     // Now update that toast to success
     act(() => {
+      // Note that we are not providing a toasterId here
       toast.success('Data saved!', {
         id: toastId,
       });
