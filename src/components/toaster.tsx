@@ -96,7 +96,7 @@ export const Toaster: React.FC<ToasterProps> = ({
 
   return (
     <div
-      id="_rht_toaster"
+      data-rht-toaster={toasterId || ''}
       style={{
         position: 'fixed',
         zIndex: 9999,
