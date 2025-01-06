@@ -10,6 +10,6 @@ jobs:
       - uses: pnpm/action-setup@v2.2.2
         with:
           version: 7
-      - uses: andresz1/size-limit-action@v1
+      - uses: andresz1/size-limit-action@v1.8.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
