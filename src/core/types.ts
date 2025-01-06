@@ -83,6 +83,7 @@ export interface ToasterProps {
   containerStyle?: React.CSSProperties;
   containerClassName?: string;
   children?: (toast: Toast) => JSX.Element;
+  pauseOnFocus?: boolean;
 }
 
 export interface ToastWrapperProps {
