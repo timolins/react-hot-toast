@@ -1,5 +1,4 @@
 import '@testing-library/jest-dom';
-import '@testing-library/jest-dom/extend-expect';
 
 // Mock matchMedia
 Object.defineProperty(window, 'matchMedia', {

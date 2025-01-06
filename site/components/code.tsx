@@ -130,9 +130,9 @@ export const Code: React.FC<{
             }
 
             return (
-              <div {...getLineProps({ line, key: i })}>
+              <div {...getLineProps({ line, key: i })} key={i}>
                 {line.map((token, key) => (
-                  <span {...getTokenProps({ token, key })} />
+                  <span {...getTokenProps({ token, key })} key={key} />
                 ))}
               </div>
             );
