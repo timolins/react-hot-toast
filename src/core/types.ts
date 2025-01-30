@@ -41,7 +41,7 @@ export interface Toast {
   position?: ToastPosition;
   removeDelay?: number;
 
-  ariaProps: {
+  ariaProps?: {
     role: 'status' | 'alert';
     'aria-live': 'assertive' | 'off' | 'polite';
   };
