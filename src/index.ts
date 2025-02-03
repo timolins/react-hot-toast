@@ -1,6 +1,8 @@
+'use client';
+
 import { toast } from './core/toast';
 
-export * from './headless';
+export * from './headless/index';
 
 export { ToastBar } from './components/toast-bar';
 export { ToastIcon } from './components/toast-icon';
