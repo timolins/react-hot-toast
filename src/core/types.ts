@@ -9,7 +9,7 @@ export type ToastPosition =
   | 'bottom-center'
   | 'bottom-right';
 
-export type Renderable = JSX.Element | string | null;
+export type Renderable = React.ReactElement | string | null;
 
 export interface IconTheme {
   primary: string;
@@ -85,7 +85,7 @@ export interface ToasterProps {
   containerStyle?: React.CSSProperties;
   containerClassName?: string;
   toasterId?: string;
-  children?: (toast: Toast) => JSX.Element;
+  children?: (toast: Toast) => React.ReactElement;
 }
 
 export interface ToastWrapperProps {

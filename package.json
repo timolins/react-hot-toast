@@ -1,7 +1,7 @@
 {
   "name": "react-hot-toast",
   "description": "Smoking hot React Notifications. Lightweight, customizable and beautiful by default.",
-  "version": "2.6.0-beta.0",
+  "version": "2.5.2",
   "author": "Timo Lins",
   "license": "MIT",
   "repository": "timolins/react-hot-toast",
@@ -35,7 +35,7 @@
     "node": ">=10"
   },
   "scripts": {
-    "dev": "tsup --watch",
+    "start": "tsup --watch",
     "build": "tsup",
     "test": "jest --runInBand",
     "setup": "pnpm i && cd site && pnpm i && cd .. && pnpm run link",
@@ -98,5 +98,6 @@
   "peerDependencies": {
     "react": ">=16",
     "react-dom": ">=16"
-  }
+  },
+  "packageManager": "pnpm@9.15.4+sha512.b2dc20e2fc72b3e18848459b37359a32064663e5627a51e4c74b2c29dd8e8e0491483c3abb40789cfd578bf362fb6ba8261b05f0387d76792ed6e23ea3b1b6a0"
 }

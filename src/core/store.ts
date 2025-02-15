@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { DefaultToastOptions, Toast, ToastType } from './types';
 
 export const TOAST_EXPIRE_DISMISS_DELAY = 1000;
@@ -189,7 +189,13 @@ export const useStore = (
   const [state, setState] = useState<ToasterState>(
     memoryState[toasterId] || defaultToasterState
   );
+  const initial = useRef(memoryState[toasterId]);
+
+  // TODO: Switch to useSyncExternalStore when targeting React 18+
   useEffect(() => {
+    if (initial.current !== memoryState[toasterId]) {
+      setState(memoryState[toasterId]);
+    }
     listeners.push([toasterId, setState]);
     return () => {
       const index = listeners.findIndex(([id]) => id === toasterId);

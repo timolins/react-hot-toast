@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   render,
   screen,
@@ -320,6 +320,28 @@ test('pause toast', async () => {
   expect(toastElement).not.toBeInTheDocument();
 });
 
+test('"toast" can be called from useEffect hook', async () => {
+  const MyComponent = () => {
+    const [success, setSuccess] = useState(false);
+    useEffect(() => {
+      toast.success('Success toast');
+      setSuccess(true);
+    }, []);
+
+    return success ? <div>MyComponent finished</div> : null;
+  };
+
+  render(
+    <>
+      <MyComponent />
+      <Toaster />
+    </>
+  );
+
+  await screen.findByText(/MyComponent finished/i);
+  expect(screen.queryByText(/Success toast/i)).toBeInTheDocument();
+});
+
 describe('Multi-Toaster behavior', () => {
   test('renders toasts in correct containers and dismisses them individually', () => {
     render(
@@ -509,4 +531,5 @@ describe('Multi-Toaster behavior', () => {
     expect(screen.queryByText('Removable toast #1')).not.toBeInTheDocument();
     expect(screen.queryByText('Removable toast #2')).toBeInTheDocument();
   });
-});
+
+
