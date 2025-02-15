@@ -531,5 +531,4 @@ describe('Multi-Toaster behavior', () => {
     expect(screen.queryByText('Removable toast #1')).not.toBeInTheDocument();
     expect(screen.queryByText('Removable toast #2')).toBeInTheDocument();
   });
-
-
+});
