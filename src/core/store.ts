@@ -139,6 +139,7 @@ export const defaultTimeouts: {
   success: 2000,
   loading: Infinity,
   custom: 4000,
+  warn: 3000,
 };
 
 export const useStore = (toastOptions: DefaultToastOptions = {}): State => {
