@@ -94,9 +94,7 @@ toast.remove = (toastId?: string, toasterId?: string) => {
   };
   if (toasterId) {
     createDispatch(toasterId)(action);
-    console.log('dispatch', action, toasterId);
   } else {
-    console.log('dispatchAll', action);
     dispatchAll(action);
   }
 };
