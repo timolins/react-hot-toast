@@ -1,0 +1,67 @@
+import Layout from '../../components/docs-layout';
+import toast, { Toaster } from 'react-hot-toast';
+
+export const meta = {
+  title: 'Multiple Toasters',
+};
+
+export default ({ children }) => <Layout meta={meta}>{children}</Layout>;
+
+# Multiple Toasters
+
+React Hot Toast supports having multiple toaster instances in your app. This allows you to have different toast configurations and positions for different parts of your application.
+
+## Basic Usage
+
+You can create multiple toasters by giving each one a unique `toasterId`:
+
+```jsx
+<Toaster toasterId="area1" />
+<Toaster toasterId="area2" />
+
+
+// Create a toast in area 1
+toast('Notification for Area 1', { toasterId: 'area1' })
+```
+
+{/* Global toaster */}
+
+<div className="flex gap-4">
+  <div className="relative min-h-[200px] bg-toast-200 text-toast-800 rounded-lg p-4 my-4 overflow-hidden flex-1">
+    <p className="text-sm  mb-4">Area 1</p>
+    <Toaster
+      toasterId="area1"
+      position="top-center"
+      containerStyle={{ position: 'absolute' }}
+    />
+    <div className="mt-8">
+      <button
+        onClick={() => toast('Notification for Area 1', { toasterId: 'area1' })}
+        className="bg-toast-500 text-white px-4 py-2 rounded hover:bg-toast-600"
+      >
+        Show Toast in Area 1
+      </button>
+    </div>
+  </div>
+
+  <div className="relative min-h-[200px] bg-toast-200 rounded-lg p-4 my-4 overflow-hidden flex-1">
+    <p className="text-sm text-toast-500 mb-4">Area 2</p>
+    <Toaster
+      toasterId="area2" 
+      position="top-center"
+      containerStyle={{ position: 'absolute' }}
+      toastOptions={{
+        className: '!bg-toast-500 !text-white px-4 py-2 hover:bg-toast-600 border border-toast-800/10 !rounded-full',
+      }}
+    />
+    <div className="mt-8">
+      <button
+        onClick={() => toast('Notification for Area 2', { toasterId: 'area2' })}
+        className="bg-toast-500 text-white px-4 py-2 rounded hover:bg-toast-600"
+      >
+        Show Toast in Area 2
+      </button>
+    </div>
+
+  </div>
+</div>

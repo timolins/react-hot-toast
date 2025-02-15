@@ -8,7 +8,13 @@ import {
   resolveValue,
 } from './types';
 import { genId } from './utils';
-import { dispatch, ActionType } from './store';
+import {
+  createDispatch,
+  Action,
+  ActionType,
+  dispatchAll,
+  getToasterIdFromToastId,
+} from './store';
 
 type Message = ValueOrFunction<Renderable, Toast>;
 
@@ -37,6 +43,11 @@ const createHandler =
   (type?: ToastType): ToastHandler =>
   (message, options) => {
     const toast = createToast(message, type, options);
+
+    const dispatch = createDispatch(
+      toast.toasterId || getToasterIdFromToastId(toast.id)
+    );
+
     dispatch({ type: ActionType.UPSERT_TOAST, toast });
     return toast.id;
   };
@@ -49,16 +60,53 @@ toast.success = createHandler('success');
 toast.loading = createHandler('loading');
 toast.custom = createHandler('custom');
 
-toast.dismiss = (toastId?: string) => {
-  dispatch({
+/**
+ * Dismisses the toast with the given id. If no id is given, dismisses all toasts.
+ * The toast will transition out and then be removed from the DOM.
+ * Applies to all toasters, except when a `toasterId` is given.
+ */
+toast.dismiss = (toastId?: string, toasterId?: string) => {
+  const action: Action = {
     type: ActionType.DISMISS_TOAST,
     toastId,
-  });
+  };
+
+  if (toasterId) {
+    createDispatch(toasterId)(action);
+  } else {
+    dispatchAll(action);
+  }
 };
 
-toast.remove = (toastId?: string) =>
-  dispatch({ type: ActionType.REMOVE_TOAST, toastId });
+/**
+ * Dismisses all toasts.
+ */
+toast.dismissAll = (toasterId?: string) => toast.dismiss(undefined, toasterId);
 
+/**
+ * Removes the toast with the given id.
+ * The toast will be removed from the DOM without any transition.
+ */
+toast.remove = (toastId?: string, toasterId?: string) => {
+  const action: Action = {
+    type: ActionType.REMOVE_TOAST,
+    toastId,
+  };
+  if (toasterId) {
+    createDispatch(toasterId)(action);
+  } else {
+    dispatchAll(action);
+  }
+};
+
+/**
+ * Removes all toasts.
+ */
+toast.removeAll = (toasterId?: string) => toast.remove(undefined, toasterId);
+
+/**
+ * Create a loading toast that will automatically updates with the promise.
+ */
 toast.promise = <T>(
   promise: Promise<T> | (() => Promise<T>),
   msgs: {
