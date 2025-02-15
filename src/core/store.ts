@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { DefaultToastOptions, Toast, ToastType } from './types';
 
 const TOAST_LIMIT = 20;
@@ -143,7 +143,13 @@ export const defaultTimeouts: {
 
 export const useStore = (toastOptions: DefaultToastOptions = {}): State => {
   const [state, setState] = useState<State>(memoryState);
+  const initial = useRef(memoryState);
+
+  // TODO: Switch to useSyncExternalStore when targeting React 18+
   useEffect(() => {
+    if (initial.current !== memoryState) {
+      setState(memoryState);
+    }
     listeners.push(setState);
     return () => {
       const index = listeners.indexOf(setState);
@@ -151,7 +157,7 @@ export const useStore = (toastOptions: DefaultToastOptions = {}): State => {
         listeners.splice(index, 1);
       }
     };
-  }, [state]);
+  }, []);
 
   const mergedToasts = state.toasts.map((t) => ({
     ...toastOptions,
