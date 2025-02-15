@@ -1,7 +1,7 @@
 {
   "name": "react-hot-toast",
   "description": "Smoking hot React Notifications. Lightweight, customizable and beautiful by default.",
-  "version": "2.5.1",
+  "version": "2.5.2",
   "author": "Timo Lins",
   "license": "MIT",
   "repository": "timolins/react-hot-toast",
