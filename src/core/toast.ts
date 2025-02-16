@@ -23,10 +23,6 @@ const createToast = (
   visible: true,
   dismissed: false,
   type,
-  ariaProps: {
-    role: 'status',
-    'aria-live': 'polite',
-  },
   message,
   pauseDuration: 0,
   ...opts,
