@@ -1,4 +1,5 @@
 import { defineConfig, Options } from 'tsup';
+import { minifyTemplates, writeFiles } from 'esbuild-minify-templates';
 
 const commonConfig: Options = {
   minify: true,
@@ -6,6 +7,10 @@ const commonConfig: Options = {
   format: ['esm', 'cjs'],
   sourcemap: true,
   clean: true,
+  esbuildPlugins: [
+    minifyTemplates({ taggedOnly: false }),
+    writeFiles(),
+  ],
 };
 export default defineConfig([
   {
