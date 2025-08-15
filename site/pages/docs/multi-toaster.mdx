@@ -9,59 +9,90 @@ export default ({ children }) => <Layout meta={meta}>{children}</Layout>;
 
 # Multiple Toasters
 
-React Hot Toast supports having multiple toaster instances in your app. This allows you to have different toast configurations and positions for different parts of your application.
+React Hot Toast supports multiple toaster instances in your app, They can be used and configured independently of each other. This is useful for having notifications in different areas of your app.
 
-## Basic Usage
-
-You can create multiple toasters by giving each one a unique `toasterId`:
+You can use multiple toasters by creating a [`Toaster`](/docs/toaster) with a unique `toasterId`:
 
 ```jsx
-<Toaster toasterId="area1" />
-<Toaster toasterId="area2" />
-
-
-// Create a toast in area 1
-toast('Notification for Area 1', { toasterId: 'area1' })
+<Toaster toasterId="sidebar" />
 ```
 
-{/* Global toaster */}
+## Example
 
-<div className="flex gap-4">
-  <div className="relative min-h-[200px] bg-toast-200 text-toast-800 rounded-lg p-4 my-4 overflow-hidden flex-1">
-    <p className="text-sm  mb-4">Area 1</p>
+This example shows two toasters, each maintaining their own state and configuration.
+
+<div className="not-prose flex gap-4 flex-col md:flex-row my-4">
+  <div className="relative min-h-[200px] bg-toast-200 text-toast-800 rounded-lg p-4 overflow-hidden flex-1 flex flex-col gap-2">
+    <p className="text-lg flex-1 text-center text-toast-300 flex items-center justify-center">Area 1</p>
     <Toaster
       toasterId="area1"
       position="top-center"
       containerStyle={{ position: 'absolute' }}
     />
-    <div className="mt-8">
-      <button
-        onClick={() => toast('Notification for Area 1', { toasterId: 'area1' })}
-        className="bg-toast-500 text-white px-4 py-2 rounded hover:bg-toast-600"
-      >
-        Show Toast in Area 1
-      </button>
-    </div>
+    <button
+      onClick={() => toast('Notification for Area 1', { toasterId: 'area1' })}
+      className="bg-toast-600 text-white px-4 py-2 rounded-lg hover:bg-toast-600 w-full"
+    >
+      Show Toast in Area 1
+    </button>
   </div>
 
-  <div className="relative min-h-[200px] bg-toast-200 rounded-lg p-4 my-4 overflow-hidden flex-1">
-    <p className="text-sm text-toast-500 mb-4">Area 2</p>
+  <div className="relative min-h-[200px] rounded-lg p-4 overflow-hidden flex-1 flex flex-col gap-2" style={{ backgroundColor: 'rgba(154, 134, 253, 0.15)' }}>
+    <p className="text-lg flex-1 text-center text-[#876fff84] flex items-center justify-center">Area 2</p>
     <Toaster
-      toasterId="area2" 
+      toasterId="area2"
       position="top-center"
       containerStyle={{ position: 'absolute' }}
       toastOptions={{
-        className: '!bg-toast-500 !text-white px-4 py-2 hover:bg-toast-600 border border-toast-800/10 !rounded-full',
+        className: '!text-white px-4 py-2 border !rounded-full',
+        style: {
+          backgroundColor: 'rgb(154, 134, 253)',
+          borderColor: 'rgba(154, 134, 253, 0.3)'
+        }
       }}
     />
-    <div className="mt-8">
-      <button
-        onClick={() => toast('Notification for Area 2', { toasterId: 'area2' })}
-        className="bg-toast-500 text-white px-4 py-2 rounded hover:bg-toast-600"
-      >
-        Show Toast in Area 2
-      </button>
-    </div>
-
+    <button
+      onClick={() => toast('Notification for Area 2', { toasterId: 'area2' })}
+      className="text-white px-4 py-2 rounded-lg bg-[#9a86fd] w-full"
+    >
+      Show Toast in Area 2
+    </button>
   </div>
 </div>
+
+## Basic Usage
+
+You can create multiple toasters providing unique `toasterId` to each `<Toaster />` component:
+
+```jsx
+// Create a toaster with a unique id
+<Toaster toasterId="area1" />
+
+// Create another toaster with a unique id
+<Toaster toasterId="area2" toastOptions={{ ... }} />
+```
+
+To create a toast in a specific toaster, you can pass the `toasterId` to the `toast` function.
+
+```jsx
+// Create a toast in area 1
+toast('Notification for Area 1', {
+  toasterId: 'area1',
+});
+```
+
+When no `toasterId` is provided, it uses `"default"` as the `toasterId`.
+
+### Positioning the toaster
+
+When placing a toaster in a specific area of your app, set the position to `absolute` and the parent element to `relative`.
+
+```jsx
+<div style={{ position: 'relative' }}>
+  <Toaster
+    toasterId="area1"
+    position="top-center"
+    containerStyle={{ position: 'absolute' }}
+  />
+</div>
+```
