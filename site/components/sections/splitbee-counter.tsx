@@ -49,7 +49,7 @@ export const SplitbeeCounter = () => {
         {letters.map((l, i) => (
           <div
             className={clsx(
-              'animate-enter',
+              'animate-custom-enter',
               'bg-toast-100 rounded p-4 text-lg font-bold font-mono'
             )}
             key={i + '-' + l}
