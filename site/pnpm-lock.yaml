@@ -69,9 +69,6 @@ importers:
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.4.49)
-      next-compose-plugins:
-        specifier: ^2.2.1
-        version: 2.2.1
       remark-gfm:
         specifier: ^3.0.1
         version: 3.0.1
@@ -1911,9 +1908,6 @@ packages:
 
   neo-async@2.6.2:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
-
-  next-compose-plugins@2.2.1:
-    resolution: {integrity: sha512-OjJ+fV15FXO2uQXQagLD4C0abYErBjyjE0I0FHpOEIB8upw0hg1ldFP6cqHTJBH1cZqy96OeR3u1dJ+Ez2D4Bg==}
 
   next-seo@5.15.0:
     resolution: {integrity: sha512-LGbcY91yDKGMb7YI+28n3g+RuChUkt6pXNpa8FkfKkEmNiJkeRDEXTnnjVtwT9FmMhG6NH8qwHTelGrlYm9rgg==}
@@ -4661,8 +4655,6 @@ snapshots:
   nanoid@3.3.8: {}
 
   neo-async@2.6.2: {}
-
-  next-compose-plugins@2.2.1: {}
 
   next-seo@5.15.0(next@12.3.4(@babel/core@7.26.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
