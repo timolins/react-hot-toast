@@ -9,34 +9,79 @@ export default ({ children }) => <Layout meta={meta}>{children}</Layout>;
 
 # `useToaster()` API
 
-The `useToaster()` hook provides you a **headless system that will manage the notification state** for you. This makes building your own notification system much easier.
+The `useToaster()` hook provides a **headless toast management system** for building custom notification UIs. It manages toast state and lifecycle without rendering any components.
 
-It solves the following problems for you:
+It handles pausing on hover, auto-removal, and provides a 1-second removal delay with `visible` flag for smooth animations.
 
-- Built-in dispatch system with [`toast()`](/docs/toast)
-- Handlers to pause toasts on hover
-- Automatically remove expired toasts
-- Support for unmount animations. Removal is delayed by 1s, but sets `visible` on the toast to `false`.
+**Alternative**: Use [`useToasterStore()`](/docs/use-toaster-store) if you already have a toaster instance and only need the state.
 
-### Importing from headless
+### Importing
 
-You can import only the core of the library with `react-hot-toast/headless`. It won't include any styles, dependencies or custom components.
+```jsx
+import { useToaster } from 'react-hot-toast';
+```
+
+You can also import from the headless entry point to exclude UI components:
 
 ```jsx
 import { useToaster } from 'react-hot-toast/headless';
 ```
 
-Be aware: [react-hot-toast 2.0](/docs/version-2) adds support for **custom render functions**, an easier method to render custom notification components.
+**Note**: [React Hot Toast 2.0](/docs/version-2) includes **custom render functions** for easier custom components.
 
-It's recommended to only have one `<Toaster/>` or `useToaster()` in your app at a time. If you need the current state without the handlers, you should use [`useToasterStore()`](/docs/use-toaster-store) instead.
+## API Reference
 
-## Usage with React Native
+### Parameters
 
-Headless mode is perfectly suited to add notifications to your React Native app. You can check out [this example](<https://snack.expo.io/@timo/react-hot-toast---usetoaster()---react-native>).
+```tsx
+useToaster(
+  toastOptions?: DefaultToastOptions,
+  toasterId?: string
+)
+```
+
+| Parameter      | Type                  | Default     | Description                                     |
+| -------------- | --------------------- | ----------- | ----------------------------------------------- |
+| `toastOptions` | `DefaultToastOptions` | `undefined` | Default options for all toasts in this instance |
+| `toasterId`    | `string`              | `'default'` | Unique identifier for this toaster instance     |
+
+### Returns
+
+```tsx
+{
+  toasts: Toast[];
+  handlers: {
+    startPause: () => void;
+    endPause: () => void;
+    updateHeight: (toastId: string, height: number) => void;
+    calculateOffset: (toast: Toast, options?: OffsetOptions) => number;
+  };
+}
+```
+
+#### `toasts`
+
+Array of all toasts in this toaster instance, including hidden ones for animation purposes.
+
+#### `handlers`
+
+- **`startPause()`**: Pause all toast timers (useful for hover states)
+- **`endPause()`**: Resume all toast timers
+- **`updateHeight(toastId, height)`**: Update toast height for offset calculations
+- **`calculateOffset(toast, options)`**: Calculate vertical offset for toast positioning
+
+## Multiple Toasters
+
+You can create multiple independent toaster instances by providing a unique `toasterId`. See the [Multiple Toasters](/docs/multi-toaster) guide for detailed examples.
+
+```jsx
+const sidebar = useToaster({ duration: 5000 }, 'sidebar');
+toast('Sidebar notification', { toasterId: 'sidebar' });
+```
 
 ## Examples
 
-### Basic Example
+### Basic Implementation
 
 ```jsx
 import toast, { useToaster } from 'react-hot-toast/headless';
@@ -58,20 +103,20 @@ const Notifications = () => {
   );
 };
 
-// Create toasts anywhere
+// Create toasts from anywhere
 toast('Hello World');
 ```
 
-### Animated Example
+### Animated Implementation
 
-Instead of mapping over `visibleToasts` we'll use `toasts`, which includes all hidden toasts. We animate them based on `toast.visible`. Toasts will be removed from 1 second after being dismissed, which give us enough time to animate.
+This example uses all `toasts` (including hidden ones) to enable smooth animations. The `toast.visible` property controls opacity, while the 1-second removal delay provides time for exit animations.
 
-You can play with the demo on [CodeSandbox](https://codesandbox.io/s/react-hot-toast-usetoaster-headless-example-zw7op?file=/src/App.js).
+**Live Demo**: [CodeSandbox](https://codesandbox.io/s/react-hot-toast-usetoaster-headless-example-zw7op?file=/src/App.js)
 
 ```jsx
 import { useToaster } from 'react-hot-toast/headless';
 
-const Notifications = () => {
+const AnimatedNotifications = () => {
   const { toasts, handlers } = useToaster();
   const { startPause, endPause, calculateOffset, updateHeight } = handlers;
 
@@ -92,11 +137,12 @@ const Notifications = () => {
         });
 
         const ref = (el) => {
-          if (el && typeof toast.height !== "number") {
+          if (el && typeof toast.height !== 'number') {
             const height = el.getBoundingClientRect().height;
             updateHeight(toast.id, height);
           }
         };
+
         return (
           <div
             key={toast.id}
@@ -119,3 +165,8 @@ const Notifications = () => {
   );
 };
 ```
+
+
+## Usage with React Native
+
+The headless API works perfectly with React Native. View the [React Native example](<https://snack.expo.io/@timo/react-hot-toast---usetoaster()---react-native>) for implementation details.

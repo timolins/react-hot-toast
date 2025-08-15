@@ -88,14 +88,15 @@ export const Toaster: React.FC<ToasterProps> = ({
   toastOptions,
   gutter,
   children,
+  toasterId,
   containerStyle,
   containerClassName,
 }) => {
-  const { toasts, handlers } = useToaster(toastOptions);
+  const { toasts, handlers } = useToaster(toastOptions, toasterId);
 
   return (
     <div
-      id="_rht_toaster"
+      data-rht-toaster={toasterId || ''}
       style={{
         position: 'fixed',
         zIndex: 9999,

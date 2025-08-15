@@ -20,6 +20,7 @@ This component will render all toasts. Alternatively you can create own renderer
   gutter={8}
   containerClassName=""
   containerStyle={{}}
+  toasterId="default"
   toastOptions={{
     // Define default options
     className: '',
@@ -66,6 +67,10 @@ Customize the style of toaster div. This can be used to change the offset of all
 ### `gutter` Prop
 
 Changes the gap between each toast. Defaults to `8`.
+
+### `toasterId` Prop
+
+You can change the toasterId to have a different toaster instance. Learn more about [multiple toasters](/docs/multi-toaster). Defaults to `"default"`.
 
 ### `toastOptions` Prop
 

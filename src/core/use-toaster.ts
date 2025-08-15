@@ -1,43 +1,37 @@
-import { useEffect, useCallback } from 'react';
-import { dispatch, ActionType, useStore } from './store';
+import { useEffect, useCallback, useRef } from 'react';
+import { createDispatch, ActionType, useStore, dispatch } from './store';
 import { toast } from './toast';
 import { DefaultToastOptions, Toast, ToastPosition } from './types';
 
-const updateHeight = (toastId: string, height: number) => {
-  dispatch({
-    type: ActionType.UPDATE_TOAST,
-    toast: { id: toastId, height },
-  });
-};
-const startPause = () => {
-  dispatch({
-    type: ActionType.START_PAUSE,
-    time: Date.now(),
-  });
-};
-
-const toastTimeouts = new Map<Toast['id'], ReturnType<typeof setTimeout>>();
-
 export const REMOVE_DELAY = 1000;
 
-const addToRemoveQueue = (toastId: string, removeDelay = REMOVE_DELAY) => {
-  if (toastTimeouts.has(toastId)) {
-    return;
-  }
+export const useToaster = (
+  toastOptions?: DefaultToastOptions,
+  toasterId: string = 'default'
+) => {
+  const { toasts, pausedAt } = useStore(toastOptions, toasterId);
+  const toastTimeouts = useRef(
+    new Map<Toast['id'], ReturnType<typeof setTimeout>>()
+  ).current;
 
-  const timeout = setTimeout(() => {
-    toastTimeouts.delete(toastId);
-    dispatch({
-      type: ActionType.REMOVE_TOAST,
-      toastId: toastId,
-    });
-  }, removeDelay);
+  const addToRemoveQueue = useCallback(
+    (toastId: string, removeDelay = REMOVE_DELAY) => {
+      if (toastTimeouts.has(toastId)) {
+        return;
+      }
 
-  toastTimeouts.set(toastId, timeout);
-};
+      const timeout = setTimeout(() => {
+        toastTimeouts.delete(toastId);
+        dispatch({
+          type: ActionType.REMOVE_TOAST,
+          toastId: toastId,
+        });
+      }, removeDelay);
 
-export const useToaster = (toastOptions?: DefaultToastOptions) => {
-  const { toasts, pausedAt } = useStore(toastOptions);
+      toastTimeouts.set(toastId, timeout);
+    },
+    []
+  );
 
   useEffect(() => {
     if (pausedAt) {
@@ -59,19 +53,38 @@ export const useToaster = (toastOptions?: DefaultToastOptions) => {
         }
         return;
       }
-      return setTimeout(() => toast.dismiss(t.id), durationLeft);
+      return setTimeout(() => toast.dismiss(t.id, toasterId), durationLeft);
     });
 
     return () => {
       timeouts.forEach((timeout) => timeout && clearTimeout(timeout));
     };
-  }, [toasts, pausedAt]);
+  }, [toasts, pausedAt, toasterId]);
+
+  const dispatch = useCallback(createDispatch(toasterId), [toasterId]);
+
+  const startPause = useCallback(() => {
+    dispatch({
+      type: ActionType.START_PAUSE,
+      time: Date.now(),
+    });
+  }, [dispatch]);
+
+  const updateHeight = useCallback(
+    (toastId: string, height: number) => {
+      dispatch({
+        type: ActionType.UPDATE_TOAST,
+        toast: { id: toastId, height },
+      });
+    },
+    [dispatch]
+  );
 
   const endPause = useCallback(() => {
     if (pausedAt) {
       dispatch({ type: ActionType.END_PAUSE, time: Date.now() });
     }
-  }, [pausedAt]);
+  }, [pausedAt, dispatch]);
 
   const calculateOffset = useCallback(
     (
@@ -104,8 +117,8 @@ export const useToaster = (toastOptions?: DefaultToastOptions) => {
     [toasts]
   );
 
+  // Keep track of dismissed toasts and remove them after the delay
   useEffect(() => {
-    // Add dismissed toasts to remove queue
     toasts.forEach((toast) => {
       if (toast.dismissed) {
         addToRemoveQueue(toast.id, toast.removeDelay);
@@ -118,7 +131,7 @@ export const useToaster = (toastOptions?: DefaultToastOptions) => {
         }
       }
     });
-  }, [toasts]);
+  }, [toasts, addToRemoveQueue]);
 
   return {
     toasts,

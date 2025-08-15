@@ -1,7 +1,13 @@
 import { useEffect, useState, useRef } from 'react';
 import { DefaultToastOptions, Toast, ToastType } from './types';
 
-const TOAST_LIMIT = 20;
+export const TOAST_EXPIRE_DISMISS_DELAY = 1000;
+export const TOAST_LIMIT = 20;
+export const DEFAULT_TOASTER_ID = 'default';
+
+interface ToasterSettings {
+  toastLimit: number;
+}
 
 export enum ActionType {
   ADD_TOAST,
@@ -13,7 +19,7 @@ export enum ActionType {
   END_PAUSE,
 }
 
-type Action =
+export type Action =
   | {
       type: ActionType.ADD_TOAST;
       toast: Toast;
@@ -43,17 +49,24 @@ type Action =
       time: number;
     };
 
-interface State {
+interface ToasterState {
   toasts: Toast[];
+  settings: ToasterSettings;
   pausedAt: number | undefined;
 }
 
-export const reducer = (state: State, action: Action): State => {
+interface State {
+  [toasterId: string]: ToasterState;
+}
+
+export const reducer = (state: ToasterState, action: Action): ToasterState => {
+  const { toastLimit } = state.settings;
+
   switch (action.type) {
     case ActionType.ADD_TOAST:
       return {
         ...state,
-        toasts: [action.toast, ...state.toasts].slice(0, TOAST_LIMIT),
+        toasts: [action.toast, ...state.toasts].slice(0, toastLimit),
       };
 
     case ActionType.UPDATE_TOAST:
@@ -120,16 +133,44 @@ export const reducer = (state: State, action: Action): State => {
   }
 };
 
-const listeners: Array<(state: State) => void> = [];
+const listeners: Array<
+  [toasterId: string, reducer: (state: ToasterState) => void]
+> = [];
 
-let memoryState: State = { toasts: [], pausedAt: undefined };
+const defaultToasterState: ToasterState = {
+  toasts: [],
+  pausedAt: undefined,
+  settings: {
+    toastLimit: TOAST_LIMIT,
+  },
+};
+let memoryState: State = {};
 
-export const dispatch = (action: Action) => {
-  memoryState = reducer(memoryState, action);
-  listeners.forEach((listener) => {
-    listener(memoryState);
+export const dispatch = (action: Action, toasterId = DEFAULT_TOASTER_ID) => {
+  memoryState[toasterId] = reducer(
+    memoryState[toasterId] || defaultToasterState,
+    action
+  );
+  listeners.forEach(([id, listener]) => {
+    if (id === toasterId) {
+      listener(memoryState[toasterId]);
+    }
   });
 };
+
+export const dispatchAll = (action: Action) =>
+  Object.keys(memoryState).forEach((toasterId) => dispatch(action, toasterId));
+
+export const getToasterIdFromToastId = (toastId: string) =>
+  Object.keys(memoryState).find((toasterId) =>
+    memoryState[toasterId].toasts.some((t) => t.id === toastId)
+  );
+
+export const createDispatch =
+  (toasterId = DEFAULT_TOASTER_ID) =>
+  (action: Action) => {
+    dispatch(action, toasterId);
+  };
 
 export const defaultTimeouts: {
   [key in ToastType]: number;
@@ -141,23 +182,28 @@ export const defaultTimeouts: {
   custom: 4000,
 };
 
-export const useStore = (toastOptions: DefaultToastOptions = {}): State => {
-  const [state, setState] = useState<State>(memoryState);
-  const initial = useRef(memoryState);
+export const useStore = (
+  toastOptions: DefaultToastOptions = {},
+  toasterId: string = DEFAULT_TOASTER_ID
+): ToasterState => {
+  const [state, setState] = useState<ToasterState>(
+    memoryState[toasterId] || defaultToasterState
+  );
+  const initial = useRef(memoryState[toasterId]);
 
   // TODO: Switch to useSyncExternalStore when targeting React 18+
   useEffect(() => {
-    if (initial.current !== memoryState) {
-      setState(memoryState);
+    if (initial.current !== memoryState[toasterId]) {
+      setState(memoryState[toasterId]);
     }
-    listeners.push(setState);
+    listeners.push([toasterId, setState]);
     return () => {
-      const index = listeners.indexOf(setState);
+      const index = listeners.findIndex(([id]) => id === toasterId);
       if (index > -1) {
         listeners.splice(index, 1);
       }
     };
-  }, []);
+  }, [toasterId]);
 
   const mergedToasts = state.toasts.map((t) => ({
     ...toastOptions,
