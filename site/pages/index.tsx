@@ -143,7 +143,7 @@ export default function Home() {
             />
           </div>
           <div className="text-center my-12 relative duration-200">
-            <h1 className="text-3xl md:text-4xl animate-enter font-bold text-toast-900">
+            <h1 className="text-3xl md:text-4xl animate-custom-enter font-bold text-toast-900">
               The Best Toast in Town.
             </h1>
             <h2 className="text-xl md:text-2xl font-bold text-toast-600 mt-2">
