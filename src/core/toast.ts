@@ -6,6 +6,8 @@ import {
   DefaultToastOptions,
   ValueOrFunction,
   resolveValue,
+  Message,
+  ToastHandler,
 } from './types';
 import { genId } from './utils';
 import {
@@ -15,10 +17,6 @@ import {
   dispatchAll,
   getToasterIdFromToastId,
 } from './store';
-
-type Message = ValueOrFunction<Renderable, Toast>;
-
-type ToastHandler = (message: Message, options?: ToastOptions) => string;
 
 const createToast = (
   message: Message,
