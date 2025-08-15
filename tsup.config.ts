@@ -7,7 +7,6 @@ const commonConfig: Options = {
   format: ['esm', 'cjs'],
   sourcemap: true,
   clean: true,
-  write: false,
   esbuildPlugins: [
     minifyTemplates({ taggedOnly: false }),
     writeFiles(),
