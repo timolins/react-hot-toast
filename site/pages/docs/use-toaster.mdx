@@ -166,30 +166,6 @@ const AnimatedNotifications = () => {
 };
 ```
 
-### Multiple Toaster Example
-
-```jsx
-const App = () => {
-  // Main notifications
-  const main = useToaster();
-
-  // Sidebar notifications
-  const sidebar = useToaster({ duration: 3000 }, 'sidebar');
-
-  return (
-    <div>
-      <MainNotifications {...main} />
-      <SidebarNotifications {...sidebar} />
-
-      <button onClick={() => toast('Main notification')}>Main Toast</button>
-
-      <button onClick={() => toast('Sidebar toast', { toasterId: 'sidebar' })}>
-        Sidebar Toast
-      </button>
-    </div>
-  );
-};
-```
 
 ## Usage with React Native
 
