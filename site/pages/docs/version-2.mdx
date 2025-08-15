@@ -46,7 +46,7 @@ toast.custom(<div>Minimal Example</div>);
 toast.custom((t) => (
   <div
     className={`bg-white px-6 py-4 shadow-md rounded-full ${
-      t.visible ? 'animate-enter' : 'animate-leave'
+      t.visible ? 'animate-custom-enter' : 'animate-custom-leave'
     }`}
   >
     Hello TailwindCSS! 👋
@@ -60,7 +60,7 @@ toast.custom((t) => (
       toast.custom((t) => (
         <div
           className={`bg-white px-6 py-4 shadow-md rounded-full ${
-            t.visible ? 'animate-enter' : 'animate-leave'
+            t.visible ? 'animate-custom-enter' : 'animate-custom-leave'
           }`}
         >Hello from TailwindCSS! 👋</div>
       ))
