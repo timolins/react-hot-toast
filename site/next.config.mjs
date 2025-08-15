@@ -1,7 +1,6 @@
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 import nextMdx from '@next/mdx';
-import withPlugins from 'next-compose-plugins';
 
 const withMDX = nextMdx({
   extension: /\.mdx?$/,
@@ -12,42 +11,28 @@ const withMDX = nextMdx({
   },
 });
 
-const withSvgr = (nextConfig = {}, nextComposePlugins = {}) => {
-  return Object.assign({}, nextConfig, {
-    webpack(config, options) {
-      config.module.rules.push({
-        test: /.svg$/,
-        use: ['@svgr/webpack'],
-      });
-
-      if (typeof nextConfig.webpack === 'function') {
-        return nextConfig.webpack(config, options);
-      }
-
-      return config;
-    },
-  });
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  pageExtensions: ['ts', 'tsx', 'md', 'mdx'],
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: ['@svgr/webpack'],
+    });
+    return config;
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/bee.js',
+        destination: 'https://cdn.splitbee.io/sb.js',
+      },
+      {
+        source: '/_hive/:slug',
+        destination: 'https://hive.splitbee.io/:slug',
+      },
+    ];
+  },
 };
 
-export default withPlugins(
-  [
-    withMDX({
-      pageExtensions: ['ts', 'tsx', 'md', 'mdx'],
-    }),
-    withSvgr,
-  ],
-  {
-    rewrites() {
-      return [
-        {
-          source: '/bee.js',
-          destination: 'https://cdn.splitbee.io/sb.js',
-        },
-        {
-          source: '/_hive/:slug',
-          destination: 'https://hive.splitbee.io/:slug',
-        },
-      ];
-    },
-  }
-);
+export default withMDX(nextConfig);

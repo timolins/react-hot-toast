@@ -1,6 +1,5 @@
 import { defineConfig, Options } from 'tsup';
 import { minifyTemplates, writeFiles } from 'esbuild-minify-templates';
-import { cssMinifierPlugin } from './build-plugins/css-minifier';
 
 const commonConfig: Options = {
   minify: true,
@@ -11,7 +10,6 @@ const commonConfig: Options = {
   write: false,
   esbuildPlugins: [
     minifyTemplates({ taggedOnly: false }),
-    cssMinifierPlugin(),
     writeFiles(),
   ],
 };
