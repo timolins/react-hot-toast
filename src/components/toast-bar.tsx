@@ -18,18 +18,21 @@ const exitAnimation = (factor: number) => `
 const fadeInAnimation = `0%{opacity:0;} 100%{opacity:1;}`;
 const fadeOutAnimation = `0%{opacity:1;} 100%{opacity:0;}`;
 
+// Use :where() for zero specificity - allows Tailwind to override easily
 const ToastBarBase = styled('div')`
-  display: flex;
-  align-items: center;
-  background: #fff;
-  color: #363636;
-  line-height: 1.3;
-  will-change: transform;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1), 0 3px 3px rgba(0, 0, 0, 0.05);
-  max-width: 350px;
-  pointer-events: auto;
-  padding: 8px 10px;
-  border-radius: 8px;
+  :where(&) {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    color: #363636;
+    line-height: 1.3;
+    will-change: transform;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1), 0 3px 3px rgba(0, 0, 0, 0.05);
+    max-width: 350px;
+    pointer-events: auto;
+    padding: 8px 10px;
+    border-radius: 8px;
+  }
 `;
 
 const Message = styled('div')`
