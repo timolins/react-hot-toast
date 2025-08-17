@@ -91,6 +91,7 @@ export const reducer = (state: ToasterState, action: Action): ToasterState => {
 
       return {
         ...state,
+        pausedAt: undefined,
         toasts: state.toasts.map((t) =>
           t.id === toastId || toastId === undefined
             ? {
@@ -105,11 +106,13 @@ export const reducer = (state: ToasterState, action: Action): ToasterState => {
       if (action.toastId === undefined) {
         return {
           ...state,
+          pausedAt: undefined,
           toasts: [],
         };
       }
       return {
         ...state,
+        pausedAt: undefined,
         toasts: state.toasts.filter((t) => t.id !== action.toastId),
       };
 
