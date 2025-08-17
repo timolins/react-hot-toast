@@ -110,6 +110,7 @@ export const Toaster: React.FC<ToasterProps> = ({
       className={containerClassName}
       onMouseEnter={handlers.startPause}
       onMouseLeave={handlers.endPause}
+      aria-live="polite"
     >
       {toasts.map((t) => {
         const toastPosition = t.position || position;
