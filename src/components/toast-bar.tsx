@@ -1,22 +1,9 @@
 import * as React from 'react';
-import { styled, keyframes } from 'goober';
+import { styled } from 'goober';
 
 import { Toast, ToastPosition, resolveValue, Renderable } from '../core/types';
 import { ToastIcon } from './toast-icon';
 import { prefersReducedMotion } from '../core/utils';
-
-const enterAnimation = (factor: number) => `
-0% {transform: translate3d(0,${factor * -200}%,0) scale(.6); opacity:.5;}
-100% {transform: translate3d(0,0,0) scale(1); opacity:1;}
-`;
-
-const exitAnimation = (factor: number) => `
-0% {transform: translate3d(0,0,-1px) scale(1); opacity:1;}
-100% {transform: translate3d(0,${factor * -150}%,-1px) scale(.6); opacity:0;}
-`;
-
-const fadeInAnimation = `0%{opacity:0;} 100%{opacity:1;}`;
-const fadeOutAnimation = `0%{opacity:1;} 100%{opacity:0;}`;
 
 // Use :where() for zero specificity - allows Tailwind to override easily
 const ToastBarBase = styled('div')`
@@ -33,6 +20,84 @@ const ToastBarBase = styled('div')`
     padding: 8px 10px;
     border-radius: 8px;
   }
+
+  @keyframes rht-enter-from-top {
+    0% { transform: translate3d(0, -200%, 0) scale(.6); opacity: .5; }
+    100% { transform: translate3d(0, 0, 0) scale(1); opacity: 1; }
+  }
+
+  @keyframes rht-enter-from-bottom {
+    0% { transform: translate3d(0, 200%, 0) scale(.6); opacity: .5; }
+    100% { transform: translate3d(0, 0, 0) scale(1); opacity: 1; }
+  }
+
+  @keyframes rht-exit-to-top {
+    0% { transform: translate3d(0, 0, -1px) scale(1); opacity: 1; }
+    100% { transform: translate3d(0, -150%, -1px) scale(.6); opacity: 0; }
+  }
+
+  @keyframes rht-exit-to-bottom {
+    0% { transform: translate3d(0, 0, -1px) scale(1); opacity: 1; }
+    100% { transform: translate3d(0, 150%, -1px) scale(.6); opacity: 0; }
+  }
+
+  @keyframes rht-fade-in {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  @keyframes rht-fade-out {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  &.rht-enter-from-top {
+    animation: rht-enter-from-top 0.35s cubic-bezier(.21,1.02,.73,1) forwards;
+  }
+
+  &.rht-enter-from-bottom {
+    animation: rht-enter-from-bottom 0.35s cubic-bezier(.21,1.02,.73,1) forwards;
+  }
+
+  &.rht-exit-to-top {
+    animation: rht-exit-to-top 0.4s forwards cubic-bezier(.06,.71,.55,1);
+  }
+
+  &.rht-exit-to-bottom {
+    animation: rht-exit-to-bottom 0.4s forwards cubic-bezier(.06,.71,.55,1);
+  }
+
+  &.rht-fade-in {
+    animation: rht-fade-in 0.35s cubic-bezier(.21,1.02,.73,1) forwards;
+  }
+
+  &.rht-fade-out {
+    animation: rht-fade-out 0.4s forwards cubic-bezier(.06,.71,.55,1);
+  }
+
+  &.rht-invisible {
+    opacity: 0;
+  }
+
+  &.rht-success {
+    background: var(--rht-success-bg, #ecfdf5);
+    color: var(--rht-success-fg, #065f46);
+  }
+
+  &.rht-error {
+    background: var(--rht-error-bg, #fef2f2);
+    color: var(--rht-error-fg, #991b1b);
+  }
+
+  &.rht-loading {
+    background: var(--rht-loading-bg, #fff);
+    color: var(--rht-loading-fg, #363636);
+  }
+
+  &.rht-blank {
+    background: var(--rht-blank-bg, #fff);
+    color: var(--rht-blank-fg, #363636);
+  }
 `;
 
 const Message = styled('div')`
@@ -48,38 +113,43 @@ interface ToastBarProps {
   toast: Toast;
   position?: ToastPosition;
   style?: React.CSSProperties;
+  strictCSP?: boolean;
   children?: (components: {
     icon: Renderable;
     message: Renderable;
   }) => Renderable;
 }
 
-const getAnimationStyle = (
+const getAnimationClass = (
   position: ToastPosition,
-  visible: boolean
-): React.CSSProperties => {
+  visible: boolean,
+  hasHeight: boolean
+): string => {
+  if (!hasHeight) {
+    return 'rht-invisible';
+  }
+
   const top = position.includes('top');
-  const factor = top ? 1 : -1;
+  const reduced = prefersReducedMotion();
 
-  const [enter, exit] = prefersReducedMotion()
-    ? [fadeInAnimation, fadeOutAnimation]
-    : [enterAnimation(factor), exitAnimation(factor)];
+  if (reduced) {
+    return visible ? 'rht-fade-in' : 'rht-fade-out';
+  }
 
-  return {
-    animation: visible
-      ? `${keyframes(enter)} 0.35s cubic-bezier(.21,1.02,.73,1) forwards`
-      : `${keyframes(exit)} 0.4s forwards cubic-bezier(.06,.71,.55,1)`,
-  };
+  if (visible) {
+    return top ? 'rht-enter-from-top' : 'rht-enter-from-bottom';
+  }
+
+  return top ? 'rht-exit-to-top' : 'rht-exit-to-bottom';
 };
 
 export const ToastBar: React.FC<ToastBarProps> = React.memo(
-  ({ toast, position, style, children }) => {
-    const animationStyle: React.CSSProperties = toast.height
-      ? getAnimationStyle(
-          toast.position || position || 'top-center',
-          toast.visible
-        )
-      : { opacity: 0 };
+  ({ toast, position, style, strictCSP, children }) => {
+    const animationClass = getAnimationClass(
+      toast.position || position || 'top-center',
+      toast.visible,
+      !!toast.height
+    );
 
     const icon = <ToastIcon toast={toast} />;
     const message = (
@@ -88,11 +158,18 @@ export const ToastBar: React.FC<ToastBarProps> = React.memo(
       </Message>
     );
 
+    const className = [
+      toast.className,
+      animationClass,
+      toast.type ? `rht-${toast.type}` : null,
+    ]
+      .filter(Boolean)
+      .join(' ');
+
     return (
       <ToastBarBase
-        className={toast.className}
-        style={{
-          ...animationStyle,
+        className={className}
+        style={strictCSP ? undefined : {
           ...style,
           ...toast.style,
         }}

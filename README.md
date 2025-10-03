@@ -67,6 +67,42 @@ const App = () => {
 };
 ```
 
+## Content Security Policy (CSP)
+
+react-hot-toast supports strict Content Security Policies through an opt-in strict CSP mode.
+
+### Default Mode
+
+By default, react-hot-toast uses inline styles for maximum flexibility. This requires `style-src 'unsafe-inline'` in your CSP.
+
+### Strict CSP Mode
+
+For applications with strict CSP that disallow inline styles, enable strict CSP mode:
+
+```jsx
+import toast, { Toaster } from 'react-hot-toast';
+
+<Toaster strictCSP={true} />
+```
+
+In strict CSP mode:
+- All inline `style` props are ignored
+- Styling must be done via CSS classes and CSS variables
+- Toast positioning uses CSS flexbox instead of inline transforms
+- Fully compatible with CSP `style-src 'nonce-...'` directives
+
+The library uses [goober](https://github.com/cristianbote/goober) for styling. To support CSP nonces, set `window.__nonce__` before your app loads:
+
+```html
+<script nonce="your-nonce-here">
+  window.__nonce__ = 'your-nonce-here';
+</script>
+```
+
+goober will automatically apply the nonce to its generated `<style>` elements.
+
+Make sure your CSP includes `style-src 'nonce-your-nonce-here'` and `script-src 'nonce-your-nonce-here'`.
+
 ## Documentation
 
 Find the full API reference on [official documentation](https://react-hot-toast.com/docs).
