@@ -126,7 +126,7 @@ The offset is now controlled by the Toaster and can be changed by overwriting th
 
 You can now use the [`<Toaster/>`](/docs/toaster#using-a-custom-render-function) to render your own components. Pass in a function that receives a [Toast](https://github.com/timolins/react-hot-toast/blob/main/src/core/types.ts#L34) as the first argument, allowing you to render whatever you please.
 
-This is a great alternative if you are using [`useToaster()`](/docs/use-toaster) to render create custom notfications.
+This is a great alternative if you are using [`useToaster()`](/docs/use-toaster) to render create custom notifications.
 
 This API allows us to dynamically react to the current state of your toasts. This can be used to **change the default animations**, add **a custom dismiss button** or render a custom notification, like [TailwindUI Notifications](https://tailwindui.com/components/application-ui/overlays/notifications).
 
@@ -183,7 +183,7 @@ In the next releases, I plan to add the [most requested feature](https://github.
 - New exit animation
 - Change the gutter between toasts with `<Toaster gutter={20} />`
 - Support for relative positioning
-- Respect reduce motion OS setting
+- Respect the reduce motion OS setting
 - Create persistent toasts with `duration: Infinity`
 
 ### Breaking Changes
