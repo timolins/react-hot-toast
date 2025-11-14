@@ -239,11 +239,13 @@ export default function Home() {
           </div>
         </div>
       </header>
-      <SplitbeeCounter />
-      <Toaster position={position} reverseOrder={reverse} toastOptions={{}} />
-      <div className="container flex justify-end -mt-10 pointer-events-none">
-        <Butter2 className="transform translate-x-20" />
-      </div>
+      <main>
+        <SplitbeeCounter />
+        <Toaster position={position} reverseOrder={reverse} toastOptions={{}} />
+        <div className="container flex justify-end -mt-10 pointer-events-none">
+          <Butter2 className="transform translate-x-20" />
+        </div>
+       </main>
       <Footer noBadge />
     </div>
   );
