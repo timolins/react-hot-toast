@@ -172,6 +172,22 @@ export const createDispatch =
     dispatch(action, toasterId);
   };
 
+const initToaster = (toasterId: string, toastLimit: number) => {
+  if (!memoryState[toasterId]) {
+    memoryState[toasterId] = {
+      ...defaultToasterState,
+      settings: { toastLimit },
+    };
+  } else if (memoryState[toasterId].settings.toastLimit !== toastLimit) {
+    memoryState[toasterId] = {
+      ...memoryState[toasterId],
+      settings: { toastLimit },
+    };
+  }
+
+  return memoryState[toasterId];
+};
+
 export const defaultTimeouts: {
   [key in ToastType]: number;
 } = {
@@ -184,12 +200,19 @@ export const defaultTimeouts: {
 
 export const useStore = (
   toastOptions: DefaultToastOptions = {},
-  toasterId: string = DEFAULT_TOASTER_ID
+  toasterId: string = DEFAULT_TOASTER_ID,
+  toastLimit: number = TOAST_LIMIT
 ): ToasterState => {
-  const [state, setState] = useState<ToasterState>(
-    memoryState[toasterId] || defaultToasterState
-  );
+  // Initialize/sync toaster settings with toastLimit
+  const initialState = initToaster(toasterId, toastLimit);
+  const [state, setState] = useState<ToasterState>(initialState);
   const initial = useRef(memoryState[toasterId]);
+
+  // Sync toastLimit changes to state
+  useEffect(() => {
+    const updated = initToaster(toasterId, toastLimit);
+    setState(updated);
+  }, [toasterId, toastLimit]);
 
   // TODO: Switch to useSyncExternalStore when targeting React 18+
   useEffect(() => {
