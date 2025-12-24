@@ -20,6 +20,7 @@ This component will render all toasts. Alternatively you can create own renderer
   gutter={8}
   containerClassName=""
   containerStyle={{}}
+  toastLimit={4}
   toasterId="default"
   toastOptions={{
     // Define default options
@@ -63,6 +64,10 @@ Add a custom CSS class name to toaster div. Defaults to `undefined`.
 ### `containerStyle` Prop
 
 Customize the style of toaster div. This can be used to change the offset of all toasts
+
+### `toastLimit` Prop
+
+Limit the number of visible toasts at any given time. When more toasts are triggered than the limit allows, new toasts will be queued and displayed once older ones are dismissed. Defaults to `20`.
 
 ### `gutter` Prop
 
