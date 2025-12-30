@@ -30,7 +30,7 @@ export type Action =
     }
   | {
       type: ActionType.UPDATE_TOAST;
-      toast: Partial<Toast>;
+      toast: Partial<Toast> & { id: string };
     }
   | {
       type: ActionType.DISMISS_TOAST;
@@ -59,6 +59,8 @@ interface State {
   [toasterId: string]: ToasterState;
 }
 
+const pendingDelayTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
+
 export const reducer = (state: ToasterState, action: Action): ToasterState => {
   const { toastLimit } = state.settings;
 
@@ -86,8 +88,19 @@ export const reducer = (state: ToasterState, action: Action): ToasterState => {
         toast,
       });
 
-    case ActionType.DISMISS_TOAST:
+    case ActionType.DISMISS_TOAST: {
       const { toastId } = action;
+
+      if (toastId) {
+        const timeoutId = pendingDelayTimeouts.get(toastId);
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+          pendingDelayTimeouts.delete(toastId);
+        }
+      } else {
+        pendingDelayTimeouts.forEach((timeoutId) => clearTimeout(timeoutId));
+        pendingDelayTimeouts.clear();
+      }
 
       return {
         ...state,
@@ -101,17 +114,34 @@ export const reducer = (state: ToasterState, action: Action): ToasterState => {
             : t
         ),
       };
-    case ActionType.REMOVE_TOAST:
-      if (action.toastId === undefined) {
+    }
+
+    case ActionType.REMOVE_TOAST: {
+      const { toastId } = action;
+
+      if (toastId) {
+        const timeoutId = pendingDelayTimeouts.get(toastId);
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+          pendingDelayTimeouts.delete(toastId);
+        }
+      } else {
+        pendingDelayTimeouts.forEach((timeoutId) => clearTimeout(timeoutId));
+        pendingDelayTimeouts.clear();
+      }
+
+      if (toastId === undefined) {
         return {
           ...state,
           toasts: [],
         };
       }
+
       return {
         ...state,
-        toasts: state.toasts.filter((t) => t.id !== action.toastId),
+        toasts: state.toasts.filter((t) => t.id !== toastId),
       };
+    }
 
     case ActionType.START_PAUSE:
       return {
@@ -130,6 +160,9 @@ export const reducer = (state: ToasterState, action: Action): ToasterState => {
           pauseDuration: t.pauseDuration + diff,
         })),
       };
+
+    default:
+      return state;
   }
 };
 
@@ -144,7 +177,10 @@ const defaultToasterState: ToasterState = {
     toastLimit: TOAST_LIMIT,
   },
 };
-let memoryState: State = {};
+
+let memoryState: State = {
+  [DEFAULT_TOASTER_ID]: defaultToasterState,
+};
 
 export const dispatch = (action: Action, toasterId = DEFAULT_TOASTER_ID) => {
   memoryState[toasterId] = reducer(
@@ -171,6 +207,8 @@ export const createDispatch =
   (action: Action) => {
     dispatch(action, toasterId);
   };
+
+export const getPendingDelayTimeouts = () => pendingDelayTimeouts;
 
 export const defaultTimeouts: {
   [key in ToastType]: number;
@@ -212,7 +250,8 @@ export const useStore = (
     removeDelay:
       t.removeDelay ||
       toastOptions[t.type]?.removeDelay ||
-      toastOptions?.removeDelay,
+      toastOptions?.removeDelay ||
+      TOAST_EXPIRE_DISMISS_DELAY,
     duration:
       t.duration ||
       toastOptions[t.type]?.duration ||

@@ -532,3 +532,35 @@ describe('Multi-Toaster behavior', () => {
     expect(screen.queryByText('Removable toast #2')).toBeInTheDocument();
   });
 });
+
+describe('toast delay', () => {
+  test('shows toast only after delay', () => {
+    render(<Toaster />);
+
+    act(() => {
+      toast.success('Delayed toast', { delay: 500 });
+    });
+
+    expect(screen.queryByText('Delayed toast')).toBeNull();
+
+    act(() => {
+      jest.advanceTimersByTime(499);
+    });
+    expect(screen.queryByText('Delayed toast')).toBeNull();
+
+    act(() => {
+      jest.advanceTimersByTime(1);
+    });
+    expect(screen.getByText('Delayed toast')).toBeInTheDocument();
+
+    act(() => {
+      jest.advanceTimersByTime(2000);
+    });
+
+    act(() => {
+      jest.advanceTimersByTime(1500);
+    });
+
+    expect(screen.queryByText('Delayed toast')).toBeNull();
+  });
+});
