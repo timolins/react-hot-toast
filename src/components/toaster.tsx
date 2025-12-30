@@ -112,6 +112,7 @@ export const Toaster: React.FC<ToasterProps> = ({
       onMouseLeave={handlers.endPause}
     >
       {toasts.map((t) => {
+        if (t.delayed && !t.visible) return null;
         const toastPosition = t.position || position;
         const offset = handlers.calculateOffset(t, {
           reverseOrder,

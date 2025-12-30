@@ -39,18 +39,34 @@ const createToast = (
   id: opts?.id || genId(),
 });
 
-const createHandler =
-  (type?: ToastType): ToastHandler =>
-  (message, options) => {
-    const toast = createToast(message, type, options);
+const pendingDelayTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
 
-    const dispatch = createDispatch(
-      toast.toasterId || getToasterIdFromToastId(toast.id)
-    );
+const createHandler = (type?: ToastType): ToastHandler => (message, options) => {
+  const toast = createToast(message, type, options);
 
+  const dispatch = createDispatch(toast.toasterId || getToasterIdFromToastId(toast.id));
+
+  if (toast.delay && toast.delay > 0) {
+    dispatch({
+      type: ActionType.UPSERT_TOAST,
+      toast: { ...toast, visible: false, delayed: true },
+    });
+
+    const timeoutId = setTimeout(() => {
+      dispatch({
+        type: ActionType.UPDATE_TOAST,
+        toast: { id: toast.id, visible: true, delayed: false },
+      });
+      pendingDelayTimeouts.delete(toast.id);
+    }, toast.delay);
+
+    pendingDelayTimeouts.set(toast.id, timeoutId);
+  } else {
     dispatch({ type: ActionType.UPSERT_TOAST, toast });
-    return toast.id;
-  };
+  }
+
+  return toast.id;
+};
 
 const toast = (message: Message, opts?: ToastOptions) =>
   createHandler('blank')(message, opts);
