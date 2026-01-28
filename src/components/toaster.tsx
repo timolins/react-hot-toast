@@ -67,7 +67,7 @@ const getPositionStyle = (
     transition: prefersReducedMotion()
       ? undefined
       : `all 230ms cubic-bezier(.21,1.02,.73,1)`,
-    transform: `translateY(${offset * (top ? 1 : -1)}px)`,
+    transform: `translateY(${Math.round(offset * (top ? 1 : -1))}px)`,
     ...verticalStyle,
     ...horizontalStyle,
   };
