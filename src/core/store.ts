@@ -120,7 +120,11 @@ export const reducer = (state: ToasterState, action: Action): ToasterState => {
       };
 
     case ActionType.END_PAUSE:
-      const diff = action.time - (state.pausedAt || 0);
+      // Only update pauseDuration if we were actually paused
+      if (!state.pausedAt) {
+        return state;
+      }
+      const diff = action.time - state.pausedAt;
 
       return {
         ...state,
