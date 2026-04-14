@@ -97,6 +97,7 @@
     "goober": "^2.1.16"
   },
   "peerDependencies": {
+    "@types/react": "*",
     "react": ">=16",
     "react-dom": ">=16"
   },
