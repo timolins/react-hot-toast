@@ -1,10 +1,13 @@
 {
-  "name": "react-hot-toast",
-  "description": "Smoking hot React Notifications. Lightweight, customizable and beautiful by default.",
+  "name": "@palmfinancial/csp-react-hot-toast",
+  "description": "Variation of react-hot-toast modified to be CSP-friendly.",
   "version": "2.6.0",
   "author": "Timo Lins",
   "license": "MIT",
-  "repository": "timolins/react-hot-toast",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
+  },  
   "keywords": [
     "react",
     "notifications",
