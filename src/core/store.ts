@@ -72,9 +72,19 @@ export const reducer = (state: ToasterState, action: Action): ToasterState => {
     case ActionType.UPDATE_TOAST:
       return {
         ...state,
-        toasts: state.toasts.map((t) =>
-          t.id === action.toast.id ? { ...t, ...action.toast } : t
-        ),
+        toasts: state.toasts.map((t) => {
+          if (t.id !== action.toast.id) return t;
+          // When the type changes (e.g. loading → success) and the caller
+          // didn't pass a new duration, drop the previous duration so the
+          // new type's default applies. Fixes #171.
+          const typeChanged =
+            action.toast.type !== undefined && action.toast.type !== t.type;
+          if (typeChanged && !('duration' in action.toast)) {
+            const { duration: _prev, ...rest } = t;
+            return { ...rest, ...action.toast };
+          }
+          return { ...t, ...action.toast };
+        }),
       };
 
     case ActionType.UPSERT_TOAST:

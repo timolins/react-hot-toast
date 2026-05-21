@@ -247,6 +247,54 @@ test('different toasts types with dismiss', async () => {
   expect(screen.queryByText(/loading/i)).not.toBeInTheDocument();
 });
 
+test('updating toast type resets inherited Infinity duration (#171)', async () => {
+  render(<Toaster />);
+
+  let id: string;
+  act(() => {
+    id = toast.custom('Loading...', { duration: Infinity });
+  });
+
+  expect(screen.queryByText(/loading\.\.\./i)).toBeInTheDocument();
+
+  act(() => {
+    toast.success('Done!', { id });
+  });
+
+  expect(screen.queryByText(/done!/i)).toBeInTheDocument();
+  expect(screen.queryByText(/loading\.\.\./i)).not.toBeInTheDocument();
+
+  waitTime(defaultTimeouts.success);
+  waitTime(REMOVE_DELAY);
+
+  expect(screen.queryByText(/done!/i)).not.toBeInTheDocument();
+});
+
+test('explicit duration is preserved when updating toast type', async () => {
+  render(<Toaster />);
+
+  let id: string;
+  act(() => {
+    id = toast.loading('Saving...', { duration: Infinity });
+  });
+
+  act(() => {
+    toast.success('Saved!', { id, duration: 5000 });
+  });
+
+  expect(screen.queryByText(/saved!/i)).toBeInTheDocument();
+
+  waitTime(defaultTimeouts.success);
+  waitTime(REMOVE_DELAY);
+
+  expect(screen.queryByText(/saved!/i)).toBeInTheDocument();
+
+  waitTime(5000 - defaultTimeouts.success);
+  waitTime(REMOVE_DELAY);
+
+  expect(screen.queryByText(/saved!/i)).not.toBeInTheDocument();
+});
+
 test('custom toaster renderer', async () => {
   render(
     <>
