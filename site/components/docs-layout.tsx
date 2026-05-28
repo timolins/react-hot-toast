@@ -50,6 +50,8 @@ export default function DocsLayout({ meta, children }) {
             />
           </Link>
           <a
+              rel="noopener noreferrer"
+              target="_blank"
             className="flex text-toast-600 underline"
             href="https://github.com/timolins/react-hot-toast"
           >

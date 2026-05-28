@@ -39,7 +39,7 @@ export const SplitbeeCounter = () => {
   const letters = count.toString().split('');
 
   return (
-    <div className="flex items-center justify-center p-4 flex-col gap-3 mt-4">
+    <div className="flex items-center justify-center p-4 flex-col gap-3 mt-4 opacity-0">
       <div className="font-semibold text-toast-900 rounded text-lg">
         Toasts made on this website so far
       </div>
@@ -58,17 +58,15 @@ export const SplitbeeCounter = () => {
           </div>
         ))}
       </div>
-      <div className="text-toast-600">
-        ⚡️ Real-time analytics by{' '}
-        <a
-          className="underline"
-          data-splitbee-event="Click Splitbee Analytics"
-          data-splitbee-event-location="Counter"
-          href="https://splitbee.io/?ref=rht-realtime"
-        >
-          Splitbee
-        </a>
-      </div>
+        <div className="text-toast-600">
+            ⚡️ We have migrated from Splitbee's amazing real-time analytics to {' '}
+            <a
+                className="underline"
+                href="https://vercel.com/analytics?utm_source=react-hot-toast&utm_medium=referral&utm_campaign=analytics"
+            >
+                Vercel Analytics
+            </a>
+        </div>
     </div>
   );
 };

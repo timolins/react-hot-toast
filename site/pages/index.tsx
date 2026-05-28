@@ -200,8 +200,6 @@ export default function Home() {
               style={{
                 transitionProperty: 'box-shadow, transform',
               }}
-              data-splitbee-event="Open Link"
-              data-splitbee-event-target="GitHub"
               onClick={() => {}}
               href="https://github.com/timolins/react-hot-toast"
             >
