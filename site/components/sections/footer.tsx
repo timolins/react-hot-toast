@@ -8,6 +8,7 @@ export function Footer({ noBadge }: { noBadge?: boolean }) {
         <a
           className="underline"
           target={"_blank"}
+          rel={"noopener noreferrer"}
           href="https://github.com/timolins/react-hot-toast?utm_source=react-hot-toast&utm_medium=referral&utm_campaign=footer"
         >
           GitHub
@@ -15,7 +16,7 @@ export function Footer({ noBadge }: { noBadge?: boolean }) {
         <Link href="/docs">
           <a className="underline">Docs</a>
         </Link>
-        <a className="underline" target={"_blank"} href="https://x.com/timolins?utm_source=react-hot-toast&utm_medium=referral&utm_campaign=footer">
+        <a className="underline" rel={"noopener noreferrer"} target={"_blank"} href="https://x.com/timolins?utm_source=react-hot-toast&utm_medium=referral&utm_campaign=footer">
           X (formerly Twitter)
         </a>
       </div>
@@ -24,7 +25,7 @@ export function Footer({ noBadge }: { noBadge?: boolean }) {
         {' · '}
         <span>
           <span>Built by </span>
-          <a className="underline" target={"_blank"} href="https://timo.sh?utm_source=react-hot-toast&utm_medium=referral&utm_campaign=footer">
+          <a className="underline" rel={"noopener noreferrer"} target={"_blank"} href="https://timo.sh?utm_source=react-hot-toast&utm_medium=referral&utm_campaign=footer">
             Timo Lins
           </a>
         </span>
