@@ -7,15 +7,17 @@ export function Footer({ noBadge }: { noBadge?: boolean }) {
       <div className="flex space-x-4">
         <a
           className="underline"
-          href="https://github.com/timolins/react-hot-toast"
+          target={"_blank"}
+          rel={"noopener noreferrer"}
+          href="https://github.com/timolins/react-hot-toast?utm_source=react-hot-toast&utm_medium=referral&utm_campaign=footer"
         >
           GitHub
         </a>
         <Link href="/docs">
           <a className="underline">Docs</a>
         </Link>
-        <a className="underline" href="https://twitter.com/timolins">
-          Twitter
+        <a className="underline" rel={"noopener noreferrer"} target={"_blank"} href="https://x.com/timolins?utm_source=react-hot-toast&utm_medium=referral&utm_campaign=footer">
+          X (formerly Twitter)
         </a>
       </div>
       <div className="text-toast-600">
@@ -23,25 +25,11 @@ export function Footer({ noBadge }: { noBadge?: boolean }) {
         {' · '}
         <span>
           <span>Built by </span>
-          <a className="underline" href="https://timo.sh">
+          <a className="underline" rel={"noopener noreferrer"} target={"_blank"} href="https://timo.sh?utm_source=react-hot-toast&utm_medium=referral&utm_campaign=footer">
             Timo Lins
           </a>
         </span>
       </div>
-      {!noBadge && (
-        <div>
-          <a
-            href="https://splitbee.io/?ref=rht"
-            data-splitbee-event="Click Splitbee Analytics"
-            data-splitbee-event-location="Footer"
-          >
-            <img
-              src="https://splitbee-cdn.fra1.cdn.digitaloceanspaces.com/static/badge/splitbee-badge.svg"
-              alt="Analytics by Splitbee.io"
-            />
-          </a>
-        </div>
-      )}
     </footer>
   );
 }
