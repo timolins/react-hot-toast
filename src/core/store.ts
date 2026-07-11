@@ -190,15 +190,18 @@ export const useStore = (
     memoryState[toasterId] || defaultToasterState
   );
   const initial = useRef(memoryState[toasterId]);
+  const listenerRef = useRef<[string, (state: ToasterState) => void]>();
 
   // TODO: Switch to useSyncExternalStore when targeting React 18+
   useEffect(() => {
     if (initial.current !== memoryState[toasterId]) {
       setState(memoryState[toasterId]);
     }
-    listeners.push([toasterId, setState]);
+    const entry: [string, (state: ToasterState) => void] = [toasterId, setState];
+    listenerRef.current = entry;
+    listeners.push(entry);
     return () => {
-      const index = listeners.findIndex(([id]) => id === toasterId);
+      const index = listeners.indexOf(listenerRef.current!);
       if (index > -1) {
         listeners.splice(index, 1);
       }
