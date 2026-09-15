@@ -198,7 +198,9 @@ export const useStore = (
     }
     listeners.push([toasterId, setState]);
     return () => {
-      const index = listeners.findIndex(([id]) => id === toasterId);
+      const index = listeners.findIndex(
+        ([id, setter]) => id === toasterId && setter === setState
+      );
       if (index > -1) {
         listeners.splice(index, 1);
       }
