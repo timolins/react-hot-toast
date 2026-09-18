@@ -1,5 +1,6 @@
 import { defineConfig, Options } from 'tsup';
 import { minifyTemplates, writeFiles } from 'esbuild-minify-templates';
+import { minifyCssLiterals } from './esbuild-minify-css-literals';
 
 const commonConfig: Options = {
   minify: true,
@@ -8,6 +9,7 @@ const commonConfig: Options = {
   sourcemap: true,
   clean: true,
   esbuildPlugins: [
+    minifyCssLiterals(),
     minifyTemplates({ taggedOnly: false }),
     writeFiles(),
   ],
