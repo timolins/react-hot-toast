@@ -64,17 +64,16 @@ toast.custom = createHandler('custom');
  * Dismisses the toast with the given id. If no id is given, dismisses all toasts.
  * The toast will transition out and then be removed from the DOM.
  * Applies to all toasters, except when a `toasterId` is given.
+ * Also ends pause state to ensure pause timer is reset when manually dismissing.
  */
 toast.dismiss = (toastId?: string, toasterId?: string) => {
-  const action: Action = {
-    type: ActionType.DISMISS_TOAST,
-    toastId,
-  };
-
   if (toasterId) {
-    createDispatch(toasterId)(action);
+    const dispatch = createDispatch(toasterId);
+    dispatch({ type: ActionType.DISMISS_TOAST, toastId });
+    dispatch({ type: ActionType.END_PAUSE, time: Date.now() });
   } else {
-    dispatchAll(action);
+    dispatchAll({ type: ActionType.DISMISS_TOAST, toastId });
+    dispatchAll({ type: ActionType.END_PAUSE, time: Date.now() });
   }
 };
 
@@ -86,16 +85,16 @@ toast.dismissAll = (toasterId?: string) => toast.dismiss(undefined, toasterId);
 /**
  * Removes the toast with the given id.
  * The toast will be removed from the DOM without any transition.
+ * Also ends pause state to ensure pause timer is reset when manually removing.
  */
 toast.remove = (toastId?: string, toasterId?: string) => {
-  const action: Action = {
-    type: ActionType.REMOVE_TOAST,
-    toastId,
-  };
   if (toasterId) {
-    createDispatch(toasterId)(action);
+    const dispatch = createDispatch(toasterId);
+    dispatch({ type: ActionType.REMOVE_TOAST, toastId});
+    dispatch({ type: ActionType.END_PAUSE, time: Date.now() });
   } else {
-    dispatchAll(action);
+    dispatchAll({ type: ActionType.REMOVE_TOAST, toastId });
+    dispatchAll({ type: ActionType.END_PAUSE, time: Date.now() });
   }
 };
 
