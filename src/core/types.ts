@@ -41,6 +41,8 @@ export interface Toast {
   pauseDuration: number;
   position?: ToastPosition;
   removeDelay?: number;
+  delay?: number;
+  delayed?: boolean;
 
   ariaProps: {
     role: 'status' | 'alert';
@@ -70,6 +72,8 @@ export type ToastOptions = Partial<
     | 'iconTheme'
     | 'toasterId'
     | 'removeDelay'
+    | 'delay'
+    | 'delayed'
   >
 >;
 
