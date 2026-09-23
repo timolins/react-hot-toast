@@ -48,6 +48,12 @@ pnpm add react-hot-toast
 npm install react-hot-toast
 ```
 
+#### With Deno
+
+```sh
+deno add react-hot-toast
+```
+
 ## Getting Started
 
 Add the Toaster to your app first. It will take care of rendering all notifications emitted. Now you can trigger `toast()` from anywhere!
