@@ -128,3 +128,55 @@ import { Toaster, ToastBar } from 'react-hot-toast';
   )}
 </Toaster>;
 ```
+
+## Strict CSP Mode
+
+For applications with strict Content Security Policies that disallow inline styles, enable `strictCSP` mode:
+
+```jsx
+<Toaster strictCSP={true} />
+```
+
+In strict CSP mode:
+- All inline `style` props are ignored
+- Styling must be done via CSS classes and CSS variables
+- Toast positioning uses CSS flexbox instead of inline transforms
+- The library is fully compatible with CSP `style-src 'nonce-...'` directives
+
+### CSP Nonce Support
+
+The library uses [goober](https://github.com/cristianbote/goober) for styling. To support CSP nonces, set `window.__nonce__` before your app loads:
+
+```html
+<script nonce="your-nonce-here">
+  window.__nonce__ = 'your-nonce-here';
+</script>
+```
+
+goober will automatically apply the nonce to its generated `<style>` elements.
+
+Make sure your CSP includes `style-src 'nonce-your-nonce-here'` and `script-src 'nonce-your-nonce-here'`.
+
+### Styling with CSS Variables (Strict CSP)
+
+When using strict CSP mode, use CSS variables for theming:
+
+```css
+:root {
+  /* Success toasts */
+  --rht-success-bg: #ecfdf5;
+  --rht-success-fg: #065f46;
+
+  /* Error toasts */
+  --rht-error-bg: #fef2f2;
+  --rht-error-fg: #991b1b;
+
+  /* Loading toasts */
+  --rht-loading-bg: #eff6ff;
+  --rht-loading-fg: #1e40af;
+
+  /* Blank toasts */
+  --rht-blank-bg: #fff;
+  --rht-blank-fg: #363636;
+}
+```

@@ -1,4 +1,4 @@
-import { css, setup } from 'goober';
+import { styled, setup, css } from 'goober';
 import * as React from 'react';
 import {
   resolveValue,
@@ -38,7 +38,7 @@ const ToastWrapper = ({
   );
 
   return (
-    <div ref={ref} className={className} style={style}>
+    <div ref={ref} className={className} {...(style ? { style } : {})}>
       {children}
     </div>
   );
@@ -81,19 +81,106 @@ const activeClass = css`
 `;
 
 const DEFAULT_OFFSET = 16;
+const DEFAULT_GUTTER = 8;
+
+const ToasterContainer = styled('div')`
+  position: fixed;
+  z-index: 9999;
+  top: ${DEFAULT_OFFSET}px;
+  left: ${DEFAULT_OFFSET}px;
+  right: ${DEFAULT_OFFSET}px;
+  bottom: ${DEFAULT_OFFSET}px;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: ${DEFAULT_GUTTER}px;
+
+  &[data-position="top-left"],
+  &[data-position="top-center"],
+  &[data-position="top-right"] {
+    align-items: flex-start;
+  }
+
+  &[data-position="bottom-left"],
+  &[data-position="bottom-center"],
+  &[data-position="bottom-right"] {
+    align-items: flex-start;
+    flex-direction: column-reverse;
+  }
+
+  &[data-position="top-center"],
+  &[data-position="bottom-center"] {
+    align-items: center;
+  }
+
+  &[data-position="top-right"],
+  &[data-position="bottom-right"] {
+    align-items: flex-end;
+  }
+
+  > * {
+    pointer-events: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+`;
 
 export const Toaster: React.FC<ToasterProps> = ({
   reverseOrder,
   position = 'top-center',
   toastOptions,
-  gutter,
+  gutter = DEFAULT_GUTTER,
   children,
   toasterId,
   containerStyle,
   containerClassName,
+  strictCSP = false,
 }) => {
   const { toasts, handlers } = useToaster(toastOptions, toasterId);
 
+  // Sort toasts based on reverseOrder
+  const sortedToasts = reverseOrder ? [...toasts].reverse() : toasts;
+
+  // Strict CSP mode: Use styled component with no inline styles
+  if (strictCSP) {
+    return (
+      <ToasterContainer
+        data-rht-toaster={toasterId || ''}
+        data-position={position}
+        className={containerClassName}
+        onMouseEnter={handlers.startPause}
+        onMouseLeave={handlers.endPause}
+      >
+        {sortedToasts.map((t) => {
+          const toastPosition = t.position || position;
+
+          return (
+            <ToastWrapper
+              id={t.id}
+              key={t.id}
+              onHeightUpdate={handlers.updateHeight}
+              className=""
+            >
+              {t.type === 'custom' ? (
+                resolveValue(t.message, t)
+              ) : children ? (
+                children(t)
+              ) : (
+                <ToastBar toast={t} position={toastPosition} strictCSP />
+              )}
+            </ToastWrapper>
+          );
+        })}
+      </ToasterContainer>
+    );
+  }
+
+  // Default mode: Use inline styles for maximum flexibility
   return (
     <div
       data-rht-toaster={toasterId || ''}

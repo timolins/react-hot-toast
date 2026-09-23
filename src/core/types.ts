@@ -86,6 +86,7 @@ export interface ToasterProps {
   containerClassName?: string;
   toasterId?: string;
   children?: (toast: Toast) => React.ReactElement;
+  strictCSP?: boolean; // When true, disables all inline styles for CSP compliance
 }
 
 export interface ToastWrapperProps {
