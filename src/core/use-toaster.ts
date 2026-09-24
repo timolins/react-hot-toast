@@ -7,9 +7,10 @@ export const REMOVE_DELAY = 1000;
 
 export const useToaster = (
   toastOptions?: DefaultToastOptions,
-  toasterId: string = 'default'
+  toasterId: string = 'default',
+  toastLimit?: number
 ) => {
-  const { toasts, pausedAt } = useStore(toastOptions, toasterId);
+  const { toasts, pausedAt } = useStore(toastOptions, toasterId, toastLimit);
   const toastTimeouts = useRef(
     new Map<Toast['id'], ReturnType<typeof setTimeout>>()
   ).current;

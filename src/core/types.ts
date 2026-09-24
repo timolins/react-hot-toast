@@ -78,6 +78,7 @@ export type DefaultToastOptions = ToastOptions & {
 };
 
 export interface ToasterProps {
+  toastLimit?: number;
   position?: ToastPosition;
   toastOptions?: DefaultToastOptions;
   reverseOrder?: boolean;

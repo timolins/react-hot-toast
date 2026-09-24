@@ -91,8 +91,9 @@ export const Toaster: React.FC<ToasterProps> = ({
   toasterId,
   containerStyle,
   containerClassName,
+  toastLimit,
 }) => {
-  const { toasts, handlers } = useToaster(toastOptions, toasterId);
+  const { toasts, handlers } = useToaster(toastOptions, toasterId, toastLimit);
 
   return (
     <div
