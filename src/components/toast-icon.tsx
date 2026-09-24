@@ -5,6 +5,7 @@ import { Toast } from '../core/types';
 import { ErrorIcon, ErrorTheme } from './error';
 import { LoaderIcon, LoaderTheme } from './loader';
 import { CheckmarkIcon, CheckmarkTheme } from './checkmark';
+import { WarnIcon, WarnTheme } from './warn';
 
 const StatusWrapper = styled('div')`
   position: absolute;
@@ -42,6 +43,7 @@ export type IconThemes = Partial<{
   success: CheckmarkTheme;
   error: ErrorTheme;
   loading: LoaderTheme;
+  warn: WarnTheme;
 }>;
 
 export const ToastIcon: React.FC<{
@@ -60,18 +62,21 @@ export const ToastIcon: React.FC<{
     return null;
   }
 
+  const renderIcon = (type: Toast['type']) => {
+    switch (type) {
+      case 'error':
+        return <ErrorIcon {...iconTheme} />;
+      case 'warn':
+        return <WarnIcon {...iconTheme} />;
+      default:
+        return <CheckmarkIcon {...iconTheme} />;
+    }
+  };
+
   return (
     <IndicatorWrapper>
       <LoaderIcon {...iconTheme} />
-      {type !== 'loading' && (
-        <StatusWrapper>
-          {type === 'error' ? (
-            <ErrorIcon {...iconTheme} />
-          ) : (
-            <CheckmarkIcon {...iconTheme} />
-          )}
-        </StatusWrapper>
-      )}
+      {type !== 'loading' && <StatusWrapper>{renderIcon(type)}</StatusWrapper>}
     </IndicatorWrapper>
   );
 };

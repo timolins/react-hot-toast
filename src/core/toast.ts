@@ -59,6 +59,7 @@ toast.error = createHandler('error');
 toast.success = createHandler('success');
 toast.loading = createHandler('loading');
 toast.custom = createHandler('custom');
+toast.warn = createHandler('warn');
 
 /**
  * Dismisses the toast with the given id. If no id is given, dismisses all toasts.
