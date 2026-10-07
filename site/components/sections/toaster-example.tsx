@@ -60,9 +60,8 @@ export const ToasterExample: React.FC<{
 
   const renderPosition = (p: ToastPosition) => (
     <button
-      id="p"
       className={clsx(
-        'rounded-xl text-center text-xs md:text-sm py-2 px- flex items-center justify-center cursor-pointer flex-col md:flex-row',
+        'rounded-xl text-center text-xs md:text-sm py-2 flex items-center justify-center cursor-pointer flex-col md:flex-row',
         position === p
           ? 'bg-toast-900 text-toast-100 '
           : 'bg-white shadow-small-button'

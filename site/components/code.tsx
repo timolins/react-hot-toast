@@ -120,7 +120,7 @@ export const Code: React.FC<{
           className={clsx(
             props.className,
             className,
-            'h-full w-full rounded-lg p-4 overflow-x-auto flex flex-col items justify-center'
+            'h-full w-full rounded-lg p-4 overflow-x-auto flex flex-col items-center justify-center'
           )}
           style={style}
         >
