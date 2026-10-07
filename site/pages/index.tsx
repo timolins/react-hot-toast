@@ -202,7 +202,6 @@ export default function Home() {
               }}
               data-splitbee-event="Open Link"
               data-splitbee-event-target="GitHub"
-              onClick={() => {}}
               href="https://github.com/timolins/react-hot-toast"
             >
               <GitHub className="opacity-100" />
