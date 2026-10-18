@@ -218,8 +218,9 @@ export const useStore = (
     duration:
       t.duration ||
       toastOptions[t.type]?.duration ||
-      toastOptions?.duration ||
-      defaultTimeouts[t.type],
+      (t.type === 'loading'
+        ? defaultTimeouts.loading
+        : toastOptions?.duration || defaultTimeouts[t.type]),
     style: {
       ...toastOptions.style,
       ...toastOptions[t.type]?.style,

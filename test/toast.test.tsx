@@ -156,6 +156,72 @@ test('promise toast error', async () => {
   });
 });
 
+test('promise loading toast ignores the toaster duration', async () => {
+  const WAIT_DELAY = 3000;
+
+  render(
+    <>
+      <button
+        type="button"
+        onClick={() => {
+          const sleep = new Promise((resolve) => {
+            setTimeout(resolve, WAIT_DELAY);
+          });
+
+          toast.promise(sleep, {
+            loading: 'Loading...',
+            success: 'Success!',
+            error: 'Error!',
+          });
+        }}
+      >
+        Notify!
+      </button>
+      <Toaster toastOptions={{ duration: 1000 }} />
+    </>
+  );
+
+  act(() => {
+    fireEvent.click(screen.getByRole('button', { name: /Notify/i }));
+  });
+
+  await screen.findByText(/loading/i);
+
+  waitTime(1000);
+
+  expect(screen.queryByText(/loading/i)).toBeInTheDocument();
+
+  waitTime(WAIT_DELAY - 1000);
+
+  await waitFor(() => {
+    expect(screen.queryByText(/success/i)).toBeInTheDocument();
+  });
+});
+
+test('loading toast still honors a type-specific duration', async () => {
+  render(
+    <>
+      <button type="button" onClick={() => toast.loading('Loading...')}>
+        Notify!
+      </button>
+      <Toaster
+        toastOptions={{ duration: 4000, loading: { duration: TOAST_DURATION } }}
+      />
+    </>
+  );
+
+  act(() => {
+    fireEvent.click(screen.getByRole('button', { name: /Notify/i }));
+  });
+
+  await screen.findByText(/loading/i);
+
+  waitTime(TOAST_DURATION);
+  waitTime(REMOVE_DELAY);
+
+  expect(screen.queryByText(/loading/i)).not.toBeInTheDocument();
+});
+
 test('error toast with custom duration', async () => {
   render(
     <>
