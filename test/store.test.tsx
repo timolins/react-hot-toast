@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, render, screen } from '@testing-library/react';
+import { act, render, renderHook, screen } from '@testing-library/react';
 
 import toast from '../src';
 import { useStore } from '../src/core/store';
@@ -34,4 +34,18 @@ test('keeps a subscriber active when another subscriber with the same toasterId 
     toast('second');
   });
   expect(screen.getByText('A:2')).toBeInTheDocument();
+});
+
+test('preserves removeDelay of 0 when configured at toast or toaster options', () => {
+  const { result } = renderHook(() =>
+    useStore({
+      removeDelay: 500,
+    })
+  );
+
+  act(() => {
+    toast('zero delay', { removeDelay: 0 });
+  });
+
+  expect(result.current.toasts[0].removeDelay).toBe(0);
 });

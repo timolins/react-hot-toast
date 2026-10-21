@@ -531,4 +531,26 @@ describe('Multi-Toaster behavior', () => {
     expect(screen.queryByText('Removable toast #1')).not.toBeInTheDocument();
     expect(screen.queryByText('Removable toast #2')).toBeInTheDocument();
   });
+  test('removes toast immediately on dismiss when removeDelay: 0 is specified', () => {
+    render(
+      <>
+        <Toaster />
+      </>
+    );
+
+    let toastId: string;
+    act(() => {
+      toastId = toast('Zero remove delay', { removeDelay: 0 });
+    });
+
+    expect(screen.queryByText('Zero remove delay')).toBeInTheDocument();
+
+    act(() => {
+      toast.dismiss(toastId);
+    });
+
+    waitTime(0);
+
+    expect(screen.queryByText('Zero remove delay')).not.toBeInTheDocument();
+  });
 });
