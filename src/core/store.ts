@@ -212,8 +212,8 @@ export const useStore = (
     ...toastOptions[t.type],
     ...t,
     removeDelay:
-      t.removeDelay ||
-      toastOptions[t.type]?.removeDelay ||
+      t.removeDelay ??
+      toastOptions[t.type]?.removeDelay ??
       toastOptions?.removeDelay,
     duration:
       t.duration ||
