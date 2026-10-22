@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import { DefaultToastOptions, Toast, ToastType } from './types';
 
 export const TOAST_EXPIRE_DISMISS_DELAY = 1000;
@@ -69,13 +69,25 @@ export const reducer = (state: ToasterState, action: Action): ToasterState => {
         toasts: [action.toast, ...state.toasts].slice(0, toastLimit),
       };
 
-    case ActionType.UPDATE_TOAST:
+    case ActionType.UPDATE_TOAST: {
+      const patch = action.toast;
+      const current = state.toasts.find((t) => t.id === patch.id);
+      if (
+        !current ||
+        (Object.keys(patch) as Array<keyof Toast>).every(
+          (key) => current[key] === patch[key]
+        )
+      ) {
+        // Nothing changes (e.g. re-measured the same height): keep identity
+        return state;
+      }
       return {
         ...state,
         toasts: state.toasts.map((t) =>
-          t.id === action.toast.id ? { ...t, ...action.toast } : t
+          t === current ? { ...t, ...patch } : t
         ),
       };
+    }
 
     case ActionType.UPSERT_TOAST:
       const { toast } = action;
@@ -88,6 +100,16 @@ export const reducer = (state: ToasterState, action: Action): ToasterState => {
 
     case ActionType.DISMISS_TOAST:
       const { toastId } = action;
+
+      if (
+        !state.toasts.some(
+          (t) =>
+            (t.id === toastId || toastId === undefined) &&
+            (!t.dismissed || t.visible)
+        )
+      ) {
+        return state;
+      }
 
       return {
         ...state,
@@ -103,10 +125,16 @@ export const reducer = (state: ToasterState, action: Action): ToasterState => {
       };
     case ActionType.REMOVE_TOAST:
       if (action.toastId === undefined) {
+        if (state.toasts.length === 0) {
+          return state;
+        }
         return {
           ...state,
           toasts: [],
         };
+      }
+      if (!state.toasts.some((t) => t.id === action.toastId)) {
+        return state;
       }
       return {
         ...state,
@@ -147,10 +175,12 @@ const defaultToasterState: ToasterState = {
 let memoryState: State = {};
 
 export const dispatch = (action: Action, toasterId = DEFAULT_TOASTER_ID) => {
-  memoryState[toasterId] = reducer(
-    memoryState[toasterId] || defaultToasterState,
-    action
-  );
+  const prevState = memoryState[toasterId] || defaultToasterState;
+  const nextState = reducer(prevState, action);
+  if (nextState === prevState) {
+    return;
+  }
+  memoryState[toasterId] = nextState;
   listeners.forEach(([id, listener]) => {
     if (id === toasterId) {
       listener(memoryState[toasterId]);
@@ -182,8 +212,10 @@ export const defaultTimeouts: {
   custom: 4000,
 };
 
+const EMPTY_TOAST_OPTIONS: DefaultToastOptions = {};
+
 export const useStore = (
-  toastOptions: DefaultToastOptions = {},
+  toastOptions: DefaultToastOptions = EMPTY_TOAST_OPTIONS,
   toasterId: string = DEFAULT_TOASTER_ID
 ): ToasterState => {
   const [state, setState] = useState<ToasterState>(
@@ -207,25 +239,33 @@ export const useStore = (
     };
   }, [toasterId]);
 
-  const mergedToasts = state.toasts.map((t) => ({
-    ...toastOptions,
-    ...toastOptions[t.type],
-    ...t,
-    removeDelay:
-      t.removeDelay ||
-      toastOptions[t.type]?.removeDelay ||
-      toastOptions?.removeDelay,
-    duration:
-      t.duration ||
-      toastOptions[t.type]?.duration ||
-      toastOptions?.duration ||
-      defaultTimeouts[t.type],
-    style: {
-      ...toastOptions.style,
-      ...toastOptions[t.type]?.style,
-      ...t.style,
-    },
-  }));
+  // Keeps `toasts` referentially stable across re-renders only while the
+  // caller passes a stable `toastOptions` reference (inline objects still
+  // recompute every render). The update-loop fix itself comes from the
+  // reducer/dispatch bailouts above.
+  const mergedToasts = useMemo(
+    () =>
+      state.toasts.map((t) => ({
+        ...toastOptions,
+        ...toastOptions[t.type],
+        ...t,
+        removeDelay:
+          t.removeDelay ||
+          toastOptions[t.type]?.removeDelay ||
+          toastOptions?.removeDelay,
+        duration:
+          t.duration ||
+          toastOptions[t.type]?.duration ||
+          toastOptions?.duration ||
+          defaultTimeouts[t.type],
+        style: {
+          ...toastOptions.style,
+          ...toastOptions[t.type]?.style,
+          ...t.style,
+        },
+      })),
+    [state.toasts, toastOptions]
+  );
 
   return {
     ...state,
