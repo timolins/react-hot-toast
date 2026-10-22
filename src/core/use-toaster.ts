@@ -1,37 +1,64 @@
-import { useEffect, useCallback, useRef } from 'react';
+import { useEffect, useCallback } from 'react';
 import { createDispatch, ActionType, useStore, dispatch } from './store';
 import { toast } from './toast';
 import { DefaultToastOptions, Toast, ToastPosition } from './types';
 
 export const REMOVE_DELAY = 1000;
 
+// Shared by every useToaster instance of a toaster, so a pending removal can be
+// cancelled by any instance still mounted, not only the one that queued it.
+const toastTimeouts = new Map<
+  string,
+  Map<Toast['id'], ReturnType<typeof setTimeout>>
+>();
+
+const getToasterTimeouts = (toasterId: string) => {
+  let timeouts = toastTimeouts.get(toasterId);
+  if (!timeouts) {
+    timeouts = new Map();
+    toastTimeouts.set(toasterId, timeouts);
+  }
+  return timeouts;
+};
+
+const addToRemoveQueue = (
+  toasterId: string,
+  toastId: string,
+  removeDelay = REMOVE_DELAY
+) => {
+  const timeouts = getToasterTimeouts(toasterId);
+  if (timeouts.has(toastId)) {
+    return;
+  }
+
+  const timeout = setTimeout(() => {
+    timeouts.delete(toastId);
+    dispatch(
+      {
+        type: ActionType.REMOVE_TOAST,
+        toastId: toastId,
+      },
+      toasterId
+    );
+  }, removeDelay);
+
+  timeouts.set(toastId, timeout);
+};
+
+const cancelRemoval = (toasterId: string, toastId: string) => {
+  const timeouts = toastTimeouts.get(toasterId);
+  const timeout = timeouts?.get(toastId);
+  if (timeout) {
+    clearTimeout(timeout);
+    timeouts!.delete(toastId);
+  }
+};
+
 export const useToaster = (
   toastOptions?: DefaultToastOptions,
   toasterId: string = 'default'
 ) => {
   const { toasts, pausedAt } = useStore(toastOptions, toasterId);
-  const toastTimeouts = useRef(
-    new Map<Toast['id'], ReturnType<typeof setTimeout>>()
-  ).current;
-
-  const addToRemoveQueue = useCallback(
-    (toastId: string, removeDelay = REMOVE_DELAY) => {
-      if (toastTimeouts.has(toastId)) {
-        return;
-      }
-
-      const timeout = setTimeout(() => {
-        toastTimeouts.delete(toastId);
-        dispatch({
-          type: ActionType.REMOVE_TOAST,
-          toastId: toastId,
-        });
-      }, removeDelay);
-
-      toastTimeouts.set(toastId, timeout);
-    },
-    []
-  );
 
   useEffect(() => {
     if (pausedAt) {
@@ -121,17 +148,13 @@ export const useToaster = (
   useEffect(() => {
     toasts.forEach((toast) => {
       if (toast.dismissed) {
-        addToRemoveQueue(toast.id, toast.removeDelay);
+        addToRemoveQueue(toasterId, toast.id, toast.removeDelay);
       } else {
         // If toast becomes visible again, remove it from the queue
-        const timeout = toastTimeouts.get(toast.id);
-        if (timeout) {
-          clearTimeout(timeout);
-          toastTimeouts.delete(toast.id);
-        }
+        cancelRemoval(toasterId, toast.id);
       }
     });
-  }, [toasts, addToRemoveQueue]);
+  }, [toasts, toasterId]);
 
   return {
     toasts,
