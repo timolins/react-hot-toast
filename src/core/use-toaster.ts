@@ -49,7 +49,7 @@ export const useToaster = (
 
       if (durationLeft < 0) {
         if (t.visible) {
-          toast.dismiss(t.id);
+          toast.dismiss(t.id, toasterId);
         }
         return;
       }
