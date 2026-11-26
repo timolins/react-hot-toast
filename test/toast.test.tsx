@@ -343,6 +343,44 @@ test('"toast" can be called from useEffect hook', async () => {
 });
 
 describe('Multi-Toaster behavior', () => {
+  test.each([
+    ['default', 'active-toaster'],
+    ['expired-toaster', 'default'],
+    ['expired-toaster', 'active-toaster'],
+  ])(
+    'expiring a queued toast in %s leaves the same ID in %s intact',
+    async (expiredToasterId, activeToasterId) => {
+      toast('Expired toast', {
+        id: 'shared-expiration-id',
+        toasterId: expiredToasterId,
+        duration: TOAST_DURATION,
+      });
+
+      // Its toaster is not mounted yet, so no dismissal timer is running.
+      waitTime(TOAST_DURATION + 1);
+
+      toast('Active toast', {
+        id: 'shared-expiration-id',
+        toasterId: activeToasterId,
+        duration: Infinity,
+      });
+
+      render(
+        <>
+          <Toaster toasterId={expiredToasterId} />
+          <Toaster toasterId={activeToasterId} />
+        </>
+      );
+
+      await act(async () => {
+        jest.advanceTimersByTime(REMOVE_DELAY);
+      });
+
+      expect(screen.queryByText('Expired toast')).not.toBeInTheDocument();
+      expect(screen.getByText('Active toast')).toBeInTheDocument();
+    }
+  );
+
   test('renders toasts in correct containers and dismisses them individually', () => {
     render(
       <>
